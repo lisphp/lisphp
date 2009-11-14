@@ -11,6 +11,40 @@ class Lisphp_Test_ParserTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($offset, $pos);
     }
 
+    function testParse() {
+        $expected = array(
+            new Lisphp_Literal('this is a docstring'),
+            new Lisphp_List(array(new Lisphp_Symbol('define'),
+                                  new Lisphp_List(array(
+                                      new Lisphp_Symbol('add'),
+                                      new Lisphp_Symbol('a'),
+                                      new Lisphp_Symbol('b')
+                                  )),
+                                  new Lisphp_List(array(
+                                      new Lisphp_Symbol('+'),
+                                      new Lisphp_Symbol('a'),
+                                      new Lisphp_Symbol('b')
+                                  )))),
+            new Lisphp_List(array(new Lisphp_Symbol('define'),
+                                  new Lisphp_List(array(
+                                      new Lisphp_Symbol('sub'),
+                                      new Lisphp_Symbol('a'),
+                                      new Lisphp_Symbol('b')
+                                  )),
+                                  new Lisphp_List(array(
+                                      new Lisphp_Symbol('-'),
+                                      new Lisphp_Symbol('a'),
+                                      new Lisphp_Symbol('b')
+                                  ))))
+        );
+        $actual = Lisphp_Parser::parse('
+            "this is a docstring"
+            (define (add a b) (+ a b))
+            (define (sub a b) (- a b))
+        ', true);
+        $this->assertEquals($expected, $actual);
+    }
+
     function testParseForm_list() {
         $expected = new Lisphp_List(array(
             new Lisphp_Symbol('define'),

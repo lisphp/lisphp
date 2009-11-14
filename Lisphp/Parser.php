@@ -20,6 +20,21 @@ final class Lisphp_Parser {
     |   [+-] ([^ \s \d () {} \[\] :] [^ \s () {} \[\]]*)?
     }x';
 
+    static function parse($program, $asArray = false) {
+        $i = 0;
+        $len = strlen($program);
+        $forms = array();
+        while ($i < $len) {
+            if (strpos(self::WHITESPACES, $program[$i]) === false) {
+                $forms[] = self::parseForm(substr($program, $i), $offset);
+                $i += $offset;
+            } else {
+                ++$i;
+            }
+        }
+        return $forms;
+    }
+
     static function parseForm($form, &$offset) {
         static $parentheses = null;
         if (is_null($parentheses)) {
