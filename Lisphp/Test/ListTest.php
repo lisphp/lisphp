@@ -4,13 +4,7 @@ require_once 'Lisphp/List.php';
 require_once 'Lisphp/Scope.php';
 require_once 'Lisphp/Symbol.php';
 require_once 'Lisphp/Literal.php';
-
-class Lisphp_Test_ListTest_DefineMacro implements Lisphp_Applicable {
-    function apply(Lisphp_Scope $scope, Lisphp_List $arguments) {
-        $scope[$arguments[0]] = $retval = $arguments[1]->evaluate($scope);
-        return $retval;
-    }
-}
+require_once 'Lisphp/Runtime/Define.php';
 
 class Lisphp_Test_ListTest extends PHPUnit_Framework_TestCase {
     function setUp() {
@@ -28,7 +22,7 @@ class Lisphp_Test_ListTest extends PHPUnit_Framework_TestCase {
 
     function testEvaluate() {
         $scope = new Lisphp_Scope;
-        $scope['define'] = new Lisphp_Test_ListTest_DefineMacro;
+        $scope['define'] = new Lisphp_Runtime_Define;
         $this->assertEquals(3.14, $this->list->evaluate($scope));
         $this->assertEquals(3.14, $scope['pi']);
     }

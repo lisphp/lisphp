@@ -3,6 +3,7 @@ require_once 'Lisphp/List.php';
 require_once 'Lisphp/Quote.php';
 require_once 'Lisphp/Symbol.php';
 require_once 'Lisphp/Literal.php';
+require_once 'Lisphp/Program.php';
 
 final class Lisphp_Parser {
     const PARENTHESES = '(){}[]';
@@ -21,6 +22,7 @@ final class Lisphp_Parser {
     }x';
 
     static function parse($program, $asArray = false) {
+        if (!$asArray) return new Lisphp_Program($program);
         $i = 0;
         $len = strlen($program);
         $forms = array();

@@ -1,5 +1,6 @@
 <?php
 require_once 'PHPUnit/Framework.php';
+require_once 'Lisphp/Program.php';
 require_once 'Lisphp/Parser.php';
 require_once 'Lisphp/Symbol.php';
 require_once 'Lisphp/Literal.php';
@@ -37,12 +38,13 @@ class Lisphp_Test_ParserTest extends PHPUnit_Framework_TestCase {
                                       new Lisphp_Symbol('b')
                                   ))))
         );
-        $actual = Lisphp_Parser::parse('
+        $program = '
             "this is a docstring"
             (define (add a b) (+ a b))
             (define (sub a b) (- a b))
-        ', true);
-        $this->assertEquals($expected, $actual);
+        ';
+        $this->assertEquals($expected, Lisphp_Parser::parse($program, true));
+        $this->assertType('Lisphp_Program', Lisphp_Parser::parse($program));
     }
 
     function testParseForm_list() {
