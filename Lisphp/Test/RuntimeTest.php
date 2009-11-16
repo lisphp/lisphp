@@ -12,16 +12,16 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $scope = new Lisphp_Scope;
         $result = $define->apply($scope, new Lisphp_List(array(
             new Lisphp_Symbol('*pi*'),
-            new Lisphp_Literal(PI)
+            new Lisphp_Literal(pi())
         )));
-        $this->assertEquals(PI, $result);
-        $this->assertEquals(PI, $scope['*pi*']);
+        $this->assertEquals(pi(), $result);
+        $this->assertEquals(pi(), $scope['*pi*']);
         $result = $define->apply($scope, new Lisphp_List(array(
             new Lisphp_Symbol('pi2'),
             new Lisphp_Symbol('*pi*')
         )));
-        $this->assertEquals(PI, $result);
-        $this->assertEquals(PI, $scope['pi2']);
+        $this->assertEquals(pi(), $result);
+        $this->assertEquals(pi(), $scope['pi2']);
     }
 
     function testLambda() {
@@ -44,9 +44,19 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         array_shift($args);
         array_shift($args);
         foreach ($args as &$value) {
-            $value = new Lisphp_Literal($value);
+            if (is_bool($value)) {
+                $value = new Lisphp_Symbol($value ? 'true' : 'false');
+            } else {
+                $value = is_null($value)
+                       ? new Lisphp_Symbol('nil')
+                       : new Lisphp_Literal($value);
+            }
         }
-        $retval = $function->apply(new Lisphp_Scope, new Lisphp_List($args));
+        $scope = new Lisphp_Scope;
+        $scope['true'] = true;
+        $scope['false'] = false;
+        $scope['nil'] = null;
+        $retval = $function->apply($scope, new Lisphp_List($args));
         $this->assertEquals($expected, $retval);
     }
 
@@ -93,6 +103,61 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $mod = new Lisphp_Runtime_Arithmetic_Modulus;
         $this->assertFunction(0, $mod, 25, 5);
         $this->assertFunction(1, $mod, 25, 4);
+    }
+
+    function testNot() {
+        $not = new Lisphp_Runtime_Logical_Not;
+        $this->assertFunction(false, $not, true);
+        $this->assertFunction(true, $not, false);
+        $this->assertFunction(false, $not, 1);
+        $this->assertFunction(false, $not, 2);
+        $this->assertFunction(true, $not, 0);
+        $this->assertFunction(false, $not, 'abc');
+        $this->assertFunction(true, $not, '');
+    }
+
+    function testAnd() {
+        $and = new Lisphp_Runtime_Logical_And;
+        $this->assertFunction(false, $and, false);
+        $this->assertFunction(true, $and, true);
+        $this->assertFunction(false, $and, false, false);
+        $this->assertFunction(false, $and, false, true);
+        $this->assertFunction(false, $and, true, false);
+        $this->assertFunction(true, $and, true, true);
+        $this->assertFunction(false, $and, false, false, false);
+        $this->assertFunction(false, $and, false, true, false);
+        $this->assertFunction(false, $and, false, false, true);
+        $this->assertFunction(false, $and, false, true, true);
+        $this->assertFunction(true, $and, true, true, true);
+        $this->assertFunction('', $and, 'a', '');
+        $this->assertFunction(null, $and, 'a', null);
+        $this->assertFunction('b', $and, 'a', 'b');
+        $this->assertFunction('', $and, 'a', 'b', '');
+        $this->assertFunction(null, $and, 'a', 'b', null);
+        $this->assertFunction('c', $and, 'a', 'b', 'c');
+    }
+
+    function testOr() {
+        $or = new Lisphp_Runtime_Logical_Or;
+        $this->assertFunction(false, $or, false);
+        $this->assertFunction(true, $or, true);
+        $this->assertFunction(false, $or, false, false);
+        $this->assertFunction(true, $or, true, false);
+        $this->assertFunction(true, $or, false, true);
+        $this->assertFunction(true, $or, true, true);
+        $this->assertFunction(false, $or, false, false, false);
+        $this->assertFunction(true, $or, false, false, true);
+        $this->assertFunction(true, $or, false, true, false);
+        $this->assertFunction(true, $or, true, false, false);
+        $this->assertFunction(true, $or, true, true, false);
+        $this->assertFunction(true, $or, false, true, true);
+        $this->assertFunction(true, $or, true, false, true);
+        $this->assertFunction(true, $or, true, true, true);
+        $this->assertFunction('a', $or, 'a', '');
+        $this->assertFunction('', $or, null, '');
+        $this->assertFunction('b', $or, '', 'b');
+        $this->assertFunction('a', $or, 'a', 'b', 'c');
+        $this->assertFunction('c', $or, false, null, 'c');
     }
 }
 
