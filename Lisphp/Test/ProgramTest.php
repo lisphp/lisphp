@@ -19,11 +19,13 @@ class Lisphp_Test_ProgramTest extends PHPUnit_Framework_TestCase {
     function testExecute() {
         $scope = new Lisphp_Scope;
         $scope['define'] = new Lisphp_Runtime_Define;
-        echo 'TODO: testExecute!!!!!!!!!!!!!!!!!!!!!!!!';
-        return;
+        $scope['+'] = new Lisphp_Runtime_Arithmetic_Addition;
+        $scope['-'] = new Lisphp_Runtime_Arithmetic_Subtraction;
+        $scope['lambda'] = new Lisphp_Runtime_Lambda;
+        $scope['echo'] = new Lisphp_Test_ProgramTest_Echo($this);
         $this->program->execute($scope);
         $this->assertSame($scope['+'], $scope['add']);
-        $this->assertEquals(9, $this->execResult);
+        $this->assertEquals(array(9), $this->execResult);
     }
 
     function testParse() {
@@ -71,6 +73,18 @@ class Lisphp_Test_ProgramTest extends PHPUnit_Framework_TestCase {
 
     function testCount() {
         $this->assertEquals(3, count($this->program));
+    }
+}
+
+final class Lisphp_Test_ProgramTest_Echo extends Lisphp_Runtime_Function {
+    public $test;
+
+    function __construct(Lisphp_Test_ProgramTest $test) {
+        $this->test = $test;
+    }
+
+    function execute(array $arguments) {
+        $this->test->execResult = $arguments;
     }
 }
 
