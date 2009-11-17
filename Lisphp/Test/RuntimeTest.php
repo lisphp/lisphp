@@ -185,5 +185,25 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertFunction('a', $or, 'a', 'b', 'c');
         $this->assertFunction('c', $or, false, null, 'c');
     }
+
+    function testCar() {
+        $car = new Lisphp_Runtime_List_Car;
+        $this->assertFunction(1, $car, array(1, 2, 3));
+        $args = Lisphp_Parser::parseForm('(:[])', $_);
+        try {
+            $car->apply(new Lisphp_Scope, $args);
+            $this->fails();
+        } catch (UnexpectedValueException $e) {
+            # pass.
+        }
+    }
+
+    function testCdr() {
+        $cdr = new Lisphp_Runtime_List_Cdr;
+        $this->assertFunction(new Lisphp_List(array(2, 3)),
+                              $cdr, array(1, 2, 3));
+        $this->assertFunction(null, $cdr, array());
+        $this->assertFunction(new Lisphp_List, $cdr, array(1));
+    }
 }
 

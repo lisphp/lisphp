@@ -22,10 +22,11 @@ class Lisphp_List extends ArrayObject implements Lisphp_Form {
     }
 
     function car() {
-        return $this[0];
+        return isset($this[0]) ? $this[0] : null;
     }
 
     function cdr() {
+        if (!isset($this[0])) return;
         return new self(array_slice($this->getArrayCopy(), 1));
     }
 
