@@ -5,8 +5,21 @@ require_once 'Lisphp/Scope.php';
 require_once 'Lisphp/List.php';
 require_once 'Lisphp/Symbol.php';
 require_once 'Lisphp/Literal.php';
+require_once 'Lisphp/Parser.php';
 
 class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
+    function testEval() {
+        $eval = new Lisphp_Runtime_Eval;
+        $form = Lisphp_Parser::parseForm('(+ 1 2 [- 4 3])', $_);
+        $scope = new Lisphp_Scope;
+        $scope['+'] = new Lisphp_Runtime_Arithmetic_Addition;
+        $scope['-'] = new Lisphp_Runtime_Arithmetic_Subtraction;
+        $args = new Lisphp_List(array($form));
+        $this->assertEquals(4, $eval->apply($scope, $args));
+        $args = new Lisphp_List(array($form, $scope));
+        $this->assertEquals(4, $eval->apply(new Lisphp_Scope, $args));
+    }
+
     function testDefine() {
         $define = new Lisphp_Runtime_Define;
         $scope = new Lisphp_Scope;
@@ -22,6 +35,14 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         )));
         $this->assertEquals(pi(), $result);
         $this->assertEquals(pi(), $scope['pi2']);
+    }
+
+    function testQuote() {
+        $quote = new Lisphp_Runtime_Quote;
+        $this->assertEquals(new Lisphp_Symbol('abc'),
+                            $quote->apply(new Lisphp_Scope, new Lisphp_List(
+                                array(new Lisphp_Symbol('abc'))
+                            )));
     }
 
     function testLambda() {
@@ -43,19 +64,18 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $args = func_get_args();
         array_shift($args);
         array_shift($args);
+        $scope = new Lisphp_Scope;
+        $symbol = 0;
         foreach ($args as &$value) {
-            if (is_bool($value)) {
-                $value = new Lisphp_Symbol($value ? 'true' : 'false');
+            if ($value instanceof ArrayObject || is_array($value)) {
+                $value = new Lisphp_Quote(new Lisphp_List($value));
+            } else if (is_object($value) || is_bool($value) || is_null($value)){
+                $scope["tmp-$symbol"] = $value;
+                $value = new Lisphp_Symbol('tmp-' . $symbol++);
             } else {
-                $value = is_null($value)
-                       ? new Lisphp_Symbol('nil')
-                       : new Lisphp_Literal($value);
+                $value = new Lisphp_Literal($value);
             }
         }
-        $scope = new Lisphp_Scope;
-        $scope['true'] = true;
-        $scope['false'] = false;
-        $scope['nil'] = null;
         $retval = $function->apply($scope, new Lisphp_List($args));
         $this->assertEquals($expected, $retval);
     }
@@ -69,6 +89,12 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($params, $func->parameters);
         $this->assertEquals($body, $func->body);
         $this->assertFunction('test', $func);
+    }
+
+    function testApply() {
+        $apply = new Lisphp_Runtime_Apply;
+        $add = new Lisphp_Runtime_Arithmetic_Addition;
+        $this->assertFunction(9, $apply, $add, new Lisphp_List(array(2, 3, 4)));
     }
 
     function testAdd() {

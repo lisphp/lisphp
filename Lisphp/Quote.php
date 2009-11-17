@@ -10,7 +10,7 @@ final class Lisphp_Quote implements Lisphp_Form {
     }
 
     function evaluate(Lisphp_Scope $scope) {
-        return $this;
+        return $this->form;
     }
 
     function __toString() {
