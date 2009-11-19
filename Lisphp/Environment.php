@@ -8,6 +8,7 @@ final class Lisphp_Environment {
         $scope['eval'] = new Lisphp_Runtime_Eval;
         $scope['quote'] = new Lisphp_Runtime_Quote;
         $scope['define'] = new Lisphp_Runtime_Define;
+        $scope['let'] = new Lisphp_Runtime_Let;
         $scope['lambda'] = new Lisphp_Runtime_Lambda;
         $scope['apply'] = new Lisphp_Runtime_Apply;
         $scope['car'] = new Lisphp_Runtime_List_Car;

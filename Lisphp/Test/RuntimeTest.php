@@ -2,6 +2,7 @@
 require_once 'PHPUnit/Framework.php';
 require_once 'Lisphp/Runtime.php';
 require_once 'Lisphp/Scope.php';
+require_once 'Lisphp/Environment.php';
 require_once 'Lisphp/List.php';
 require_once 'Lisphp/Symbol.php';
 require_once 'Lisphp/Literal.php';
@@ -11,9 +12,7 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
     function testEval() {
         $eval = new Lisphp_Runtime_Eval;
         $form = Lisphp_Parser::parseForm('(+ 1 2 [- 4 3])', $_);
-        $scope = new Lisphp_Scope;
-        $scope['+'] = new Lisphp_Runtime_Arithmetic_Addition;
-        $scope['-'] = new Lisphp_Runtime_Arithmetic_Subtraction;
+        $scope = Lisphp_Environment::sandbox();
         $args = new Lisphp_List(array($form));
         $this->assertEquals(4, $eval->apply($scope, $args));
         $args = new Lisphp_List(array($form, $scope));
@@ -35,6 +34,19 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         )));
         $this->assertEquals(pi(), $result);
         $this->assertEquals(pi(), $scope['pi2']);
+    }
+
+    function testLet() {
+        $let = new Lisphp_Runtime_Let;
+        $scope = Lisphp_Environment::sandbox();
+        $scope['a'] = 1;
+        $retval = $let->apply(
+            $scope,
+            Lisphp_Parser::parseForm('{[(a 2) (b 1)] (+ a b)}', $_)
+        );
+        $this->assertEquals(3, $retval);
+        $this->assertEquals(1, $scope['a']);
+        $this->assertNull($scope['b']);
     }
 
     function testQuote() {
