@@ -62,16 +62,12 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
     function testLambda() {
         $lambda = new Lisphp_Runtime_Lambda;
         $scope = new Lisphp_Scope;
-        $params = new Lisphp_List(array(new Lisphp_Symbol('a'),
-                                        new Lisphp_Symbol('b')));
-        $body = new Lisphp_List(array(new Lisphp_Symbol('+'),
-                                      new Lisphp_Symbol('a'),
-                                      new Lisphp_Symbol('b')));
-        $func = $lambda->apply($scope, new Lisphp_List(array($params, $body)));
+        $args = Lisphp_Parser::parseForm('{[a b] (define x 2) (+ a b)}', $_);
+        $func = $lambda->apply($scope, $args);
         $this->assertType('Lisphp_Runtime_Function', $func);
         $this->assertSame($scope, $func->scope);
-        $this->assertEquals($params, $func->parameters);
-        $this->assertEquals($body, $func->body);
+        $this->assertEquals($args->car(), $func->parameters);
+        $this->assertEquals($args->cdr(), $func->body);
     }
 
     function testIf() {
@@ -129,14 +125,16 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
     }
 
     function testFunction() {
-        $global = new Lisphp_Scope;
-        $params = new Lisphp_List(array());
-        $body = new Lisphp_Literal('test');
+        $global = new Lisphp_Scope(Lisphp_Environment::sandbox());
+        $global['x'] = 1;
+        $params = Lisphp_Parser::parseForm('[a b]', $_);
+        $body = Lisphp_Parser::parseForm('{(define x 2) (+ a b)}', $_);
         $func = new Lisphp_Runtime_Function($global, $params, $body);
         $this->assertSame($global, $func->scope);
         $this->assertEquals($params, $func->parameters);
         $this->assertEquals($body, $func->body);
-        $this->assertFunction('test', $func);
+        $this->assertFunction(3, $func, 1, 2);
+        $this->assertEquals(2, $global['x']);
     }
 
     function testApply() {

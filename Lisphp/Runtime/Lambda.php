@@ -10,8 +10,9 @@ final class Lisphp_Runtime_Lambda implements Lisphp_Applicable {
             $msg = 'parameter list and body form are required';
             throw new InvalidArgumentException($msg);
         }
-        list($params, $body) = $arguments;
-        return new Lisphp_Runtime_Function($scope, $params, $body);
+        return new Lisphp_Runtime_Function($scope,
+                                           $arguments->car(),
+                                           $arguments->cdr());
     }
 }
 

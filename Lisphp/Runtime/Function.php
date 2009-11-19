@@ -28,7 +28,10 @@ class Lisphp_Runtime_Function implements Lisphp_Applicable {
         foreach ($this->parameters as $i => $name) {
             $local->let($name, $arguments[$i]);
         }
-        return $this->body->evaluate($local);
+        foreach ($this->body as $form) {
+            $retval = $form->evaluate($local);
+        }
+        return $retval;
     }
 }
 
