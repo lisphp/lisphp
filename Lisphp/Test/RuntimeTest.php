@@ -268,5 +268,49 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertType('ArrayObject', $obj);
         $this->assertEquals(array(1, 2, 3), $obj->getArrayCopy());
     }
+
+    function testUse() {
+        $use = new Lisphp_Runtime_Use;
+        $env = Lisphp_Environment::sandbox();
+        $scope = new Lisphp_Scope($env);
+        $values = $use->apply($scope,
+                              Lisphp_Parser::parseForm('{
+                                  array_merge
+                                  array-slice
+                                  [substr substring]
+                                  <ArrayObject>
+                                  <Lisphp_Symbol>
+                                  <Lisphp/List>
+                                  [<Lisphp-Scope> scope]
+                              }', $_));
+        $this->assertType('Lisphp_Runtime_PHPFunction', $values[0]);
+        $this->assertEquals('array_merge', $values[0]->callback);
+        $this->assertSame($values[0], $scope['array_merge']);
+        $this->assertNull($env['array_merge']);
+        $this->assertType('Lisphp_Runtime_PHPFunction', $values[1]);
+        $this->assertEquals('array_slice', $values[1]->callback);
+        $this->assertSame($values[1], $scope['array-slice']);
+        $this->assertNull($env['array-slice']);
+        $this->assertType('Lisphp_Runtime_PHPFunction', $values[2]);
+        $this->assertEquals('substr', $values[2]->callback);
+        $this->assertSame($values[2], $scope['substring']);
+        $this->assertNull($env['substring']);
+        $this->assertType('Lisphp_Runtime_PHPClass', $values[3]);
+        $this->assertEquals('ArrayObject', $values[3]->class->getName());
+        $this->assertSame($values[3], $scope['<ArrayObject>']);
+        $this->assertNull($env['<ArrayObject>']);
+        $this->assertType('Lisphp_Runtime_PHPClass', $values[4]);
+        $this->assertEquals('Lisphp_Symbol', $values[4]->class->getName());
+        $this->assertSame($values[4], $scope['<Lisphp_Symbol>']);
+        $this->assertNull($env['<Lisphp_Symbol>']);
+        $this->assertType('Lisphp_Runtime_PHPClass', $values[5]);
+        $this->assertEquals('Lisphp_List', $values[5]->class->getName());
+        $this->assertSame($values[5], $scope['<Lisphp/List>']);
+        $this->assertNull($env['<Lisphp/List>']);
+        $this->assertType('Lisphp_Runtime_PHPClass', $values[6]);
+        $this->assertEquals('Lisphp_Scope', $values[6]->class->getName());
+        $this->assertSame($values[6], $scope['scope']);
+        $this->assertNull($env['scope']);
+    }
 }
 
