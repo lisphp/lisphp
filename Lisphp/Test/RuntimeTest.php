@@ -87,9 +87,8 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(2, $scope['b']);
     }
 
-    function assertFunction($expected, Lisphp_Runtime_Function $function) {
+    function applyFunction(Lisphp_Runtime_Function $function) {
         $args = func_get_args();
-        array_shift($args);
         array_shift($args);
         $scope = new Lisphp_Scope;
         $symbol = 0;
@@ -103,8 +102,16 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
                 $value = new Lisphp_Literal($value);
             }
         }
-        $retval = $function->apply($scope, new Lisphp_List($args));
-        $this->assertEquals($expected, $retval);
+        return $function->apply($scope, new Lisphp_List($args));
+    }
+
+    function assertFunction($expected, Lisphp_Runtime_Function $function) {
+        $args = func_get_args();
+        array_shift($args);
+        $this->assertEquals(
+            $expected,
+            call_user_func_array(array($this, 'applyFunction'), $args)
+        );
     }
 
     function testFunction() {
@@ -216,9 +223,8 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
     function testCar() {
         $car = new Lisphp_Runtime_List_Car;
         $this->assertFunction(1, $car, array(1, 2, 3));
-        $args = Lisphp_Parser::parseForm('(:[])', $_);
         try {
-            $car->apply(new Lisphp_Scope, $args);
+            $this->applyFunction($car, new Lisphp_List);
             $this->fails();
         } catch (UnexpectedValueException $e) {
             # pass.
@@ -231,6 +237,24 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
                               $cdr, array(1, 2, 3));
         $this->assertFunction(null, $cdr, array());
         $this->assertFunction(new Lisphp_List, $cdr, array(1));
+    }
+
+    function methodTest($a) {
+        return array($this, $a);
+    }
+
+    function testPHPFunction() {
+        $substr = new Lisphp_Runtime_PHPFunction('substr');
+        $this->assertFunction('world', $substr, 'hello world', 6);
+        $method = new Lisphp_Runtime_PHPFunction(array($this, 'methodTest'));
+        $this->assertFunction(array($this, 123), $method, 123);
+    }
+
+    function testPHPClass() {
+        $class = new Lisphp_Runtime_PHPClass('ArrayObject');
+        $obj = $this->applyFunction($class, array(1, 2, 3));
+        $this->assertType('ArrayObject', $obj);
+        $this->assertEquals(array(1, 2, 3), $obj->getArrayCopy());
     }
 }
 
