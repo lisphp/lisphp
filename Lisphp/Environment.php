@@ -20,11 +20,17 @@ final class Lisphp_Environment {
         $scope['-'] = new Lisphp_Runtime_Arithmetic_Subtraction;
         $scope['*'] = new Lisphp_Runtime_Arithmetic_Multiplication;
         $scope['/'] = new Lisphp_Runtime_Arithmetic_Division;
-        $scope['%'] = new Lisphp_Runtime_Arithmetic_Modulus;
+        $scope['%'] = $scope['mod'] =new Lisphp_Runtime_Arithmetic_Modulus;
         $scope['not'] = new Lisphp_Runtime_Logical_Not;
         $scope['and'] = new Lisphp_Runtime_Logical_And;
         $scope['or'] = new Lisphp_Runtime_Logical_Or;
         $scope['if'] = new Lisphp_Runtime_Logical_If;
+        return $scope;
+    }
+
+    static function full() {
+        $scope = new Lisphp_Scope(self::sandbox());
+        $scope['use'] = new Lisphp_Runtime_Use;
         return $scope;
     }
 }
