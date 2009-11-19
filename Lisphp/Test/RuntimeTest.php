@@ -40,10 +40,12 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $let = new Lisphp_Runtime_Let;
         $scope = Lisphp_Environment::sandbox();
         $scope['a'] = 1;
+        $scope['c'] = 1;
         $retval = $let->apply(
             $scope,
-            Lisphp_Parser::parseForm('{[(a 2) (b 1)] (+ a b)}', $_)
+            Lisphp_Parser::parseForm('{[(a 2) (b 1)] (define c 2) (+ a b)}', $_)
         );
+        $this->assertEquals(2, $scope['c']);
         $this->assertEquals(3, $retval);
         $this->assertEquals(1, $scope['a']);
         $this->assertNull($scope['b']);
