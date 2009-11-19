@@ -260,6 +260,12 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertFunction('world', $substr, 'hello world', 6);
         $method = new Lisphp_Runtime_PHPFunction(array($this, 'methodTest'));
         $this->assertFunction(array($this, 123), $method, 123);
+        try {
+            new Lisphp_Runtime_PHPFunction('undefined_function_name');
+            $this->fail();
+        } catch (UnexpectedValueException $e) {
+            # pass
+        }
     }
 
     function testPHPClass() {
@@ -267,6 +273,12 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $obj = $this->applyFunction($class, array(1, 2, 3));
         $this->assertType('ArrayObject', $obj);
         $this->assertEquals(array(1, 2, 3), $obj->getArrayCopy());
+        try {
+            new Lisphp_Runtime_PHPClass('UndefinedClassName');
+            $this->fail();
+        } catch (UnexpectedValueException $e) {
+            # pass
+        }
     }
 
     function testUse() {
@@ -311,6 +323,24 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Lisphp_Scope', $values[6]->class->getName());
         $this->assertSame($values[6], $scope['scope']);
         $this->assertNull($env['scope']);
+        try {
+            $use->apply(
+                $scope,
+                Lisphp_Parser::parseForm('(undefined-function-name)', $_)
+            );
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass
+        }
+        try {
+            $use->apply(
+                $scope,
+                Lisphp_Parser::parseForm('(<UndefinedClassName>)', $_)
+            );
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass
+        }
     }
 }
 

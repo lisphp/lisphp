@@ -25,11 +25,15 @@ final class Lisphp_Runtime_Use implements Lisphp_Applicable {
             $name = $name[1]->symbol;
         }
         $phpname = str_replace('-', '_', $phpname);
-        if (preg_match('/^<([^>]+)>$/', $phpname, $matches)) {
-            $phpname = str_replace('/', '_', $matches[1]);
-            return array($name, new Lisphp_Runtime_PHPClass($phpname));
+        try {
+            if (preg_match('/^<([^>]+)>$/', $phpname, $matches)) {
+                $phpname = str_replace('/', '_', $matches[1]);
+                    return array($name, new Lisphp_Runtime_PHPClass($phpname));
+            }
+            return array($name, new Lisphp_Runtime_PHPFunction($phpname));
+        } catch (UnexpectedValueException $e) {
+            throw new InvalidArgumentException($e);
         }
-        return array($name, new Lisphp_Runtime_PHPFunction($phpname));
     }
 }
 
