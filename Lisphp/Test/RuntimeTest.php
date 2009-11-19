@@ -60,6 +60,33 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($body, $func->body);
     }
 
+    function testIf() {
+        $if = new Lisphp_Runtime_Logical_If;
+        $scope = new Lisphp_Scope;
+        $scope['define'] = new Lisphp_Runtime_Define;
+        $args = array(
+            new Lisphp_Symbol('condition'),
+            new Lisphp_List(array(new Lisphp_Symbol('define'),
+                                  new Lisphp_Symbol('a'),
+                                  new Lisphp_Literal(1))),
+            new Lisphp_List(array(new Lisphp_Symbol('define'),
+                                  new Lisphp_Symbol('b'),
+                                  new Lisphp_Literal(2)))
+        );
+        $scope['condition'] = true;
+        $scope['a'] = $scope['b'] = 0;
+        $retval = $if->apply($scope, new Lisphp_List($args));
+        $this->assertEquals(1, $retval);
+        $this->assertEquals(1, $scope['a']);
+        $this->assertEquals(0, $scope['b']);
+        $scope['condition'] = false;
+        $scope['a'] = $scope['b'] = 0;
+        $retval = $if->apply($scope, new Lisphp_List($args));
+        $this->assertEquals(2, $retval);
+        $this->assertEquals(0, $scope['a']);
+        $this->assertEquals(2, $scope['b']);
+    }
+
     function assertFunction($expected, Lisphp_Runtime_Function $function) {
         $args = func_get_args();
         array_shift($args);
