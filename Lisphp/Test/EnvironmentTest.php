@@ -6,6 +6,11 @@ require_once 'Lisphp/Runtime.php';
 class Lisphp_Test_EnvironmentTest extends PHPUnit_Framework_TestCase {
     function testSandbox() {
         $scope = Lisphp_Environment::sandbox();
+        $this->assertNull($scope['nil']);
+        $this->assertTrue($scope['true']);
+        $this->assertFalse($scope['false']);
+        $this->assertTrue($scope['#t']);
+        $this->assertFalse($scope['#f']);
         $this->assertType('Lisphp_Runtime_Eval', $scope['eval']);
         $this->assertType('Lisphp_Runtime_Quote', $scope['quote']);
         $this->assertType('Lisphp_Runtime_Define', $scope['define']);

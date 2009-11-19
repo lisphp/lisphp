@@ -5,6 +5,9 @@ require_once 'Lisphp/Runtime.php';
 final class Lisphp_Environment {
     static function sandbox() {
         $scope = new Lisphp_Scope;
+        $scope['nil'] = null;
+        $scope['true'] = $scope['#t'] = true;
+        $scope['false'] = $scope['#f'] = false;
         $scope['eval'] = new Lisphp_Runtime_Eval;
         $scope['quote'] = new Lisphp_Runtime_Quote;
         $scope['define'] = new Lisphp_Runtime_Define;
