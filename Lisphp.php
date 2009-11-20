@@ -1,4 +1,6 @@
 <?php
+define('LISPHP_VERSION', '0.9.0');
+
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__));
 
 require_once 'Lisphp/Program.php';

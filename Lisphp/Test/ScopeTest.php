@@ -53,5 +53,19 @@ class Lisphp_Test_ScopeTest extends PHPUnit_Framework_TestCase {
         $scope->let('abc', 'overridden');
         $this->assertEquals('overridden', $scope['abc']);
     }
+
+    function testListSymbols() {
+        $this->assertEquals(
+            array(),
+            array_diff(array('abc', 'def', 'ghi'), $this->scope->listSymbols())
+        );
+        $scope = new Lisphp_Scope($this->scope);
+        $scope->let('jkl', 123);
+        $scope->let('abc', 456);
+        $this->assertEquals(
+            array(),
+            array_diff(array('def', 'ghi', 'jkl', 'abc'), $scope->listSymbols())
+        );
+    }
 }
 

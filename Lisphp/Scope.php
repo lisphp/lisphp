@@ -50,5 +50,12 @@ final class Lisphp_Scope implements ArrayAccess {
             unset($this->superscope[$symbol]);
         }
     }
+
+    function listSymbols() {
+        $symbols = array_keys($this->values);
+        if (!$this->superscope) return $symbols;
+        $symbols = array_merge($this->superscope->listSymbols(), $symbols);
+        return array_unique($symbols);
+    }
 }
 
