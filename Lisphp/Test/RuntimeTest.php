@@ -263,6 +263,18 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertFunction(new Lisphp_List, $cdr, array(1));
     }
 
+    function testAt() {
+        $at = new Lisphp_Runtime_List_At;
+        $this->assertFunction(1, $at, new Lisphp_List(array(1, 2, 3)), 0);
+        $this->assertFunction(3, $at, new Lisphp_List(array(1, 2, 3)), 2);
+        try {
+            $this->applyFunction($at, new Lisphp_List(array(1, 2, 3)), 3);
+            $this->fail();
+        } catch (OutOfRangeException $e) {
+            # pass.
+        }
+    }
+
     function methodTest($a) {
         return array($this, $a);
     }
