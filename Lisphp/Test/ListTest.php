@@ -27,6 +27,20 @@ class Lisphp_Test_ListTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(3.14, $scope['pi']);
     }
 
+    function testEvaluate530() {
+        if (version_compare(phpversion(), '5.3.0', '<')) {
+            $this->markTestSkipped('PHP version is less than 5.3.0.');
+        }
+        $scope = new Lisphp_Scope;
+        eval('$scope["f"] = function($a, $b) { return $a + $b; };');
+        $list = new Lisphp_List(array(
+            new Lisphp_Symbol('f'),
+            new Lisphp_Literal(123),
+            new Lisphp_Literal(456)
+        ));
+        $this->assertEquals(579, $list->evaluate($scope));
+    }
+
     function testCar() {
         $this->assertSame($this->list[0], $this->list->car());
     }
