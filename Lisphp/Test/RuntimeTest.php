@@ -8,6 +8,18 @@ require_once 'Lisphp/Symbol.php';
 require_once 'Lisphp/Literal.php';
 require_once 'Lisphp/Parser.php';
 
+final class Lisphp_Test_SampleClass {
+    const PI = 3.14;
+
+    static function a() {
+        return 'a';
+    }
+
+    static function b() {
+        return 'b';
+    }
+}
+
 class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
     function testEval() {
         $eval = new Lisphp_Runtime_Eval;
@@ -279,6 +291,15 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         } catch (UnexpectedValueException $e) {
             # pass
         }
+        $class = new Lisphp_Runtime_PHPClass('Lisphp_Test_SampleClass');
+        $methods = $class->getStaticMethods();
+        $this->assertEquals(2, count($methods));
+        $this->assertType('Lisphp_Runtime_PHPFunction', $methods['a']);
+        $this->assertEquals(array('Lisphp_Test_SampleClass', 'a'),
+                            $methods['a']->callback);
+        $this->assertType('Lisphp_Runtime_PHPFunction', $methods['b']);
+        $this->assertEquals(array('Lisphp_Test_SampleClass', 'b'),
+                            $methods['b']->callback);
     }
 
     function testUse() {

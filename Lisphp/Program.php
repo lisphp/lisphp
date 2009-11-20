@@ -6,6 +6,19 @@ final class Lisphp_Program implements IteratorAggregate, ArrayAccess,
                                       Countable {
     public $forms;
 
+    static function load($file) {
+        if ($fp = fopen($file, 'r')) {
+            for ($code = ''; !feof($fp); $code .= fread($fp, 8192));
+            fclose($fp);
+            try {
+                $program = new self($code);
+            } catch (Lisphp_ParsingException $e) {
+                throw new Lisphp_ParsingException($e->code, $e->offset, $file);
+            }
+            return $program;
+        }
+    }
+
     function __construct($program) {
         $this->forms = Lisphp_Parser::parse($program, true);
     }

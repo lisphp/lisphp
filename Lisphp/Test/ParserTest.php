@@ -45,6 +45,17 @@ class Lisphp_Test_ParserTest extends PHPUnit_Framework_TestCase {
         ';
         $this->assertEquals($expected, Lisphp_Parser::parse($program, true));
         $this->assertType('Lisphp_Program', Lisphp_Parser::parse($program));
+        try {
+            Lisphp_Parser::parse($code = '
+                (correct form)
+                (incorrect form}
+                (correct form)
+            ', true);
+            $this->fail();
+        } catch (Lisphp_ParsingException $e) {
+            $this->assertEquals($code, $e->code);
+            $this->assertEquals(63, $e->offset);
+        }
     }
 
     function testParseForm_list() {

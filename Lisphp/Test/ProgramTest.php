@@ -16,6 +16,20 @@ class Lisphp_Test_ProgramTest extends PHPUnit_Framework_TestCase {
         ');
     }
 
+    function testFromFile() {
+        $program = Lisphp_Program::load(dirname(__FILE__) . '/sample.lisphp');
+        $this->assertEquals(3, count($program));
+        try {
+            Lisphp_Program::load($f = dirname(__FILE__) . '/sample2.lisphp');
+            $this->fail();
+        } catch (Lisphp_ParsingException $e) {
+            $this->assertEquals(file_get_contents($f), $e->code);
+            $this->assertEquals($f, $e->getLisphpFile());
+            $this->assertEquals(2, $e->getLisphpLine());
+            $this->assertEquals(32, $e->getLisphpColumn());
+        }
+    }
+
     function testExecute() {
         $scope = new Lisphp_Scope;
         $scope['define'] = new Lisphp_Runtime_Define;

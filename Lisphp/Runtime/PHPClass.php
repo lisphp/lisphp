@@ -1,5 +1,6 @@
 <?php
 require_once 'Lisphp/Runtime/Function.php';
+require_once 'Lisphp/Runtime/PHPFunction.php';
 
 final class Lisphp_Runtime_PHPClass extends Lisphp_Runtime_Function {
     public $class;
@@ -14,6 +15,17 @@ final class Lisphp_Runtime_PHPClass extends Lisphp_Runtime_Function {
 
     function execute(array $arguments) {
         return $this->class->newInstanceArgs($arguments);
+    }
+
+    function getStaticMethods() {
+        $methods = array();
+        foreach ($this->class->getMethods() as $method) {
+            if (!$method->isStatic() || !$method->isPublic()) continue;
+            $name = $method->getName();
+            $callback = array($this->class->getName(), $name);
+            $methods[$name] = new Lisphp_Runtime_PHPFunction($callback);
+        }
+        return $methods;
     }
 }
 

@@ -5,4 +5,5 @@ require_once 'Lisphp/Program.php';
 require_once 'Lisphp/Parser.php';
 require_once 'Lisphp/Scope.php';
 require_once 'Lisphp/Runtime.php';
+require_once 'Lisphp/Environment.php';
 

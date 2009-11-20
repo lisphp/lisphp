@@ -28,7 +28,12 @@ final class Lisphp_Parser {
         $forms = array();
         while ($i < $len) {
             if (strpos(self::WHITESPACES, $program[$i]) === false) {
-                $forms[] = self::parseForm(substr($program, $i), $offset);
+                try {
+                    $forms[] = self::parseForm(substr($program, $i), $offset);
+                } catch (Lisphp_ParsingException $e) {
+                    throw new Lisphp_ParsingException($program,
+                                                      $e->offset + $i);
+                }
                 $i += $offset;
             } else {
                 ++$i;
@@ -68,7 +73,7 @@ final class Lisphp_Parser {
                 $offset = $i + 1;
                 return new Lisphp_List($values);
             }
-            throw new ParsingException($form, $i);
+            throw new Lisphp_ParsingException($form, $i);
         } else if (isset($form[0]) && $form[0] == self::QUOTE_PREFIX) {
             $parsed = self::parseForm(substr($form, 1), $_offset);
             $offset = $_offset + 1;
@@ -109,11 +114,30 @@ final class Lisphp_Parser {
 }
 
 class Lisphp_ParsingException extends Exception {
-    public $code, $offset;
+    public $code, $offset, $lisphpFile;
 
-    function __construct($code, $offset) {
+    function __construct($code, $offset, $file = '') {
         $this->code = $code;
         $this->offset = $offset;
+        $this->lisphpFile = $file;
+        $on = ($file ? "$file:" : '')
+            . $this->getLisphpLine() . ':'
+            . $this->getLisphpColumn();
+        $this->message = "parsing error on $on";
+    }
+
+    function getLisphpFile() {
+        return $this->lisphpFile;
+    }
+
+    function getLisphpLine() {
+        if ($this->offset <= 0) return 1;
+        return substr_count($this->code, "\n", 0, $this->offset) + 1;
+    }
+
+    function getLisphpColumn() {
+        $pos = strrpos(substr($this->code, 0, $this->offset), "\n");
+        return $this->offset - ($pos === false ? -1 : $pos);
     }
 }
 
