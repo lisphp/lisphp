@@ -8,12 +8,12 @@ class Lisphp_Test_ScopeTest extends PHPUnit_Framework_TestCase {
         $this->scope = new Lisphp_Scope;
         $this->scope['abc'] = 1;
         $this->scope['def'] = true;
-        $this->scope[new Lisphp_Symbol('ghi')] = null;
+        $this->scope[Lisphp_Symbol::get('ghi')] = null;
     }
 
     function testGet() {
         $this->assertEquals(1, $this->scope['abc']);
-        $this->assertEquals(true, $this->scope[new Lisphp_Symbol('def')]);
+        $this->assertEquals(true, $this->scope[Lisphp_Symbol::get('def')]);
         $this->assertNull($this->scope['ghi']);
         $this->assertNull($this->scope['x']);
     }

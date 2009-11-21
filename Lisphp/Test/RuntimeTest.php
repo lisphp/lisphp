@@ -35,14 +35,14 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $define = new Lisphp_Runtime_Define;
         $scope = new Lisphp_Scope;
         $result = $define->apply($scope, new Lisphp_List(array(
-            new Lisphp_Symbol('*pi*'),
+            Lisphp_Symbol::get('*pi*'),
             new Lisphp_Literal(pi())
         )));
         $this->assertEquals(pi(), $result);
         $this->assertEquals(pi(), $scope['*pi*']);
         $result = $define->apply($scope, new Lisphp_List(array(
-            new Lisphp_Symbol('pi2'),
-            new Lisphp_Symbol('*pi*')
+            Lisphp_Symbol::get('pi2'),
+            Lisphp_Symbol::get('*pi*')
         )));
         $this->assertEquals(pi(), $result);
         $this->assertEquals(pi(), $scope['pi2']);
@@ -65,9 +65,9 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
 
     function testQuote() {
         $quote = new Lisphp_Runtime_Quote;
-        $this->assertEquals(new Lisphp_Symbol('abc'),
+        $this->assertEquals(Lisphp_Symbol::get('abc'),
                             $quote->apply(new Lisphp_Scope, new Lisphp_List(
-                                array(new Lisphp_Symbol('abc'))
+                                array(Lisphp_Symbol::get('abc'))
                             )));
     }
 
@@ -87,12 +87,12 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $scope = new Lisphp_Scope;
         $scope['define'] = new Lisphp_Runtime_Define;
         $args = array(
-            new Lisphp_Symbol('condition'),
-            new Lisphp_List(array(new Lisphp_Symbol('define'),
-                                  new Lisphp_Symbol('a'),
+            Lisphp_Symbol::get('condition'),
+            new Lisphp_List(array(Lisphp_Symbol::get('define'),
+                                  Lisphp_Symbol::get('a'),
                                   new Lisphp_Literal(1))),
-            new Lisphp_List(array(new Lisphp_Symbol('define'),
-                                  new Lisphp_Symbol('b'),
+            new Lisphp_List(array(Lisphp_Symbol::get('define'),
+                                  Lisphp_Symbol::get('b'),
                                   new Lisphp_Literal(2)))
         );
         $scope['condition'] = true;
@@ -119,7 +119,7 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
                 $value = new Lisphp_Quote(new Lisphp_List($value));
             } else if (is_object($value) || is_bool($value) || is_null($value)){
                 $scope["tmp-$symbol"] = $value;
-                $value = new Lisphp_Symbol('tmp-' . $symbol++);
+                $value = Lisphp_Symbol::get('tmp-' . $symbol++);
             } else {
                 $value = new Lisphp_Literal($value);
             }

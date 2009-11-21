@@ -97,7 +97,7 @@ final class Lisphp_Parser {
             );
         } else if (preg_match(self::SYMBOL_PATTERN, $form, $matches)) {
             $offset = strlen($matches[0]);
-            return new Lisphp_Symbol($matches[0]);
+            return Lisphp_Symbol::get($matches[0]);
         } else {
             throw new Lisphp_ParsingException($form, 0);
         }

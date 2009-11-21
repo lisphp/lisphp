@@ -15,27 +15,27 @@ class Lisphp_Test_ParserTest extends PHPUnit_Framework_TestCase {
     function testParse() {
         $expected = array(
             new Lisphp_Literal('this is a docstring'),
-            new Lisphp_List(array(new Lisphp_Symbol('define'),
+            new Lisphp_List(array(Lisphp_Symbol::get('define'),
                                   new Lisphp_List(array(
-                                      new Lisphp_Symbol('add'),
-                                      new Lisphp_Symbol('a'),
-                                      new Lisphp_Symbol('b')
+                                      Lisphp_Symbol::get('add'),
+                                      Lisphp_Symbol::get('a'),
+                                      Lisphp_Symbol::get('b')
                                   )),
                                   new Lisphp_List(array(
-                                      new Lisphp_Symbol('+'),
-                                      new Lisphp_Symbol('a'),
-                                      new Lisphp_Symbol('b')
+                                      Lisphp_Symbol::get('+'),
+                                      Lisphp_Symbol::get('a'),
+                                      Lisphp_Symbol::get('b')
                                   )))),
-            new Lisphp_List(array(new Lisphp_Symbol('define'),
+            new Lisphp_List(array(Lisphp_Symbol::get('define'),
                                   new Lisphp_List(array(
-                                      new Lisphp_Symbol('sub'),
-                                      new Lisphp_Symbol('a'),
-                                      new Lisphp_Symbol('b')
+                                      Lisphp_Symbol::get('sub'),
+                                      Lisphp_Symbol::get('a'),
+                                      Lisphp_Symbol::get('b')
                                   )),
                                   new Lisphp_List(array(
-                                      new Lisphp_Symbol('-'),
-                                      new Lisphp_Symbol('a'),
-                                      new Lisphp_Symbol('b')
+                                      Lisphp_Symbol::get('-'),
+                                      Lisphp_Symbol::get('a'),
+                                      Lisphp_Symbol::get('b')
                                   ))))
         );
         $program = '
@@ -60,18 +60,18 @@ class Lisphp_Test_ParserTest extends PHPUnit_Framework_TestCase {
 
     function testParseForm_list() {
         $expected = new Lisphp_List(array(
-            new Lisphp_Symbol('define'),
-            new Lisphp_Symbol('add'),
+            Lisphp_Symbol::get('define'),
+            Lisphp_Symbol::get('add'),
             new Lisphp_List(array(
-                new Lisphp_Symbol('lambda'),
+                Lisphp_Symbol::get('lambda'),
                 new Lisphp_List(array(
-                    new Lisphp_Symbol('a'),
-                    new Lisphp_Symbol('b')
+                    Lisphp_Symbol::get('a'),
+                    Lisphp_Symbol::get('b')
                 )),
                 new Lisphp_List(array(
-                    new Lisphp_Symbol('+'),
-                    new Lisphp_Symbol('a'),
-                    new Lisphp_Symbol('b')
+                    Lisphp_Symbol::get('+'),
+                    Lisphp_Symbol::get('a'),
+                    Lisphp_Symbol::get('b')
                 ))
             ))
         ));
@@ -87,10 +87,10 @@ class Lisphp_Test_ParserTest extends PHPUnit_Framework_TestCase {
     }
 
     function testParseForm_quote() {
-        $this->assertForm(new Lisphp_Quote(new Lisphp_Symbol('abc')), 4,
+        $this->assertForm(new Lisphp_Quote(Lisphp_Symbol::get('abc')), 4,
                           ':abc');
         $this->assertForm(new Lisphp_Quote(new Lisphp_List(array(
-                              new Lisphp_Symbol('add'),
+                              Lisphp_Symbol::get('add'),
                               new Lisphp_Literal(2),
                               new Lisphp_Literal(3)
                           ))),
@@ -129,10 +129,10 @@ class Lisphp_Test_ParserTest extends PHPUnit_Framework_TestCase {
     }
 
     function testParseForm_symbol() {
-        $this->assertForm(new Lisphp_Symbol('abc'), 3, 'abc');
-        $this->assertForm(new Lisphp_Symbol('-abcd'), 5, '-abcd ');
-        $this->assertForm(new Lisphp_Symbol('-'), 1, '-');
-        $this->assertForm(new Lisphp_Symbol('+'), 1, '+');
+        $this->assertForm(Lisphp_Symbol::get('abc'), 3, 'abc');
+        $this->assertForm(Lisphp_Symbol::get('-abcd'), 5, '-abcd ');
+        $this->assertForm(Lisphp_Symbol::get('-'), 1, '-');
+        $this->assertForm(Lisphp_Symbol::get('+'), 1, '+');
     }
 }
 

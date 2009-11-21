@@ -9,8 +9,8 @@ require_once 'Lisphp/Runtime/Define.php';
 class Lisphp_Test_ListTest extends PHPUnit_Framework_TestCase {
     function setUp() {
         $this->list = new Lisphp_List(array(
-            new Lisphp_Symbol('define'),
-            new Lisphp_Symbol('pi'),
+            Lisphp_Symbol::get('define'),
+            Lisphp_Symbol::get('pi'),
             new Lisphp_Literal(3.14)
         ));
     }
@@ -34,7 +34,7 @@ class Lisphp_Test_ListTest extends PHPUnit_Framework_TestCase {
         $scope = new Lisphp_Scope;
         eval('$scope["f"] = function($a, $b) { return $a + $b; };');
         $list = new Lisphp_List(array(
-            new Lisphp_Symbol('f'),
+            Lisphp_Symbol::get('f'),
             new Lisphp_Literal(123),
             new Lisphp_Literal(456)
         ));
@@ -46,7 +46,7 @@ class Lisphp_Test_ListTest extends PHPUnit_Framework_TestCase {
     }
 
     function testCdr() {
-        $this->assertEquals(new Lisphp_List(array(new Lisphp_Symbol('pi'),
+        $this->assertEquals(new Lisphp_List(array(Lisphp_Symbol::get('pi'),
                                                   new Lisphp_Literal(3.14))),
                             $this->list->cdr());
     }
