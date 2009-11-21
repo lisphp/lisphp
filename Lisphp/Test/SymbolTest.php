@@ -8,9 +8,14 @@ class Lisphp_Test_SymbolTest extends PHPUnit_Framework_TestCase {
         $this->assertSame(Lisphp_Symbol::get('abc'), Lisphp_Symbol::get('abc'));
     }
 
-    function testUnexpectedValue() {
+    function testNonString() {
         $this->setExpectedException('UnexpectedValueException');
         Lisphp_Symbol::get(123);
+    }
+
+    function testInvalidSymbol() {
+        $this->setExpectedException('UnexpectedValueException');
+        Lisphp_Symbol::get('(abc)');
     }
 
     function testEvaluate() {

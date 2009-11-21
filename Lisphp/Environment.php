@@ -10,6 +10,9 @@ final class Lisphp_Environment {
         $scope['false'] = $scope['#f'] = false;
         $scope['eval'] = new Lisphp_Runtime_Eval;
         $scope['quote'] = new Lisphp_Runtime_Quote;
+        $scope['symbol'] = new Lisphp_Runtime_PHPFunction(
+            array('Lisphp_Symbol', 'get')
+        );
         $scope['define'] = new Lisphp_Runtime_Define;
         $scope['let'] = new Lisphp_Runtime_Let;
         $scope['lambda'] = new Lisphp_Runtime_Lambda;
