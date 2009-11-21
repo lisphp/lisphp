@@ -392,6 +392,16 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         }
     }
 
+    function testCount() {
+        $count = new Lisphp_Runtime_List_Count;
+        $this->assertFunction(0, $count, array());
+        $this->assertFunction(3, $count, array(1, 2, 3));
+        $this->assertFunction(0, $count, new Lisphp_List);
+        $this->assertFunction(3, $count, new Lisphp_List(array(1, 2, 3)));
+        $this->assertFunction(0, $count, '');
+        $this->assertFunction(3, $count, 'abc');
+    }
+
     function testArray() {
         $array = new Lisphp_Runtime_Array;
         $this->assertFunction(array(), $array);
