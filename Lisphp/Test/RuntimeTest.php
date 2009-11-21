@@ -244,6 +244,116 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertFunction('c', $or, false, null, 'c');
     }
 
+    function testEq() {
+        $eq = new Lisphp_Runtime_Predicate_Eq;
+        $this->assertFunction(false, $eq, new stdClass, new stdClass);
+        $o = new stdClass;
+        $this->assertFunction(true, $eq, $o, $o);
+        $this->assertFunction(true, $eq, 3, 3);
+        $this->assertFunction(false, $eq, 3, 3.0);
+        $this->assertFunction(true, $eq, 3.0, 3.0);
+        $this->assertFunction(true, $eq, 'foo', 'foo');
+        $this->assertFunction(false, $eq, 'foo', 'bar');
+        $this->assertFunction(true, $eq, 3.0, 3.0, 3.0);
+        $this->assertFunction(false, $eq, 3, 3.0, 3.0);
+        $this->assertFunction(true, $eq, 'foo', 'foo', 'foo');
+        $this->assertFunction(false, $eq, 'foo', 'foo', 'bar');
+        try {
+            $this->applyFunction($eq);
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
+        try {
+            $this->applyFunction($eq, 1);
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
+    }
+
+    function testEqual() {
+        $eq = new Lisphp_Runtime_Predicate_Equal;
+        $this->assertFunction(true, $eq, new stdClass, new stdClass);
+        $this->assertFunction(true, $eq, 3, 3);
+        $this->assertFunction(true, $eq, 3, 3.0);
+        $this->assertFunction(true, $eq, 3.0, 3.0);
+        $this->assertFunction(true, $eq, 'foo', 'foo');
+        $this->assertFunction(false, $eq, 'foo', 'bar');
+        $this->assertFunction(true, $eq, 3.0, 3.0, 3.0);
+        $this->assertFunction(true, $eq, 3, 3.0, 3.0);
+        $this->assertFunction(true, $eq, 'foo', 'foo', 'foo');
+        $this->assertFunction(false, $eq, 'foo', 'foo', 'bar');
+        try {
+            $this->applyFunction($eq);
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
+        try {
+            $this->applyFunction($eq, 1);
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
+    }
+
+    function testNotEq() {
+        $ne = new Lisphp_Runtime_Predicate_NotEq;
+        $this->assertFunction(true, $ne, new stdClass, new stdClass);
+        $o = new stdClass;
+        $this->assertFunction(false, $ne, $o, $o);
+        $this->assertFunction(false, $ne, 3, 3);
+        $this->assertFunction(true, $ne, 3, 3.0);
+        $this->assertFunction(false, $ne, 3.0, 3.0);
+        $this->assertFunction(false, $ne, 'foo', 'foo');
+        $this->assertFunction(true, $ne, 'foo', 'bar');
+        $this->assertFunction(false, $ne, 3.0, 3.0, 3.0);
+        $this->assertFunction(true, $ne, 3, 3.0, 3.0);
+        $this->assertFunction(false, $ne, 'foo', 'foo', 'foo');
+        $this->assertFunction(true, $ne, 'foo', 'foo', 'bar');
+        try {
+            $this->applyFunction($ne);
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
+        try {
+            $this->applyFunction($ne, 1);
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
+    }
+
+    function testNotEqual() {
+        $ne = new Lisphp_Runtime_Predicate_NotEqual;
+        $this->assertFunction(false, $ne, new stdClass, new stdClass);
+        $o = new stdClass;
+        $this->assertFunction(false, $ne, $o, $o);
+        $this->assertFunction(false, $ne, 3, 3);
+        $this->assertFunction(false, $ne, 3, 3.0);
+        $this->assertFunction(false, $ne, 3.0, 3.0);
+        $this->assertFunction(false, $ne, 'foo', 'foo');
+        $this->assertFunction(true, $ne, 'foo', 'bar');
+        $this->assertFunction(false, $ne, 3.0, 3.0, 3.0);
+        $this->assertFunction(false, $ne, 3, 3.0, 3.0);
+        $this->assertFunction(false, $ne, 'foo', 'foo', 'foo');
+        $this->assertFunction(true, $ne, 'foo', 'foo', 'bar');
+        try {
+            $this->applyFunction($ne);
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
+        try {
+            $this->applyFunction($ne, 1);
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
+    }
+
     function testList() {
         $list = new Lisphp_Runtime_List;
         $this->assertFunction(new Lisphp_List, $list);

@@ -9,6 +9,7 @@ require_once 'Runtime/Apply.php';
 require_once 'Runtime/Dict.php';
 require_once 'Runtime/Array.php';
 require_once 'Runtime/Logical.php';
+require_once 'Runtime/Predicate.php';
 require_once 'Runtime/Arithmetic.php';
 require_once 'Runtime/List.php';
 require_once 'Runtime/PHPFunction.php';

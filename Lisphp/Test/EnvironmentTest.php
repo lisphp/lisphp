@@ -20,8 +20,27 @@ class Lisphp_Test_EnvironmentTest extends PHPUnit_Framework_TestCase {
         $this->assertType('Lisphp_Runtime_Let', $scope['let']);
         $this->assertType('Lisphp_Runtime_Lambda', $scope['lambda']);
         $this->assertType('Lisphp_Runtime_Apply', $scope['apply']);
+        $this->assertType('Lisphp_Runtime_Dict', $scope['dict']);
+        $this->assertType('Lisphp_Runtime_Array', $scope['array']);
+        $this->assertType('Lisphp_Runtime_List', $scope['list']);
         $this->assertType('Lisphp_Runtime_List_Car', $scope['car']);
         $this->assertType('Lisphp_Runtime_List_Cdr', $scope['cdr']);
+        $this->assertType('Lisphp_Runtime_Predicate_Eq', $scope['==']);
+        $this->assertType('Lisphp_Runtime_Predicate_Eq', $scope['eq']);
+        $this->assertType('Lisphp_Runtime_Predicate_Eq', $scope['eq?']);
+        $this->assertType('Lisphp_Runtime_Predicate_Equal', $scope['=']);
+        $this->assertType('Lisphp_Runtime_Predicate_Equal', $scope['equal']);
+        $this->assertType('Lisphp_Runtime_Predicate_Equal', $scope['equal?']);
+        $this->assertType('Lisphp_Runtime_Predicate_NotEq', $scope['/==']);
+        $this->assertType('Lisphp_Runtime_Predicate_NotEq', $scope['!==']);
+        $this->assertType('Lisphp_Runtime_Predicate_NotEq', $scope['not-eq']);
+        $this->assertType('Lisphp_Runtime_Predicate_NotEq', $scope['not-eq?']);
+        $this->assertType('Lisphp_Runtime_Predicate_NotEqual', $scope['!=']);
+        $this->assertType('Lisphp_Runtime_Predicate_NotEqual', $scope['/=']);
+        $this->assertType('Lisphp_Runtime_Predicate_NotEqual',
+                          $scope['not-equal']);
+        $this->assertType('Lisphp_Runtime_Predicate_NotEqual',
+                          $scope['not-equal?']);
         $this->assertType('Lisphp_Runtime_Arithmetic_Addition', $scope['+']);
         $this->assertType('Lisphp_Runtime_Arithmetic_Subtraction', $scope['-']);
         $this->assertType('Lisphp_Runtime_Arithmetic_Multiplication',

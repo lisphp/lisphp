@@ -19,6 +19,14 @@ final class Lisphp_Environment {
         $scope['list'] = new Lisphp_Runtime_List;
         $scope['car'] = new Lisphp_Runtime_List_Car;
         $scope['cdr'] = new Lisphp_Runtime_List_Cdr;
+        $scope['=='] = $scope['eq'] = $scope['eq?']
+                     = new Lisphp_Runtime_Predicate_Eq;
+        $scope['='] = $scope['equal'] = $scope['equal?']
+                    = new Lisphp_Runtime_Predicate_Equal;
+        $scope['!=='] = $scope['/=='] = $scope['not-eq'] = $scope['not-eq?']
+                      = new Lisphp_Runtime_Predicate_NotEq;
+        $scope['!='] = $scope['/='] = $scope['not-equal'] = $scope['not-equal?']
+                     = new Lisphp_Runtime_Predicate_NotEqual;
         $scope['+'] = new Lisphp_Runtime_Arithmetic_Addition;
         $scope['-'] = new Lisphp_Runtime_Arithmetic_Subtraction;
         $scope['*'] = new Lisphp_Runtime_Arithmetic_Multiplication;
