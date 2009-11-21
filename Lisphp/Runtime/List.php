@@ -2,6 +2,12 @@
 require_once 'Lisphp/Runtime/BuiltinFunction.php';
 require_once 'Lisphp/List.php';
 
+final class Lisphp_Runtime_List extends Lisphp_Runtime_BuiltinFunction {
+    protected function execute(array $arguments) {
+        return new Lisphp_List($arguments);
+    }
+}
+
 final class Lisphp_Runtime_List_Car extends Lisphp_Runtime_BuiltinFunction {
     protected function execute(array $arguments) {
         list($list) = $arguments;

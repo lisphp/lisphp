@@ -244,6 +244,13 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertFunction('c', $or, false, null, 'c');
     }
 
+    function testList() {
+        $list = new Lisphp_Runtime_List;
+        $this->assertFunction(new Lisphp_List, $list);
+        $this->assertFunction(new Lisphp_List(array(1, 2, 3, 4)),
+                              $list, 1, 2, 3, 4);
+    }
+
     function testCar() {
         $car = new Lisphp_Runtime_List_Car;
         $this->assertFunction(1, $car, array(1, 2, 3));
@@ -273,6 +280,22 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         } catch (OutOfRangeException $e) {
             # pass.
         }
+    }
+
+    function testArray() {
+        $array = new Lisphp_Runtime_Array;
+        $this->assertFunction(array(), $array);
+        $this->assertFunction(array(1, 2, 3), $array, 1, 2, 3);
+    }
+
+    function testDict() {
+        $dict = new Lisphp_Runtime_Dict;
+        $scope = new Lisphp_Scope;
+        $scope['a'] = 'key';
+        $retval = $dict->apply($scope, Lisphp_Parser::parseForm('{
+            (a 1) ("key2" 2) (3) 4
+        }', $_));
+        $this->assertEquals(array('key' => 1, 'key2' => 2, 3, 4), $retval);
     }
 
     function methodTest($a) {

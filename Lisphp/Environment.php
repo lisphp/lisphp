@@ -14,6 +14,9 @@ final class Lisphp_Environment {
         $scope['let'] = new Lisphp_Runtime_Let;
         $scope['lambda'] = new Lisphp_Runtime_Lambda;
         $scope['apply'] = new Lisphp_Runtime_Apply;
+        $scope['dict'] = new Lisphp_Runtime_Dict;
+        $scope['array'] = new Lisphp_Runtime_Array;
+        $scope['list'] = new Lisphp_Runtime_List;
         $scope['car'] = new Lisphp_Runtime_List_Car;
         $scope['cdr'] = new Lisphp_Runtime_List_Cdr;
         $scope['+'] = new Lisphp_Runtime_Arithmetic_Addition;

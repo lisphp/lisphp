@@ -6,6 +6,8 @@ require_once 'Runtime/Let.php';
 require_once 'Runtime/Quote.php';
 require_once 'Runtime/Lambda.php';
 require_once 'Runtime/Apply.php';
+require_once 'Runtime/Dict.php';
+require_once 'Runtime/Array.php';
 require_once 'Runtime/Logical.php';
 require_once 'Runtime/Arithmetic.php';
 require_once 'Runtime/List.php';
