@@ -71,6 +71,38 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
                             )));
     }
 
+    function logTest($log) {
+        $this->logged = $log;
+    }
+
+    function testUserMacro() {
+        $scope = Lisphp_Environment::sandbox();
+        $scope['log'] = new Lisphp_Runtime_PHPFunction(array($this, 'logTest'));
+        $body = Lisphp_Parser::parseForm('{
+            (log "testUserMacro")
+            (list #scope #arguments)
+        }', $_);
+        $macro = new Lisphp_Runtime_UserMacro($scope, $body);
+        $this->assertSame($scope, $macro->scope);
+        $this->assertEquals($body, $macro->body);
+        $context = new Lisphp_Scope;
+        $args = Lisphp_Parser::parseForm('{a (+ a b)}', $_);
+        $retval = $macro->apply($context, $args);
+        $this->assertType('Lisphp_List', $retval);
+        $this->assertSame($context, $retval[0]);
+        $this->assertEquals($args, $retval[1]);
+    }
+
+    function testMacro() {
+        $macro = new Lisphp_Runtime_Macro;
+        $args = Lisphp_Parser::parseForm('{(+ 1 2)}', $_);
+        $scope = new Lisphp_Scope;
+        $retval = $macro->apply($scope, $args);
+        $this->assertType('Lisphp_Runtime_UserMacro', $retval);
+        $this->assertSame($scope, $retval->scope);
+        $this->assertEquals($args, $retval->body);
+    }
+
     function testLambda() {
         $lambda = new Lisphp_Runtime_Lambda;
         $scope = new Lisphp_Scope;

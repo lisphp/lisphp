@@ -1,9 +1,11 @@
 <?php
 require_once 'Runtime/Function.php';
+require_once 'Runtime/UserMacro.php';
 require_once 'Runtime/Eval.php';
 require_once 'Runtime/Define.php';
 require_once 'Runtime/Let.php';
 require_once 'Runtime/Quote.php';
+require_once 'Runtime/Macro.php';
 require_once 'Runtime/Lambda.php';
 require_once 'Runtime/Apply.php';
 require_once 'Runtime/Dict.php';
