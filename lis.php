@@ -72,20 +72,32 @@ try {
             else die($status);
         ')
     );
-    readline_completion_function(create_function('$line', '
-        global $scope;
-        $symbols = array();
-        foreach ($scope->listSymbols() as $symbol) {
-            if ($line != "" && strpos($symbol, $line) !== 0) continue;
-            $symbols[] = $symbol;
-        }
-        if (!isset($symbols[0])) {
-            $symbols[] = $line;
-        }
-        return $symbols;
-    '));
+    if (extension_loaded('readline')) {
+        readline_completion_function(create_function('$line', '
+            global $scope;
+            $symbols = array();
+            foreach ($scope->listSymbols() as $symbol) {
+                if ($line != "" && strpos($symbol, $line) !== 0) continue;
+                $symbols[] = $symbol;
+            }
+            if (!isset($symbols[0])) {
+                $symbols[] = $line;
+            }
+            return $symbols;
+        '));
+        $readline = 'readline';
+        $add_history = 'readline_add_history';
+    } else {
+        $readline = create_function('$prompt', '
+            echo $prompt;
+            return fread(STDIN, 8192);
+        ');
+        $add_history = create_function('', '');
+    }
     while (true) {
-        $code = readline(LISPHP_REPL_PROMPT);
+        $code = $readline(LISPHP_REPL_PROMPT);
+        if ($code == '') die("\n");
+        else if (trim($code) == '') continue;
         try {
             $form = Lisphp_Parser::parseForm($code, $_);
             var_export($form->evaluate($scope));
@@ -95,7 +107,7 @@ try {
         } catch (Exception $e) {
             echo $e->getMessage();
         }
-        readline_add_history($code);
+        $add_history($code);
     }
 }
 
