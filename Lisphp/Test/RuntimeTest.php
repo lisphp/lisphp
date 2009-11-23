@@ -179,6 +179,32 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($body, $func->body);
         $this->assertFunction(3, $func, 1, 2);
         $this->assertEquals(2, $global['x']);
+        try {
+            $this->applyFunction($func, 1);
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
+        $body = Lisphp_Parser::parseForm('{#arguments}', $_);
+        $func = new Lisphp_Runtime_Function($global, new Lisphp_List, $body);
+        $this->assertFunction(new Lisphp_List, $func);
+        $this->assertFunction(new Lisphp_List(range(1, 3)), $func, 1, 2, 3);
+    }
+
+    function testGenericCall() {
+        $val = Lisphp_Runtime_Function::call(
+            new Lisphp_Runtime_Arithmetic_Addition,
+            array(1, 2)
+        );
+        $this->assertEquals(3, $val);
+        $val = Lisphp_Runtime_Function::call('trim', array('  hello  '));
+        $this->assertEquals('hello', $val);
+        try {
+            Lisphp_Runtime_Function::call(1, array());
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass
+        }
     }
 
     function testApply() {
@@ -448,6 +474,47 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
             (a 1) ("key2" 2) (3) 4
         }', $_));
         $this->assertEquals(array('key' => 1, 'key2' => 2, 3, 4), $retval);
+    }
+
+    function testMap() {
+        $map = new Lisphp_Runtime_List_Map;
+        $func = new Lisphp_Runtime_Function(
+            Lisphp_Environment::sandbox(),
+            Lisphp_Parser::parseForm('[a]', $_),
+            Lisphp_Parser::parseForm('{(+ a 1)}', $_)
+        );
+        $this->assertFunction(new Lisphp_List, $map, $func, array());
+        $this->assertFunction(new Lisphp_List(array(2, 3)),
+                              $map, $func, array(1, 2));
+        $func = new Lisphp_Runtime_Function(new Lisphp_Scope,
+                                            Lisphp_Parser::parseForm('[]', $_),
+                                            Lisphp_Parser::parseForm('{
+                                                #arguments
+                                            }', $_));
+        $this->assertFunction(
+            new Lisphp_List(array(new Lisphp_List(array(1, 4)),
+                                  new Lisphp_List(array(2, 5)),
+                                  new Lisphp_List(array(3, 6)))),
+            $map, $func, array(1, 2, 3), array(4, 5, 6)
+        );
+        try {
+            $this->applyFunction($map);
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
+        try {
+            $this->applyFunction($map, $func);
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
+        try {
+            $this->applyFunction($map, 1, array(1));
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
     }
 
     function methodTest($a) {

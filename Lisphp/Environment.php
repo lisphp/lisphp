@@ -25,6 +25,7 @@ final class Lisphp_Environment {
         $scope['cdr'] = new Lisphp_Runtime_List_Cdr;
         $scope['at'] = new Lisphp_Runtime_List_At;
         $scope['count'] = new Lisphp_Runtime_List_Count;
+        $scope['map'] = new Lisphp_Runtime_List_Map;
         $scope['=='] = $scope['eq'] = $scope['eq?']
                      = new Lisphp_Runtime_Predicate_Eq;
         $scope['='] = $scope['equal'] = $scope['equal?']

@@ -31,6 +31,7 @@ class Lisphp_Test_EnvironmentTest extends PHPUnit_Framework_TestCase {
         $this->assertType('Lisphp_Runtime_List_Cdr', $scope['cdr']);
         $this->assertType('Lisphp_Runtime_List_At', $scope['at']);
         $this->assertType('Lisphp_Runtime_List_Count', $scope['count']);
+        $this->assertType('Lisphp_Runtime_List_Map', $scope['map']);
         $this->assertType('Lisphp_Runtime_Predicate_Eq', $scope['==']);
         $this->assertType('Lisphp_Runtime_Predicate_Eq', $scope['eq']);
         $this->assertType('Lisphp_Runtime_Predicate_Eq', $scope['eq?']);

@@ -7,10 +7,7 @@ class Lisphp_List extends ArrayObject implements Lisphp_Form {
     function evaluate(Lisphp_Scope $scope) {
         $function = $this->car()->evaluate($scope);
         $applicable = $function instanceof Lisphp_Applicable;
-        if ($invokable = version_compare(phpversion(), '5.3.0', '>=')) {
-            $invokable = method_exists($function, '__invoke');
-        }
-        if ($invokable) {   
+        if (is_callable($function)) {   
             $parameters = array();
             foreach ($this->cdr() as $arg) {
                 $parameters[] = $arg->evaluate($scope);
