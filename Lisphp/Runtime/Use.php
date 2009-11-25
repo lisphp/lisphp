@@ -10,10 +10,11 @@ final class Lisphp_Runtime_Use implements Lisphp_Applicable {
     function apply(Lisphp_Scope $scope, Lisphp_List $arguments) {
         $values = array();
         foreach ($arguments as $name) {
-            list($name, $value) = $this->dispatch($name);
-            $scope->let($name, $value);
+            foreach ($this->dispatch($name) as $name => $value) {
+                $scope->let($name, $value);
+            }
             $values[] = $value;
-        }
+        }exit;
         return new Lisphp_List($values);
     }
 
@@ -26,11 +27,16 @@ final class Lisphp_Runtime_Use implements Lisphp_Applicable {
         }
         $phpname = str_replace('-', '_', $phpname);
         try {
-            if (preg_match('/^<([^>]+)>$/', $phpname, $matches)) {
-                $phpname = str_replace('/', '_', $matches[1]);
-                    return array($name, new Lisphp_Runtime_PHPClass($phpname));
+            if (preg_match('|^(?:([^/]+/)+)?<([^>]+)>$|', $phpname, $matches)) {
+                $phpname = str_replace('/', '_', $matches[1] . $matches[2]);
+                $class = new Lisphp_Runtime_PHPClass($phpname);
+                foreach ($class->getStaticMethods() as $methodName => $method) {
+                    $objs["$name/$methodName"] = $method;
+                }
+                $objs[$name] = $class;
+                return $objs;
             }
-            return array($name, new Lisphp_Runtime_PHPFunction($phpname));
+            return array($name => new Lisphp_Runtime_PHPFunction($phpname));
         } catch (UnexpectedValueException $e) {
             throw new InvalidArgumentException($e);
         }

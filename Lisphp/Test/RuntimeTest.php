@@ -588,7 +588,7 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
                                   [substr substring]
                                   <ArrayObject>
                                   <Lisphp_Symbol>
-                                  <Lisphp/List>
+                                  Lisphp/<Program>
                                   [<Lisphp-Scope> scope]
                               }', $_));
         $this->assertType('Lisphp_Runtime_PHPFunction', $values[0]);
@@ -612,9 +612,13 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertSame($values[4], $scope['<Lisphp_Symbol>']);
         $this->assertNull($env['<Lisphp_Symbol>']);
         $this->assertType('Lisphp_Runtime_PHPClass', $values[5]);
-        $this->assertEquals('Lisphp_List', $values[5]->class->getName());
-        $this->assertSame($values[5], $scope['<Lisphp/List>']);
-        $this->assertNull($env['<Lisphp/List>']);
+        $this->assertEquals('Lisphp_Program', $values[5]->class->getName());
+        $this->assertSame($values[5], $scope['Lisphp/<Program>']);
+        $this->assertType('Lisphp_Runtime_PHPFunction',
+                          $scope['Lisphp/<Program>/load']);
+        $this->assertEquals(array('Lisphp_Program', 'load'),
+                            $scope['Lisphp/<Program>/load']->callback);
+        $this->assertNull($env['Lisphp/<Program>']);
         $this->assertType('Lisphp_Runtime_PHPClass', $values[6]);
         $this->assertEquals('Lisphp_Scope', $values[6]->class->getName());
         $this->assertSame($values[6], $scope['scope']);

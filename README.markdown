@@ -56,13 +56,44 @@ Programs cannot access to file system, IO, etc. The other is the full
 environment of Lisphp, which is initialized with `Lisphp_Environment::full()`.
 In the environment, `use` macro, is for importing native PHP functions and
 classes, is provided. File system, IO, socket, et cetera can be accessed in
-the full environment. Following code touches file a.txt and write some string.
+the full environment. Following code touches file a.txt and writes some text.
 
     (use fopen fwrite fclose)
 
     {let [fp (fopen "a.txt" "w")]
-         (fwrite fp "some string")
+         (fwrite fp "some text")
          (flose fp)}
+
+
+Macro `use`
+-----------
+
+The full environment of Lisphp provides `use` macro. It can import native
+PHP functions and classes.
+
+    (use strrev array_sum array-product [substr substring])
+
+It takes function identifiers to import. Hyphens in identifiers are replaced to
+underscores. Lists that contain two symbols are aliasing.
+
+    (strrev "hello")                #=> "olleh"
+    (array_sum [array 1 2 3])       #=> 6
+    (array-product [array 4 5 6])   #=> 120
+    (substring "world" 2)           #=> "rld"
+
+Wrap identifiers with angle brackets in order to import class. According
+[PEAR naming convention][1] for classes, slashes are treated as hierarchical
+separators, so replaced to underscores.
+
+    (use <PDO> Lisphp/<Program>)
+
+Imported classes are applicable. They as functions behave as instantiation.
+Static methods in imported classes are also imported.
+
+    (<PDO> "mysql:dbname=testdb;host=127.0.0.1" "dbuser" "dbpass")
+    (Lisphp/<Program>/load "program.lisphp")
+
+ [1]: http://pear.php.net/manual/en/standards.naming.php
 
 
 About lists and `nil`
