@@ -7,19 +7,19 @@ class Lisphp_Runtime_Logical_Not extends Lisphp_Runtime_BuiltinFunction {
     }
 }
 
-class Lisphp_Runtime_Logical_And extends Lisphp_Runtime_BuiltinFunction {
-    protected function execute(array $arguments) {
-        foreach ($arguments as $value) {
-            if (!$value) return $value;
+class Lisphp_Runtime_Logical_And implements Lisphp_Applicable {
+    function apply(Lisphp_Scope $scope, Lisphp_List $operands) {
+        foreach ($operands as $form) {
+            if (!$value = $form->evaluate($scope)) return $value;
         }
         return $value;
     }
 }
 
-class Lisphp_Runtime_Logical_Or extends Lisphp_Runtime_BuiltinFunction {
-    protected function execute(array $arguments) {
-        foreach ($arguments as $value) {
-            if ($value) return $value;
+class Lisphp_Runtime_Logical_Or implements Lisphp_Applicable {
+    function apply(Lisphp_Scope $scope, Lisphp_List $operands) {
+        foreach ($operands as $form) {
+            if ($value = $form->evaluate($scope)) return $value;
         }
         return $value;
     }

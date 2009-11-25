@@ -141,7 +141,7 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(2, $scope['b']);
     }
 
-    function applyFunction(Lisphp_Runtime_Function $function) {
+    function applyFunction(Lisphp_Applicable $function) {
         $args = func_get_args();
         array_shift($args);
         $scope = new Lisphp_Scope;
@@ -159,7 +159,7 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         return $function->apply($scope, new Lisphp_List($args));
     }
 
-    function assertFunction($expected, Lisphp_Runtime_Function $function) {
+    function assertFunction($expected, Lisphp_Applicable $function) {
         $args = func_get_args();
         array_shift($args);
         $this->assertEquals(
@@ -277,6 +277,16 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertFunction('', $and, 'a', 'b', '');
         $this->assertFunction(null, $and, 'a', 'b', null);
         $this->assertFunction('c', $and, 'a', 'b', 'c');
+        $env = Lisphp_Environment::sandbox();
+        $scope = new Lisphp_Scope($env);
+        $scope['a'] = 1;
+        $retval = $and->apply($scope, Lisphp_Parser::parseForm('{
+            (define a 2)
+            (define b 0)
+            (define a 3)
+        }', $_));
+        $this->assertEquals(0, $retval);
+        $this->assertEquals(2, $scope['a']);
     }
 
     function testOr() {
@@ -300,6 +310,17 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertFunction('b', $or, '', 'b');
         $this->assertFunction('a', $or, 'a', 'b', 'c');
         $this->assertFunction('c', $or, false, null, 'c');
+        $env = Lisphp_Environment::sandbox();
+        $scope = new Lisphp_Scope($env);
+        $scope['a'] = 1;
+        $retval = $or->apply($scope, Lisphp_Parser::parseForm('{
+            (define b 0)
+            (define a 2)
+            (define a 3)
+        }', $_));
+        $this->assertEquals(2, $retval);
+        $this->assertEquals(2, $scope['a']);
+        $this->assertEquals(0, $scope['b']);
     }
 
     function testEq() {
