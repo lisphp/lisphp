@@ -433,6 +433,25 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         }
     }
 
+    function testTypePredicate() {
+        $int = new Lisphp_Runtime_Predicate_Type('int');
+        $this->assertEquals('int', $int->type);
+        $this->assertFunction(true, $int, 123);
+        $this->assertFunction(false, $int, 3.14);
+        $this->assertFunction(false, $int, 'abc');
+        $string = new Lisphp_Runtime_Predicate_Type('string');
+        $this->assertEquals('string', $string->type);
+        $this->assertFunction(true, $string, 'hello');
+        $this->assertFunction(false, $string, 123);
+        $env = Lisphp_Runtime_Predicate_Type::getFunctions();
+        foreach (Lisphp_Runtime_Predicate_Type::$types as $type) {
+            $this->assertType('Lisphp_Runtime_Predicate_Type', $env["$type?"]);
+            $this->assertEquals($type, $env["$type?"]->type);
+        }
+        $this->assertFunction(true, $env['nil?'], null);
+        $this->assertFunction(false, $env['nil?'], 123);
+    }
+
     function testList() {
         $list = new Lisphp_Runtime_List;
         $this->assertFunction(new Lisphp_List, $list);

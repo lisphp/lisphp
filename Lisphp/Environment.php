@@ -34,6 +34,9 @@ final class Lisphp_Environment {
                       = new Lisphp_Runtime_Predicate_NotEq;
         $scope['!='] = $scope['/='] = $scope['not-equal'] = $scope['not-equal?']
                      = new Lisphp_Runtime_Predicate_NotEqual;
+        foreach (Lisphp_Runtime_Predicate_Type::getFunctions() as $n => $f) {
+            $scope[$n] = $f;
+        }
         $scope['+'] = new Lisphp_Runtime_Arithmetic_Addition;
         $scope['-'] = new Lisphp_Runtime_Arithmetic_Subtraction;
         $scope['*'] = new Lisphp_Runtime_Arithmetic_Multiplication;

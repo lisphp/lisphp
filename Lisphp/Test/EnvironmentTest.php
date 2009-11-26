@@ -48,6 +48,13 @@ class Lisphp_Test_EnvironmentTest extends PHPUnit_Framework_TestCase {
                           $scope['not-equal']);
         $this->assertType('Lisphp_Runtime_Predicate_NotEqual',
                           $scope['not-equal?']);
+        foreach (Lisphp_Runtime_Predicate_Type::$types as $type) {
+            $this->assertType('Lisphp_Runtime_Predicate_Type',
+                              $scope["$type?"]);
+            $this->assertEquals($type, $scope["$type?"]->type);
+        }
+        $this->assertType('Lisphp_Runtime_Predicate_Type', $scope['nil?']);
+        $this->assertEquals('null', $scope['nil?']->type);
         $this->assertType('Lisphp_Runtime_Arithmetic_Addition', $scope['+']);
         $this->assertType('Lisphp_Runtime_Arithmetic_Subtraction', $scope['-']);
         $this->assertType('Lisphp_Runtime_Arithmetic_Multiplication',

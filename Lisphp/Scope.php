@@ -1,7 +1,7 @@
 <?php
 require_once 'Lisphp/Symbol.php';
 
-final class Lisphp_Scope implements ArrayAccess {
+final class Lisphp_Scope implements ArrayAccess, IteratorAggregate {
     public $values = array(), $superscope;
 
     function __construct(self $superscope = null) {
@@ -49,6 +49,13 @@ final class Lisphp_Scope implements ArrayAccess {
         if ($this->superscope) {
             unset($this->superscope[$symbol]);
         }
+    }
+
+    function getIterator() {
+        foreach ($this->listSymbols() as $name) {
+            $values[$name] = $this[$name];
+        }
+        return new ArrayIterator(isset($values) ? $values : array());
     }
 
     function listSymbols() {
