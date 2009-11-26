@@ -33,7 +33,7 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
 
     function testDefine() {
         $define = new Lisphp_Runtime_Define;
-        $scope = new Lisphp_Scope;
+        $scope = new Lisphp_Scope(Lisphp_Environment::sandbox());
         $result = $define->apply($scope, new Lisphp_List(array(
             Lisphp_Symbol::get('*pi*'),
             new Lisphp_Literal(pi())
@@ -46,6 +46,13 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         )));
         $this->assertEquals(pi(), $result);
         $this->assertEquals(pi(), $scope['pi2']);
+        $result = $define->apply($scope, Lisphp_Parser::parseForm('(
+            [add a b]
+            {+ a b}
+        )', $_));
+        $this->assertSame($result, $scope['add']);
+        $this->assertType('Lisphp_Runtime_Function', $result);
+        $this->assertFunction(3, $result, 1, 2);
     }
 
     function testLet() {

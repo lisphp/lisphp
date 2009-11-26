@@ -96,6 +96,37 @@ Static methods in imported classes are also imported.
  [1]: http://pear.php.net/manual/en/standards.naming.php
 
 
+Define custom functions
+-----------------------
+
+There is the macro `lambda` that creates a new function. It takes parameters
+list as first argument, and function body trails.
+
+    (lambda (a b) (+ a b))
+
+Functions are also value, so in order to name it use `define`.
+
+    (define fibonacci
+            {lambda [n]
+                    (if (= n 0) 0
+                        {if (/= n 1)
+                            (+ (fibonacci (- n 1))
+                               (fibonacci (- n 2)))
+                            1})})
+
+Following code defines the same function.
+
+    (define (fibonacci n)
+            (if (= n 0) 0
+                {if (/= n 1)
+                    (+ (fibonacci (- n 1))
+                       (fibonacci (- n 2)))
+                    1}))
+
+Function body can contain one or more forms. All forms are evaluated
+sequentially then the evaluated value of last form is returned.
+
+
 About lists and `nil`
 ---------------------
 
