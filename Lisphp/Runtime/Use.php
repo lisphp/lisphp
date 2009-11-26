@@ -14,7 +14,7 @@ final class Lisphp_Runtime_Use implements Lisphp_Applicable {
                 $scope->let($name, $value);
             }
             $values[] = $value;
-        }exit;
+        }
         return new Lisphp_List($values);
     }
 
