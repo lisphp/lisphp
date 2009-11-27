@@ -27,5 +27,9 @@ final class Lisphp_Runtime_PHPClass extends Lisphp_Runtime_Function {
         }
         return $methods;
     }
+
+    function isClassOf($instance) {
+        return is_object($instance) && $this->class->isInstance($instance);
+    }
 }
 

@@ -37,6 +37,7 @@ final class Lisphp_Environment {
         foreach (Lisphp_Runtime_Predicate_Type::getFunctions() as $n => $f) {
             $scope[$n] = $f;
         }
+        $scope['isa?'] = $scope['is-a?'] = new Lisphp_Runtime_Predicate_IsA;
         $scope['+'] = new Lisphp_Runtime_Arithmetic_Addition;
         $scope['-'] = new Lisphp_Runtime_Arithmetic_Subtraction;
         $scope['*'] = new Lisphp_Runtime_Arithmetic_Multiplication;

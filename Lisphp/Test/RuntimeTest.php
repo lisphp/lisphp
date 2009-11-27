@@ -459,6 +459,38 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertFunction(false, $env['nil?'], 123);
     }
 
+    function testIsA() {
+        $isa = new Lisphp_Runtime_Predicate_IsA;
+        $this->assertFunction(true, $isa,
+                              new stdClass,
+                              new Lisphp_Runtime_PHPClass('stdClass'));
+        $this->assertFunction(false, $isa,
+                              new stdClass,
+                              new Lisphp_Runtime_PHPClass('ArrayObject'));
+        $this->assertFunction(false, $isa,
+                              1, new Lisphp_Runtime_PHPClass('stdClass'));
+        $this->assertFunction(true, $isa,
+                              new stdClass,
+                              new Lisphp_Runtime_PHPClass('ArrayObject'),
+                              new Lisphp_Runtime_PHPClass('stdClass'));
+        $this->assertFunction(false, $isa,
+                              new stdClass,
+                              new Lisphp_Runtime_PHPClass('ArrayObject'),
+                              new Lisphp_Runtime_PHPClass('ArrayIterator'));
+        try {
+            $this->applyFunction($isa);
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
+        try {
+            $this->applyFunction($isa, 1);
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
+    }
+
     function testList() {
         $list = new Lisphp_Runtime_List;
         $this->assertFunction(new Lisphp_List, $list);
@@ -601,6 +633,9 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertType('Lisphp_Runtime_PHPFunction', $methods['b']);
         $this->assertEquals(array('Lisphp_Test_SampleClass', 'b'),
                             $methods['b']->callback);
+        $this->assertTrue($class->isClassOf(new Lisphp_Test_SampleClass));
+        $this->assertFalse($class->isClassOf(new stdClass));
+        $this->assertFalse($class->isClassOf(213));
     }
 
     function testUse() {
