@@ -609,6 +609,28 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         }
     }
 
+    function testFilter() {
+        $filter = new Lisphp_Runtime_List_Filter;
+        $this->assertFunction(new Lisphp_List(array(1, 3, 5)),
+                              $filter,
+                              new Lisphp_Runtime_Predicate_Type('int'),
+                              array(1, '2', 3, array(4), 5));
+    }
+
+    function testFoldl() {
+        $fold = new Lisphp_Runtime_List_Fold;
+        $agg = new Lisphp_Runtime_Arithmetic_Subtraction;
+        $this->assertFunction(3, $fold, $agg, array(25, 9, 5, 7, 1));
+        $this->assertFunction(3, $fold, $agg, array(9, 5, 7, 1), 25);
+        $this->assertFunction(25, $fold, $agg, array(), 25);
+        try {
+            $this->applyFunction($fold, $agg, array());
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
+    }
+
     function methodTest($a) {
         return array($this, $a);
     }
