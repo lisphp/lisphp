@@ -20,6 +20,12 @@ class Lisphp_Test_ListTest extends PHPUnit_Framework_TestCase {
         $this->list->evaluate(new Lisphp_Scope);
     }
 
+    function testInvalidApplication2() {
+        $this->setExpectedException('InvalidApplicationException');
+        $l = Lisphp_Parser::parseForm('("trim" "  hello  ")', $_);
+        $l->evaluate(new Lisphp_Scope);
+    }
+
     function testEvaluate() {
         $scope = new Lisphp_Scope;
         $scope['define'] = new Lisphp_Runtime_Define;

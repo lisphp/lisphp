@@ -9,7 +9,9 @@ class Lisphp_Runtime_Function implements Lisphp_Applicable {
 
     static function call($func, array $args) {
         if ($func instanceof self) return $func->execute($args);
-        else if (is_callable($func)) return call_user_func_array($func, $args);
+        else if (is_callable($func) && is_object($func)) {
+            return call_user_func_array($func, $args);
+        }
         throw new InvalidArgumentException('expected callable value');
     }
 

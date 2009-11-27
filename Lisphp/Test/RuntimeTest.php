@@ -204,14 +204,27 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
             array(1, 2)
         );
         $this->assertEquals(3, $val);
-        $val = Lisphp_Runtime_Function::call('trim', array('  hello  '));
-        $this->assertEquals('hello', $val);
+        try {
+            Lisphp_Runtime_Function::call('trim', array('a'));
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass
+        }
         try {
             Lisphp_Runtime_Function::call(1, array());
             $this->fail();
         } catch (InvalidArgumentException $e) {
             # pass
         }
+    }
+
+    function testGenericCall530() {
+        if (version_compare(phpversion(), '5.3.0', '<')) {
+            $this->markTestSkipped('PHP version is less than 5.3.0.');
+        }
+        eval('$f = function($a, $b) { return $a + $b; };');
+        $val = Lisphp_Runtime_Function::call($f, array(1, 2));
+        $this->assertEquals(3, $val);
     }
 
     function testApply() {
