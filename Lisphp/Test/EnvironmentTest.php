@@ -70,6 +70,12 @@ class Lisphp_Test_EnvironmentTest extends PHPUnit_Framework_TestCase {
         $this->assertType('Lisphp_Runtime_String_Concat', $scope['concat']);
         $this->assertType('Lisphp_Runtime_String_StringJoin',
                           $scope['string-join']);
+        $this->assertType('Lisphp_Runtime_PHPFunction',
+                          $scope['string-upcase']);
+        $this->assertEquals('strtoupper', $scope['string-upcase']->callback);
+        $this->assertType('Lisphp_Runtime_PHPFunction',
+                          $scope['string-downcase']);
+        $this->assertEquals('strtolower', $scope['string-downcase']->callback);
         $this->assertType('Lisphp_Runtime_Logical_Not', $scope['not']);
         $this->assertType('Lisphp_Runtime_Logical_And', $scope['and']);
         $this->assertType('Lisphp_Runtime_Logical_Or', $scope['or']);
