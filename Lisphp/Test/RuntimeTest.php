@@ -631,6 +631,18 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         }
     }
 
+    function testConcat() {
+        $concat = new Lisphp_Runtime_String_Concat;
+        $this->assertFunction('ab', $concat, 'a', 'b');
+        $this->assertFunction('hello world!', $concat, 'hello', ' world', '!');
+        try {
+            $this->applyFunction($concat);
+            $this->fail();
+        } catch (InvalidArgumentException $e) {
+            # pass.
+        }
+    }
+
     function methodTest($a) {
         return array($this, $a);
     }
