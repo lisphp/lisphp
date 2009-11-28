@@ -47,6 +47,7 @@ final class Lisphp_Environment {
         $scope['%'] = $scope['mod'] =new Lisphp_Runtime_Arithmetic_Modulus;
         $scope['.'] = $scope['concat'] =new Lisphp_Runtime_String_Concat;
         $scope['string-join'] = new Lisphp_Runtime_String_StringJoin;
+        $scope['substring'] = new Lisphp_Runtime_PHPFunction('substr');
         $scope['string-upcase'] = new Lisphp_Runtime_PHPFunction('strtoupper');
         $scope['string-downcase']= new Lisphp_Runtime_PHPFunction('strtolower');
         $scope['not'] = new Lisphp_Runtime_Logical_Not;

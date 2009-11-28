@@ -699,7 +699,7 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
                               Lisphp_Parser::parseForm('{
                                   array_merge
                                   array-slice
-                                  [substr substring]
+                                  [implode array->string]
                                   <ArrayObject>
                                   <Lisphp_Symbol>
                                   Lisphp/<Program>
@@ -714,9 +714,9 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertSame($values[1], $scope['array-slice']);
         $this->assertNull($env['array-slice']);
         $this->assertType('Lisphp_Runtime_PHPFunction', $values[2]);
-        $this->assertEquals('substr', $values[2]->callback);
-        $this->assertSame($values[2], $scope['substring']);
-        $this->assertNull($env['substring']);
+        $this->assertEquals('implode', $values[2]->callback);
+        $this->assertSame($values[2], $scope['array->string']);
+        $this->assertNull($env['implode']);
         $this->assertType('Lisphp_Runtime_PHPClass', $values[3]);
         $this->assertEquals('ArrayObject', $values[3]->class->getName());
         $this->assertSame($values[3], $scope['<ArrayObject>']);
