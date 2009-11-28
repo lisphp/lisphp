@@ -643,6 +643,12 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         }
     }
 
+    function testStringJoin() {
+        $join = new Lisphp_Runtime_String_StringJoin;
+        $this->assertFunction('one two three', $join,
+                              array('one', 'two', 'three'), ' ');
+    }
+
     function methodTest($a) {
         return array($this, $a);
     }

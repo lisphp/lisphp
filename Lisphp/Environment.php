@@ -46,6 +46,7 @@ final class Lisphp_Environment {
         $scope['/'] = new Lisphp_Runtime_Arithmetic_Division;
         $scope['%'] = $scope['mod'] =new Lisphp_Runtime_Arithmetic_Modulus;
         $scope['.'] = $scope['concat'] =new Lisphp_Runtime_String_Concat;
+        $scope['string-join'] =new Lisphp_Runtime_String_StringJoin;
         $scope['not'] = new Lisphp_Runtime_Logical_Not;
         $scope['and'] = new Lisphp_Runtime_Logical_And;
         $scope['or'] = new Lisphp_Runtime_Logical_Or;
