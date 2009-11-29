@@ -704,6 +704,8 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
                                   <Lisphp_Symbol>
                                   Lisphp/<Program>
                                   [<Lisphp-Scope> scope]
+                                  +PHP_VERSION+
+                                  PHP/+OS+
                               }', $_));
         $this->assertType('Lisphp_Runtime_PHPFunction', $values[0]);
         $this->assertEquals('array_merge', $values[0]->callback);
@@ -737,6 +739,12 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Lisphp_Scope', $values[6]->class->getName());
         $this->assertSame($values[6], $scope['scope']);
         $this->assertNull($env['scope']);
+        $this->assertEquals(PHP_VERSION, $values[7]);
+        $this->assertEquals(PHP_VERSION, $scope['+PHP_VERSION+']);
+        $this->assertNull($env['+PHP_VERSION+']);
+        $this->assertEquals(PHP_OS, $values[8]);
+        $this->assertEquals(PHP_OS, $scope['PHP/+OS+']);
+        $this->assertNull($env['PHP/+OS+']);
         try {
             $use->apply(
                 $scope,
