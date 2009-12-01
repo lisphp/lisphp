@@ -13,8 +13,8 @@ class Lisphp_Runtime_UserMacro implements Lisphp_Applicable {
 
     function apply(Lisphp_Scope $scope, Lisphp_List $arguments) {
         $call = new Lisphp_Scope($this->scope);
-        $call['#scope'] = $scope;
-        $call['#arguments'] = $arguments;
+        $call->let('#scope', $scope);
+        $call->let('#arguments', $arguments);
         foreach ($this->body as $form) {
             $retval = $form->evaluate($call);
         }
