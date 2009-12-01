@@ -87,16 +87,18 @@ try {
         '));
         $readline = 'readline';
         $add_history = 'readline_add_history';
+        $exit = false;
     } else {
         $readline = create_function('$prompt', '
             echo $prompt;
             return fread(STDIN, 8192);
         ');
         $add_history = create_function('', '');
+        $exit = '';
     }
     while (true) {
         $code = $readline(LISPHP_REPL_PROMPT);
-        if ($code == '') die("\n");
+        if ($code === $exit) die("\n");
         else if (trim($code) == '') continue;
         try {
             $form = Lisphp_Parser::parseForm($code, $_);
@@ -105,7 +107,9 @@ try {
         } catch (Lisphp_ParsingException $e) {
             Lisphp_printParsingError($e);
         } catch (Exception $e) {
-            echo $e->getMessage();
+            echo '!!! ', $e->getMessage(), "\n",
+                 preg_replace('/^|\n/', '\\0    ', $e->getTraceAsString()),
+                 "\n";
         }
         $add_history($code);
     }

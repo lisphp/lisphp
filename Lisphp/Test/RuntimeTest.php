@@ -23,12 +23,14 @@ final class Lisphp_Test_SampleClass {
 class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
     function testEval() {
         $eval = new Lisphp_Runtime_Eval;
-        $form = Lisphp_Parser::parseForm('(+ 1 2 [- 4 3])', $_);
+        $form = Lisphp_Parser::parseForm(':(+ 1 2 [- 4 3])', $_);
         $scope = Lisphp_Environment::sandbox();
         $args = new Lisphp_List(array($form));
         $this->assertEquals(4, $eval->apply($scope, $args));
-        $args = new Lisphp_List(array($form, $scope));
-        $this->assertEquals(4, $eval->apply(new Lisphp_Scope, $args));
+        $args = new Lisphp_List(array($form, Lisphp_Symbol::get('scope')));
+        $names = new Lisphp_Scope;
+        $names['scope'] = $scope;
+        $this->assertEquals(4, $eval->apply($names, $args));
     }
 
     function testDefine() {

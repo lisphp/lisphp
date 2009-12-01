@@ -29,11 +29,30 @@ If there is no filename in arguments to `lis.php`, it enters REPL mode.
 
 Similarly you can specify `-s` to restrict it sandbox.
 
-    $ php -s lis.php
+    $ php lis.php -s
 
  - `>>>` is a prompt.
  - `==>` is a returned value of evaluation.
  - `!!!` is a thrown exception.
+
+
+Simple tutorial
+---------------
+
+    >>> (+ 12 34)
+    46
+    >>> (- 1 2)
+    -1
+    >>> (* 5 6)
+    30
+    >>> (/ 30 5)
+    6
+    >>> (/ 30 4)
+    7.5
+    >>> (% 30 4)
+    2
+    >>> (. "hello" "world")
+    'helloworld' 
 
 
 Embed in your app
@@ -125,6 +144,39 @@ Following code defines the same function.
 
 Function body can contain one or more forms. All forms are evaluated
 sequentially then the evaluated value of last form is returned.
+
+
+Define custom macros
+--------------------
+
+Macros do not evaluate arguments forms. There are some built-in macros in
+Lisphp e.g. `eval`, `define`, `lambda`, `let`, `if`, `and`, `or`. For example,
+`define` takes the name to define as its first argument, but the name is not
+evaluated. In the same way, `if` takes three forms as arguments, but always
+only two arguments are evaluated and the other is ignored. It is impossible
+to implement `if` as function, because all arguments are evaluated. In a case
+like this, `macro` helps you.
+
+    (define if*
+            {macro [let {(cond (eval (car #arguments)
+                                     #scope))}
+                        (eval (at #arguments (or (and cond 1) 2))
+                              #scope)]})
+
+    (define quote*
+            [macro (car #arguments)])
+
+
+Quote
+-----
+
+There are two ways to quote a form in Lisphp. First is the macro `quote`, and
+the other is quote syntax `:`. Single quotations is used as string literal.
+
+    (quote abc)
+    :abc
+    (quote (+ a b))
+    :(+ a b)
 
 
 About lists and `nil`
