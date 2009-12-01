@@ -3,6 +3,8 @@ require_once 'Lisphp.php';
 
 define('LISPHP_COLUMN', 80);
 define('LISPHP_REPL_PROMPT', '>>> ');
+define('LISPHP_REPL_VALUE_PROMPT', '==> ');
+define('LISPHP_REPL_EXCEPTION_PROMPT', '!!! ');
 
 function Lisphp_usage() {
     static $commands = array(
@@ -102,12 +104,13 @@ try {
         else if (trim($code) == '') continue;
         try {
             $form = Lisphp_Parser::parseForm($code, $_);
+            echo LISPHP_REPL_VALUE_PROMPT;
             var_export($form->evaluate($scope));
             echo "\n";
         } catch (Lisphp_ParsingException $e) {
             Lisphp_printParsingError($e);
         } catch (Exception $e) {
-            echo '!!! ', $e->getMessage(), "\n",
+            echo LISPHP_REPL_EXCEPTION_PROMPT, $e->getMessage(), "\n",
                  preg_replace('/^|\n/', '\\0    ', $e->getTraceAsString()),
                  "\n";
         }
