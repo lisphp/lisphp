@@ -45,6 +45,7 @@ final class Lisphp_Environment {
         $scope['*'] = new Lisphp_Runtime_Arithmetic_Multiplication;
         $scope['/'] = new Lisphp_Runtime_Arithmetic_Division;
         $scope['%'] = $scope['mod'] =new Lisphp_Runtime_Arithmetic_Modulus;
+        $scope['string'] = new Lisphp_Runtime_PHPFunction('strval');
         $scope['.'] = $scope['concat'] =new Lisphp_Runtime_String_Concat;
         $scope['string-join'] = new Lisphp_Runtime_String_StringJoin;
         $scope['substring'] = new Lisphp_Runtime_PHPFunction('substr');

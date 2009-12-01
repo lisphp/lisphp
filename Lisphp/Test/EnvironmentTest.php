@@ -66,6 +66,8 @@ class Lisphp_Test_EnvironmentTest extends PHPUnit_Framework_TestCase {
         $this->assertType('Lisphp_Runtime_Arithmetic_Division', $scope['/']);
         $this->assertType('Lisphp_Runtime_Arithmetic_Modulus', $scope['%']);
         $this->assertType('Lisphp_Runtime_Arithmetic_Modulus', $scope['mod']);
+        $this->assertType('Lisphp_Runtime_PHPFunction', $scope['string']);
+        $this->assertEquals('strval', $scope['string']->callback);
         $this->assertType('Lisphp_Runtime_String_Concat', $scope['.']);
         $this->assertType('Lisphp_Runtime_String_Concat', $scope['concat']);
         $this->assertType('Lisphp_Runtime_String_StringJoin',
