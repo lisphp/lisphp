@@ -60,8 +60,33 @@ final class Lisphp_Environment {
 
     static function full() {
         $scope = new Lisphp_Scope(self::sandbox());
-        $scope['use'] = new Lisphp_Runtime_Use;
+        $scope->let('use', new Lisphp_Runtime_Use);
+        $scope->let('*env*', $_ENV);
+        $scope->let('*server*', $_SERVER);
         return $scope;
+    }
+
+    protected static $antimagicFunction = null;
+
+    protected static function antimagic($vars) {
+        if (!$f = self::$antimagicFunction) {
+            self::$antimagicFunction = create_function('$vars', '
+                return is_array($vars)
+                     ? array_map(' . __CLASS__ . '::$antimagicFunction, $vars)
+                     : stripslashes($vars);
+            ');
+        }
+        return $f($vars);
+    }
+
+    static function webapp() {
+        $scope = new Lisphp_Scope(self::sandbox());
+        $scope->let('*get*', self::antimagic($_GET));
+        $scope->let('*post*', self::antimagic($_POST));
+        $scope->let('*request*', self::antimagic($_REQUEST));
+        $scope->let('*files*', $_FILES);
+        $scope->let('*cookie*', self::antimagic($_COOKIE));
+        $scope->let('*session*', $_SESSION);
     }
 }
 
