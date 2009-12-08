@@ -30,6 +30,9 @@ class Lisphp_Test_EnvironmentTest extends PHPUnit_Framework_TestCase {
         $this->assertType('Lisphp_Runtime_List_Car', $scope['car']);
         $this->assertType('Lisphp_Runtime_List_Cdr', $scope['cdr']);
         $this->assertType('Lisphp_Runtime_List_At', $scope['at']);
+        $this->assertType('Lisphp_Runtime_List_SetAt', $scope['set-at!']);
+        $this->assertType('Lisphp_Runtime_List_UnsetAt', $scope['unset-at!']);
+        $this->assertType('Lisphp_Runtime_List_ExistsAt', $scope['exists-at?']);
         $this->assertType('Lisphp_Runtime_List_Count', $scope['count']);
         $this->assertType('Lisphp_Runtime_List_Map', $scope['map']);
         $this->assertType('Lisphp_Runtime_List_Filter', $scope['filter']);

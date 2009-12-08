@@ -544,6 +544,39 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         }
     }
 
+    function testSetAt() {
+        $setAt = new Lisphp_Runtime_List_SetAt;
+        $array = new ArrayObject(array('a', 'b'));
+        $this->assertFunction('c', $setAt, $array, 'c');
+        $this->assertEquals(new ArrayObject(array('a', 'b', 'c')), $array);
+        $this->assertFunction('C', $setAt, $array, 2, 'C');
+        $this->assertEquals(new ArrayObject(array('a', 'b', 'C')), $array);
+        $this->assertFunction('d', $setAt, $array, 3, 'd');
+        $this->assertEquals(new ArrayObject(array('a', 'b', 'C', 'd')), $array);
+    }
+
+    function testUnsetAt() {
+        $unsetAt = new Lisphp_Runtime_List_UnsetAt;
+        $array = new ArrayObject(array('a', 'b'));
+        $this->assertFunction('b', $unsetAt, $array, 1);
+        $this->assertEquals(new ArrayObject(array('a')), $array);
+        $array = new ArrayObject(array('a', 'b'));
+        $this->assertFunction('a', $unsetAt, $array, 0);
+        $this->assertEquals(new ArrayObject(array(1 => 'b')), $array);
+        try {
+            $this->applyFunction($unsetAt, array('a', 'b'), 3);
+            $this->fail();
+        } catch (OutOfRangeException $e) {
+            # pass.
+        }
+    }
+
+    function testExistsAt() {
+        $existsAt = new Lisphp_Runtime_List_ExistsAt;
+        $this->assertFunction(true, $existsAt, array(1, 2, 3), 0);
+        $this->assertFunction(false, $existsAt, array(1, 2, 3), 5);
+    }
+
     function testCount() {
         $count = new Lisphp_Runtime_List_Count;
         $this->assertFunction(0, $count, array());

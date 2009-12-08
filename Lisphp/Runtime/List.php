@@ -53,6 +53,41 @@ final class Lisphp_Runtime_List_At extends Lisphp_Runtime_BuiltinFunction {
     }
 }
 
+final class Lisphp_Runtime_List_SetAt extends Lisphp_Runtime_BuiltinFunction {
+    protected function execute(array $arguments) {
+        list($list, $offset) = $arguments;
+        $list = array_shift($arguments);
+        if (count($arguments) < 2) {
+            $list[] = $value = array_shift($arguments);
+        } else {
+            list($key, $value) = $arguments;
+            $list[$key] = $value;
+        }
+        return $value;
+    }
+}
+
+final class Lisphp_Runtime_List_UnsetAt extends Lisphp_Runtime_BuiltinFunction {
+    protected function execute(array $arguments) {
+        list($list, $key) = $arguments;
+        if (isset($list[$key])) {
+            $value = $list[$key];
+            unset($list[$key]);
+            return $value;
+        }
+        $key = var_export($key, true);
+        throw new OutOfRangeException("no index $key of the list");
+    }
+}
+
+final class Lisphp_Runtime_List_ExistsAt
+      extends Lisphp_Runtime_BuiltinFunction {
+    protected function execute(array $arguments) {
+        list($list, $key) = $arguments;
+        return isset($list[$key]);
+    }
+}
+
 final class Lisphp_Runtime_List_Count extends Lisphp_Runtime_BuiltinFunction {
     protected function execute(array $arguments) {
         list($list) = $arguments;

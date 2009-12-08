@@ -24,6 +24,9 @@ final class Lisphp_Environment {
         $scope['car'] = new Lisphp_Runtime_List_Car;
         $scope['cdr'] = new Lisphp_Runtime_List_Cdr;
         $scope['at'] = new Lisphp_Runtime_List_At;
+        $scope['set-at!'] = new Lisphp_Runtime_List_SetAt;
+        $scope['unset-at!'] = new Lisphp_Runtime_List_UnsetAt;
+        $scope['exists-at?'] = new Lisphp_Runtime_List_ExistsAt;
         $scope['count'] = new Lisphp_Runtime_List_Count;
         $scope['map'] = new Lisphp_Runtime_List_Map;
         $scope['filter'] = new Lisphp_Runtime_List_Filter;
