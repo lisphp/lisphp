@@ -18,6 +18,7 @@ final class Lisphp_Environment {
         $scope['macro'] = new Lisphp_Runtime_Macro;
         $scope['lambda'] = new Lisphp_Runtime_Lambda;
         $scope['apply'] = new Lisphp_Runtime_Apply;
+        $scope['do'] = new Lisphp_Runtime_Do;
         $scope['dict'] = new Lisphp_Runtime_Dict;
         $scope['array'] = new Lisphp_Runtime_Array;
         $scope['list'] = new Lisphp_Runtime_List;

@@ -24,6 +24,7 @@ class Lisphp_Test_EnvironmentTest extends PHPUnit_Framework_TestCase {
         $this->assertType('Lisphp_Runtime_Macro', $scope['macro']);
         $this->assertType('Lisphp_Runtime_Lambda', $scope['lambda']);
         $this->assertType('Lisphp_Runtime_Apply', $scope['apply']);
+        $this->assertType('Lisphp_Runtime_Do', $scope['do']);
         $this->assertType('Lisphp_Runtime_Dict', $scope['dict']);
         $this->assertType('Lisphp_Runtime_Array', $scope['array']);
         $this->assertType('Lisphp_Runtime_List', $scope['list']);

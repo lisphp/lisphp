@@ -8,6 +8,7 @@ require_once 'Runtime/Quote.php';
 require_once 'Runtime/Macro.php';
 require_once 'Runtime/Lambda.php';
 require_once 'Runtime/Apply.php';
+require_once 'Runtime/Do.php';
 require_once 'Runtime/Dict.php';
 require_once 'Runtime/Array.php';
 require_once 'Runtime/Logical.php';

@@ -123,6 +123,21 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($args->cdr(), $func->body);
     }
 
+    function testDo() {
+        $do = new Lisphp_Runtime_Do;
+        $scope = new Lisphp_Scope(Lisphp_Environment::sandbox());
+        $scope['a'] = new Lisphp_List;
+        $args = Lisphp_Parser::parseForm('{
+            (set-at! a "first")
+            (set-at! a "second")
+            (set-at! a "third")
+        }', $_);
+        $retval = $do->apply($scope, $args);
+        $this->assertEquals('third', $retval);
+        $this->assertEquals(new Lisphp_List(array('first', 'second', 'third')),
+                            $scope['a']);
+    }
+
     function testIf() {
         $if = new Lisphp_Runtime_Logical_If;
         $scope = new Lisphp_Scope;
