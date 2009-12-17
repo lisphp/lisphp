@@ -205,6 +205,32 @@ Lisp. It is a just synonym for PHP [`null`][null] value.
  [null]: http://php.net/manual/en/language.types.null.php
 
 
+About value types and refernece types
+-------------------------------------
+
+According to the typing method of PHP, primitive types e.g. boolean, integer,
+float, string, array behave as value type. They are always copied when they
+passed into arguments or returned from a called function. For example,
+`arr` is empty from beginning to end in the following code.
+
+    (define arr (array))
+    (set-at! arr "element")
+
+Such behavior is not problem for scalar types e.g. boolean, integer, float,
+string because they are immutable, but can be problem for arrays.
+
+However you know objects behave as reference type in PHP if you are good at
+PHP, and there are `ArrayObject` class and its subclass `Lisphp_List`. They
+and arrays have the same interface, so you can use these class instead of
+arrays.
+
+    (use <ArrayObject>)
+    (define arr (<ArrayObject>))
+    (set-at! arr "element")
+    (define lis (list))
+    (set-at! arr "element")
+
+
 Author and license
 ------------------
 
