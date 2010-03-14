@@ -16,7 +16,7 @@ final class Lisphp_Runtime_From implements Lisphp_Applicable {
         }
         $retval = $use->apply($tmp, new Lisphp_List($names));
         foreach ($simpleNames as $i => $name) {
-            $scope[$name] = $retval[$i];
+            $scope->let($name, $retval[$i]);
         }
         return $retval;
     }
