@@ -21,6 +21,10 @@ final class Lisphp_Test_SampleClass {
 }
 
 class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
+    static function lst($code) {
+        return Lisphp_Parser::parseForm("[$code]", $_);
+    }
+
     function testEval() {
         $eval = new Lisphp_Runtime_Eval;
         $form = Lisphp_Parser::parseForm(':(+ 1 2 [- 4 3])', $_);
@@ -48,10 +52,7 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         )));
         $this->assertEquals(pi(), $result);
         $this->assertEquals(pi(), $scope['pi2']);
-        $result = $define->apply($scope, Lisphp_Parser::parseForm('(
-            [add a b]
-            {+ a b}
-        )', $_));
+        $result = $define->apply($scope, self::lst('[add a b] {+ a b}', $_));
         $this->assertSame($result, $scope['add']);
         $this->assertType('Lisphp_Runtime_Function', $result);
         $this->assertFunction(3, $result, 1, 2);
@@ -64,7 +65,7 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $scope['c'] = 1;
         $retval = $let->apply(
             $scope,
-            Lisphp_Parser::parseForm('{[(a 2) (b 1)] (define c 2) (+ a b)}', $_)
+            self::lst('[(a 2) (b 1)] (define c 2) (+ a b)')
         );
         $this->assertEquals(2, $scope['c']);
         $this->assertEquals(3, $retval);
@@ -87,15 +88,12 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
     function testUserMacro() {
         $scope = Lisphp_Environment::sandbox();
         $scope['log'] = new Lisphp_Runtime_PHPFunction(array($this, 'logTest'));
-        $body = Lisphp_Parser::parseForm('{
-            (log "testUserMacro")
-            (list #scope #arguments)
-        }', $_);
+        $body = self::lst('(log "testUserMacro") (list #scope #arguments)', $_);
         $macro = new Lisphp_Runtime_UserMacro($scope, $body);
         $this->assertSame($scope, $macro->scope);
         $this->assertEquals($body, $macro->body);
         $context = new Lisphp_Scope;
-        $args = Lisphp_Parser::parseForm('{a (+ a b)}', $_);
+        $args = self::lst('a (+ a b)');
         $retval = $macro->apply($context, $args);
         $this->assertType('Lisphp_List', $retval);
         $this->assertSame($context, $retval[0]);
@@ -104,7 +102,7 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
 
     function testMacro() {
         $macro = new Lisphp_Runtime_Macro;
-        $args = Lisphp_Parser::parseForm('{(+ 1 2)}', $_);
+        $args = self::lst('(+ 1 2)');
         $scope = new Lisphp_Scope;
         $retval = $macro->apply($scope, $args);
         $this->assertType('Lisphp_Runtime_UserMacro', $retval);
@@ -115,7 +113,7 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
     function testLambda() {
         $lambda = new Lisphp_Runtime_Lambda;
         $scope = new Lisphp_Scope;
-        $args = Lisphp_Parser::parseForm('{[a b] (define x 2) (+ a b)}', $_);
+        $args = self::lst('[a b] (define x 2) (+ a b)');
         $func = $lambda->apply($scope, $args);
         $this->assertType('Lisphp_Runtime_Function', $func);
         $this->assertSame($scope, $func->scope);
@@ -127,11 +125,9 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $do = new Lisphp_Runtime_Do;
         $scope = new Lisphp_Scope(Lisphp_Environment::sandbox());
         $scope['a'] = new Lisphp_List;
-        $args = Lisphp_Parser::parseForm('{
-            (set-at! a "first")
-            (set-at! a "second")
-            (set-at! a "third")
-        }', $_);
+        $args = self::lst('(set-at! a "first")
+                           (set-at! a "second")
+                           (set-at! a "third")');
         $retval = $do->apply($scope, $args);
         $this->assertEquals('third', $retval);
         $this->assertEquals(new Lisphp_List(array('first', 'second', 'third')),
@@ -195,8 +191,8 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
     function testFunction() {
         $global = new Lisphp_Scope(Lisphp_Environment::sandbox());
         $global['x'] = 1;
-        $params = Lisphp_Parser::parseForm('[a b]', $_);
-        $body = Lisphp_Parser::parseForm('{(define x 2) (+ a b)}', $_);
+        $params = self::lst('a b');
+        $body = self::lst('(define x 2) (+ a b)');
         $func = new Lisphp_Runtime_Function($global, $params, $body);
         $this->assertSame($global, $func->scope);
         $this->assertEquals($params, $func->parameters);
@@ -209,7 +205,7 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         } catch (InvalidArgumentException $e) {
             # pass.
         }
-        $body = Lisphp_Parser::parseForm('{#arguments}', $_);
+        $body = self::lst('#arguments');
         $func = new Lisphp_Runtime_Function($global, new Lisphp_List, $body);
         $this->assertFunction(new Lisphp_List, $func);
         $this->assertFunction(new Lisphp_List(range(1, 3)), $func, 1, 2, 3);
@@ -317,11 +313,9 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $env = Lisphp_Environment::sandbox();
         $scope = new Lisphp_Scope($env);
         $scope['a'] = 1;
-        $retval = $and->apply($scope, Lisphp_Parser::parseForm('{
-            (define a 2)
-            (define b 0)
-            (define a 3)
-        }', $_));
+        $retval = $and->apply($scope, self::lst('(define a 2)
+                                                 (define b 0)
+                                                 (define a 3)'));
         $this->assertEquals(0, $retval);
         $this->assertEquals(2, $scope['a']);
     }
@@ -350,11 +344,9 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $env = Lisphp_Environment::sandbox();
         $scope = new Lisphp_Scope($env);
         $scope['a'] = 1;
-        $retval = $or->apply($scope, Lisphp_Parser::parseForm('{
-            (define b 0)
-            (define a 2)
-            (define a 3)
-        }', $_));
+        $retval = $or->apply($scope, self::lst('(define b 0)
+                                                (define a 2)
+                                                (define a 3)'));
         $this->assertEquals(2, $retval);
         $this->assertEquals(2, $scope['a']);
         $this->assertEquals(0, $scope['b']);
@@ -612,9 +604,7 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $dict = new Lisphp_Runtime_Dict;
         $scope = new Lisphp_Scope;
         $scope['a'] = 'key';
-        $retval = $dict->apply($scope, Lisphp_Parser::parseForm('{
-            (a 1) ("key2" 2) (3) 4
-        }', $_));
+        $retval = $dict->apply($scope, self::lst('(a 1) ("key2" 2) (3) 4'));
         $this->assertEquals(array('key' => 1, 'key2' => 2, 3, 4), $retval);
     }
 
@@ -622,17 +612,15 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $map = new Lisphp_Runtime_List_Map;
         $func = new Lisphp_Runtime_Function(
             Lisphp_Environment::sandbox(),
-            Lisphp_Parser::parseForm('[a]', $_),
-            Lisphp_Parser::parseForm('{(+ a 1)}', $_)
+            self::lst('a'),
+            self::lst('(+ a 1)')
         );
         $this->assertFunction(new Lisphp_List, $map, $func, array());
         $this->assertFunction(new Lisphp_List(array(2, 3)),
                               $map, $func, array(1, 2));
         $func = new Lisphp_Runtime_Function(new Lisphp_Scope,
-                                            Lisphp_Parser::parseForm('[]', $_),
-                                            Lisphp_Parser::parseForm('{
-                                                #arguments
-                                            }', $_));
+                                            self::lst(''),
+                                            self::lst('#arguments'));
         $this->assertFunction(
             new Lisphp_List(array(new Lisphp_List(array(1, 4)),
                                   new Lisphp_List(array(2, 5)),
@@ -741,22 +729,43 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertFalse($class->isClassOf(213));
     }
 
+    function testGetAttribute() {
+        $attr = new Lisphp_Runtime_Object_GetAttribute;
+        $object = (object) array('abc' => 'value');
+        $object->ptr = $object;
+        $object->lst = new Lisphp_List;
+        $scope = new Lisphp_Scope;
+        $scope->let('object', $object);
+        $val = $attr->apply($scope,
+                            self::lst('object abc'));
+        $this->assertEquals($object->abc, $val);
+        $val = $attr->apply($scope, self::lst('object ptr ptr abc'));
+        $this->assertEquals($object->ptr->ptr->abc, $val);
+        $val = $attr->apply($scope, self::lst('object lst car'));
+        $this->assertType('Lisphp_Runtime_PHPFunction', $val);
+        $this->assertSame($object->lst, $val->callback[0]);
+        $this->assertEquals('car', $val->callback[1]);
+        try {
+            $attr->apply($scope, self::lst('object lst a'));
+            $this->fail();
+        } catch (RuntimeException $e) {
+            # pass
+        }
+    }
+
     function testUse() {
         $use = new Lisphp_Runtime_Use;
         $env = Lisphp_Environment::sandbox();
         $scope = new Lisphp_Scope($env);
-        $values = $use->apply($scope,
-                              Lisphp_Parser::parseForm('{
-                                  array_merge
-                                  array-slice
-                                  [implode array->string]
-                                  <ArrayObject>
-                                  <Lisphp_Symbol>
-                                  Lisphp/<Program>
-                                  [<Lisphp-Scope> scope]
-                                  +PHP_VERSION+
-                                  PHP/+OS+
-                              }', $_));
+        $values = $use->apply($scope, self::lst('array_merge
+                                                 array-slice
+                                                 [implode array->string]
+                                                 <ArrayObject>
+                                                 <Lisphp_Symbol>
+                                                 Lisphp/<Program>
+                                                 [<Lisphp-Scope> scope]
+                                                 +PHP_VERSION+
+                                                 PHP/+OS+'));
         $this->assertType('Lisphp_Runtime_PHPFunction', $values[0]);
         $this->assertEquals('array_merge', $values[0]->callback);
         $this->assertSame($values[0], $scope['array_merge']);
@@ -796,19 +805,13 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(PHP_OS, $scope['PHP/+OS+']);
         $this->assertNull($env['PHP/+OS+']);
         try {
-            $use->apply(
-                $scope,
-                Lisphp_Parser::parseForm('(undefined-function-name)', $_)
-            );
+            $use->apply($scope, self::lst('undefined-function-name'));
             $this->fail();
         } catch (InvalidArgumentException $e) {
             # pass
         }
         try {
-            $use->apply(
-                $scope,
-                Lisphp_Parser::parseForm('(<UndefinedClassName>)', $_)
-            );
+            $use->apply($scope, self::lst('<UndefinedClassName>'));
             $this->fail();
         } catch (InvalidArgumentException $e) {
             # pass
@@ -819,10 +822,8 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         $from = new Lisphp_Runtime_From;
         $env = Lisphp_Environment::sandbox();
         $scope = new Lisphp_Scope($env);
-        $values = $from->apply($scope, Lisphp_Parser::parseForm('{
-            Lisphp
-            (<Symbol> <Program>)
-        }', $_));
+        $values = $from->apply($scope,
+                               self::lst('Lisphp (<Symbol> <Program>)'));
         $this->assertEquals('Lisphp_Symbol', $values[0]->class->getName());
         $this->assertEquals('Lisphp_Symbol',
                             $scope['<Symbol>']->class->getName());

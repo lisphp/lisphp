@@ -59,6 +59,7 @@ final class Lisphp_Environment {
         $scope['and'] = new Lisphp_Runtime_Logical_And;
         $scope['or'] = new Lisphp_Runtime_Logical_Or;
         $scope['if'] = new Lisphp_Runtime_Logical_If;
+        $scope['->'] = new Lisphp_Runtime_Object_GetAttribute;
         return $scope;
     }
 

@@ -203,6 +203,39 @@ the other is quote syntax `:`. Single quotations is used as string literal.
     :(+ a b)
 
 
+Playing with objects
+--------------------
+
+In order to get attribute of object, use `->` macro. It takes an object as
+first arguments, and attribute names go the rest.
+
+    (use [dir <dir>])
+    (define directory (<dir> "/tmp"))
+    (define handle (-> directory handle))
+
+There is a syntactic sugar for object attribute chaining also.
+
+    (-> object attribute names go here)
+
+This form equals to following PHP expression.
+
+    $object->attribute->names->go->here
+
+Instance methods can be invoked also by `->`.
+
+    ((-> object method) method arguments)
+
+This form equals to following PHP expression.
+
+    $object->method($method, $arguments)
+
+Exactly equals to following code.
+
+    call_user_func(array($object, 'method'), $method, $arguments)
+
+Because `->` does not call but get method as function object.
+
+
 About lists and `nil`
 ---------------------
 

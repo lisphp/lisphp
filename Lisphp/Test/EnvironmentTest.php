@@ -88,6 +88,7 @@ class Lisphp_Test_EnvironmentTest extends PHPUnit_Framework_TestCase {
         $this->assertType('Lisphp_Runtime_Logical_And', $scope['and']);
         $this->assertType('Lisphp_Runtime_Logical_Or', $scope['or']);
         $this->assertType('Lisphp_Runtime_Logical_If', $scope['if']);
+        $this->assertType('Lisphp_Runtime_Object_GetAttribute', $scope['->']);
     }
 
     function testFull() {
