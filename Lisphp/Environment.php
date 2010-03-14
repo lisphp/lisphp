@@ -65,6 +65,7 @@ final class Lisphp_Environment {
     static function full() {
         $scope = new Lisphp_Scope(self::sandbox());
         $scope->let('use', new Lisphp_Runtime_Use);
+        $scope->let('from', new Lisphp_Runtime_From);
         $scope->let('*env*', $_ENV);
         $scope->let('*server*', $_SERVER);
         return $scope;

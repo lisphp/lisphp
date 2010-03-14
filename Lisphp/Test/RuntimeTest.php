@@ -814,5 +814,21 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
             # pass
         }
     }
+
+    function testFrom() {
+        $from = new Lisphp_Runtime_From;
+        $env = Lisphp_Environment::sandbox();
+        $scope = new Lisphp_Scope($env);
+        $values = $from->apply($scope, Lisphp_Parser::parseForm('{
+            Lisphp
+            (<Symbol> <Program>)
+        }', $_));
+        $this->assertEquals('Lisphp_Symbol', $values[0]->class->getName());
+        $this->assertEquals('Lisphp_Symbol',
+                            $scope['<Symbol>']->class->getName());
+        $this->assertEquals('Lisphp_Program', $values[1]->class->getName());
+        $this->assertEquals('Lisphp_Program',
+                            $scope['<Program>']->class->getName());
+    }
 }
 

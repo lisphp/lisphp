@@ -94,6 +94,7 @@ class Lisphp_Test_EnvironmentTest extends PHPUnit_Framework_TestCase {
         $scope = Lisphp_Environment::full();
         $this->testSandbox($scope);
         $this->assertType('Lisphp_Runtime_Use', $scope['use']);
+        $this->assertType('Lisphp_Runtime_From', $scope['from']);
         $this->assertEquals($_ENV, $scope['*env*']);
         $this->assertEquals($_SERVER, $scope['*server*']);
     }

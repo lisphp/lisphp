@@ -19,4 +19,5 @@ require_once 'Runtime/String.php';
 require_once 'Runtime/PHPFunction.php';
 require_once 'Runtime/PHPClass.php';
 require_once 'Runtime/Use.php';
+require_once 'Runtime/From.php';
 
