@@ -94,8 +94,8 @@ the full environment. Following code touches file a.txt and writes some text.
          (flose fp)}
 
 
-Macro `use`
------------
+Macro `use` and `from`
+----------------------
 
 The full environment of Lisphp provides `use` macro. It can import native
 PHP functions and classes.
@@ -121,6 +121,20 @@ Static methods in imported classes are also imported.
 
     (<PDO> "mysql:dbname=testdb;host=127.0.0.1" "dbuser" "dbpass")
     (Lisphp/<Program>/load "program.lisphp")
+
+There are the macro `from` also. It makes importing objects with resolved names
+easy.
+
+    (from Lisphp [<Program> <Scope>])
+
+It has the same behavior as following code that contains `use`.
+
+    (use Lisphp/<Program> Lisphp/<Scope>)
+    (define <Program> Lisphp/<Program>)
+    (define <Scope> Lisphp/<Scope>)
+    (define Lisphp/<Program> nil)
+    (define Lisphp/<Scope> nil)
+
 
  [1]: http://pear.php.net/manual/en/standards.naming.php
 
