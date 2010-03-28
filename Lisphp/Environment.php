@@ -75,6 +75,7 @@ final class Lisphp_Environment {
     protected static $antimagicFunction = null;
 
     protected static function antimagic($vars) {
+        if (!get_magic_quotes_gpc()) return ($vars);
         if (!$f = self::$antimagicFunction) {
             self::$antimagicFunction = create_function('$vars', '
                 return is_array($vars)
