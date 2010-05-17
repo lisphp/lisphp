@@ -1,20 +1,21 @@
 Lisphp
 ======
 
-Lisphp is a Lisp dialect written in PHP. It purposes to be embedded in web
-applications to be distributed or web services and so implements sandbox
-environment for security issues and multiple environment instances.
+Lisphp is a Lisp dialect written in PHP. It was created to be embedded in 
+web services or to be distributed within web applications. For that reason,
+it implements sandbox environment for security issues and multiple 
+environment instances.
 
 
 Standalone command line interface
 ---------------------------------
 
-There is `lis.php`, a standalone command line interface. It takes a parameter,
-a program filename to execute.
+There is `lis.php`, a standalone command line interface. It can take one
+parameter, the filename of the lisphp program to be executed.
 
     $ php lis.php program.lisphp
 
-You can run programs in sandbox with an option `-s`.
+You can run the program in sandbox with the option `-s`.
 
     $ php lis.php -s program.lisphp
 
@@ -27,7 +28,7 @@ If there is no filename in arguments to `lis.php`, it enters REPL mode.
     $ php lis.php
     >>> (form to evaulate)
 
-Similarly you can specify `-s` to restrict it sandbox.
+Similarly you can specify `-s` to enter REPL mode in sandbox.
 
     $ php lis.php -s
 
@@ -68,10 +69,11 @@ Simple tutorial
 Embed in your app
 -----------------
 
-In order to execute the Lisphp program, an _environment instance_ is required.
-Environment means global state for the program. It includes global symbols,
-built-in functions and macros. A program to execute starts from the initialized
-environment. You can initialize an environment with `Lisphp_Environment` class.
+In order to execute a Lisphp program, an _environment instance_ is required.
+Environment represents a global state for the program. It includes global
+symbols, built-in functions and macros. A program to be executed starts from the
+initialized environment. You can initialize the environment with
+`Lisphp_Environment` class.
 
     require_once 'Lisphp.php';
     $env = Lisphp_Environment::sandbox();
@@ -79,13 +81,13 @@ environment. You can initialize an environment with `Lisphp_Environment` class.
     $program->execute($env);
 
 There are two given environment sets in `Lisphp_Environment`. One is the
-sandbox, restricted to inside of Lisphp, which is created with the method
-`Lisphp_Environment::sandbox()`. It cannot touch outside of Lisphp, PHP side.
-Programs cannot access to file system, IO, etc. The other is the full
-environment of Lisphp, which is initialized with `Lisphp_Environment::full()`.
-In the environment, `use` macro, is for importing native PHP functions and
-classes, is provided. File system, IO, socket, et cetera can be accessed in
-the full environment. Following code touches file a.txt and writes some text.
+sandbox, which is created with the method `Lisphp_Environment::sandbox()`.
+In the sandbox mode, programs cannot access the file system, IO, etc. 
+The other set is the full environment of Lisphp, which is initialized with
+`Lisphp_Environment::full()`. This environment provides `use` macro for
+importing native PHP functions and classes. File system, IO, socket, etc.
+can be accessed in this full environment. Following code touches file a.txt and
+writes some text.
 
     (use fopen fwrite fclose)
 
@@ -97,37 +99,38 @@ the full environment. Following code touches file a.txt and writes some text.
 Macro `use` and `from`
 ----------------------
 
-The full environment of Lisphp provides `use` macro. It can import native
-PHP functions and classes.
+The full environment of Lisphp provides `use` macro. It can import native PHP
+functions and classes.
 
     (use strrev array_sum array-product [substr substring])
 
-It takes function identifiers to import. Hyphens in identifiers are replaced to
-underscores. Lists that contain two symbols are aliasing.
+It imports by taking function identifiers. Hyphens in identifiers are replaced
+by underscores. If you supply a list as an argument to `use` macro, the second
+symbol becomes the alias of the first function identifier.
 
     (strrev "hello")                #=> "olleh"
     (array_sum [array 1 2 3])       #=> 6
     (array-product [array 4 5 6])   #=> 120
     (substring "world" 2)           #=> "rld"
 
-Wrap identifiers with angle brackets in order to import class. According
+Wrap identifiers with angle brackets in order to import class. According to the
 [PEAR naming convention][1] for classes, slashes are treated as hierarchical
-separators, so replaced to underscores.
+separators, so it gets replaced by underscores.
 
     (use <PDO> Lisphp/<Program>)
 
-Imported classes are applicable. They as functions behave as instantiation.
-Static methods in imported classes are also imported.
+Imported classes are applicable and act as instantiating functions.
+Static methods in imported classes are also imported as well.
 
     (<PDO> "mysql:dbname=testdb;host=127.0.0.1" "dbuser" "dbpass")
     (Lisphp/<Program>/load "program.lisphp")
 
-There are the macro `from` also. It makes importing objects with resolved names
-easy.
+There's also a macro called `from`. It simplifies the step of importing objects
+and resolving their names.
 
     (from Lisphp [<Program> <Scope>])
 
-It has the same behavior as following code that contains `use`.
+It has the same behavior as the following code which utilizes `use`.
 
     (use Lisphp/<Program> Lisphp/<Scope>)
     (define <Program> Lisphp/<Program>)
@@ -142,12 +145,12 @@ It has the same behavior as following code that contains `use`.
 Define custom functions
 -----------------------
 
-There is the macro `lambda` that creates a new function. It takes parameters
-list as first argument, and function body trails.
+There is a macro `lambda` that creates a new function. It takes parameter
+list as its first argument, and then a trailing function body.
 
     (lambda (a b) (+ a b))
 
-Functions are also value, so in order to name it use `define`.
+Functions are also values, so in order to name the function, use `define`.
 
     (define fibonacci
             {lambda [n]
@@ -167,19 +170,19 @@ Following code defines the same function.
                     1}))
 
 Function body can contain one or more forms. All forms are evaluated
-sequentially then the evaluated value of last form is returned.
+sequentially then the evaluated value of the last form is returned.
 
 
 Define custom macros
 --------------------
 
-Macros do not evaluate arguments forms. There are some built-in macros in
-Lisphp e.g. `eval`, `define`, `lambda`, `let`, `if`, `and`, `or`. For example,
-`define` takes the name to define as its first argument, but the name is not
-evaluated. In the same way, `if` takes three forms as arguments, but always
-only two arguments are evaluated and the other is ignored. It is impossible
-to implement `if` as function, because all arguments are evaluated. In a case
-like this, `macro` helps you.
+The built-in macros in Lisphp such as `eval`, `define`, `lambda`, `let`, `if`,
+`and`, `or` do not evaluate the form of their arguments'. For example, `define`
+takes the name to define as its first argument, but it does not evaluate the 
+name. In the same way, `if` takes three forms as arguments, but always
+evaluates only two of those arguments and ignores the other. It is impossible
+to implement `if` as a function, because then every argument would have to be
+evaluated. If you have a case like this, you can try defining a `macro`.
 
     (define if*
             {macro [let {(cond (eval (car #arguments)
@@ -195,7 +198,8 @@ Quote
 -----
 
 There are two ways to quote a form in Lisphp. First is the macro `quote`, and
-the other is quote syntax `:`. Single quotations is used as string literal.
+the other is quote syntax `:`. (You cannot use the traditional single quotation
+because it is already being used as a string literal.)
 
     (quote abc)
     :abc
@@ -206,45 +210,45 @@ the other is quote syntax `:`. Single quotations is used as string literal.
 Playing with objects
 --------------------
 
-In order to get attribute of object, use `->` macro. It takes an object as
-first arguments, and attribute names go the rest.
+In order to get an attribute of an object, use `->` macro. It takes an object as
+its first argument, and the name of the attribute follows.
 
     (use [dir <dir>])
     (define directory (<dir> "/tmp"))
     (define handle (-> directory handle))
 
-There is a syntactic sugar for object attribute chaining also.
+There is also a syntactic sugar for object attribute chaining.
 
     (-> object attribute names go here)
 
-This form equals to following PHP expression.
+This form is equivalent to the following PHP expression.
 
     $object->attribute->names->go->here
 
-Instance methods can be invoked also by `->`.
+Instance methods can also be invoked by `->`.
 
     ((-> object method) method arguments)
 
-This form equals to following PHP expression.
+This form is equivalent to the following PHP expression.
 
     $object->method($method, $arguments)
 
-Exactly equals to following code.
+Because `->` does not call but gets method as a function object, the expression
+above is equivalent to the following code.
 
     call_user_func(array($object, 'method'), $method, $arguments)
 
-Because `->` does not call but get method as function object.
 
 
 About lists and `nil`
 ---------------------
 
 Lisphp implements lists in primitive, but it has some differences between
-original Lisp. In original Lisp, lists are made by [cons][] pairs. But lists in
-Lisphp is just instance of `Lisphp_List` class, a subclass of
-[`ArrayObject`][arrayobject]. So exactly it is not linked list but similar to
-array. In like manner `nil` also is not empty list in Lisphp unlike in original
-Lisp. It is a just synonym for PHP [`null`][null] value.
+original Lisp. In original Lisp, lists are made from [cons][] pairs. But lists
+in Lisphp is just an instance of `Lisphp_List` class, a subclass of
+[`ArrayObject`][arrayobject]. So it is not exactly a linked list but is similar
+to an array. In the same manner, `nil`is  also not an empty list in Lisphp 
+unlike in the original Lisp. It is a just synonym for PHP [`null`][null] value.
 
 
  [cons]: http://en.wikipedia.org/wiki/Cons
@@ -252,24 +256,24 @@ Lisp. It is a just synonym for PHP [`null`][null] value.
  [null]: http://php.net/manual/en/language.types.null.php
 
 
-About value types and refernece types
+About value types and reference types
 -------------------------------------
 
-According to the typing method of PHP, primitive types e.g. boolean, integer,
-float, string, array behave as value type. They are always copied when they
-passed into arguments or returned from a called function. For example,
-`arr` is empty from beginning to end in the following code.
+In PHP, primitive types such as boolean, integer, float, string, and array
+behave as value types. They are always copied when they are passed as arguments
+or returned from a called function. For example, `arr` is empty from the
+beginning to the end in the following code.
 
     (define arr (array))
     (set-at! arr "element")
 
-Such behavior is not problem for scalar types e.g. boolean, integer, float,
-string because they are immutable, but can be problem for arrays.
-
-However you know objects behave as reference type in PHP if you are good at
-PHP, and there are `ArrayObject` class and its subclass `Lisphp_List`. They
-and arrays have the same interface, so you can use these class instead of
+Such behavior is not a problem for scalar types like boolean, integer, float,
+and string because they are immutable. Yet this can be problematic for native
 arrays.
+
+In PHP, objects behave as reference types, and there exists class `ArrayObject`
+which has the same interface as PHP's native array. `Lisphp_List` is a subclass
+of `ArrayObject` and you can use these classes instead of arrays.
 
     (use <ArrayObject>)
     (define arr (<ArrayObject>))
@@ -281,7 +285,7 @@ arrays.
 Author and license
 ------------------
 
-The author is Hong, MinHee <http://dahlia.kr/>.
+Lisphp was written by Hong, MinHee <http://dahlia.kr/>.
 
-Lisphp is distributed under MIT license.
+Lisphp is distributed under the MIT license.
 
