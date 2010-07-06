@@ -11,7 +11,7 @@ Standalone command line interface
 ---------------------------------
 
 There is `lis.php`, a standalone command line interface. It can take one
-parameter, the filename of the lisphp program to be executed.
+parameter, the filename of the Lisphp program to be executed.
 
     $ php lis.php program.lisphp
 
@@ -280,6 +280,14 @@ of `ArrayObject` and you can use these classes instead of arrays.
     (set-at! arr "element")
     (define lis (list))
     (set-at! arr "element")
+
+
+Mailing list
+------------
+
+There is the mailing list to discuss about Lisphp: <lisphp@googlegroups.com>.
+
+The web archive for this mailing list: <http://groups.google.com/group/lisphp>.
 
 
 Author and license
