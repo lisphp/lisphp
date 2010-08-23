@@ -1,4 +1,4 @@
-"Church numerals by Seo Sanghyun. http://bit.ly/bSlqTK"
+"Church numerals by Seo Sanghyeon. http://bit.ly/bSlqTK"
 
 (define zero (lambda (f) (lambda (x) x))) 
 (define one (lambda (f) (lambda (x) (f x)))) 
