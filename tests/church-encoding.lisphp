@@ -1,0 +1,15 @@
+"Church numerals by Seo Sanghyun. http://bit.ly/bSlqTK"
+
+(define zero (lambda (f) (lambda (x) x))) 
+(define one (lambda (f) (lambda (x) (f x)))) 
+(define plus (lambda (m n) (lambda (f) (lambda (x) ((n f) ((m f) x)))))) 
+(define mult (lambda (m n) (lambda (f) (lambda (x) ((n (m f)) x))))) 
+(define xp (lambda (m n) (lambda (f) (lambda (x) (((n m) f) x))))) 
+(define pr (lambda (x) (do (echo x) x))) 
+(define prn (lambda (n) (do ((n pr) ".") (echo "\n")))) 
+(define two (plus one one)) 
+(define three (plus two one)) 
+(define six (mult two three)) 
+(define sixty-four (xp two six)) 
+(prn sixty-four)
+
