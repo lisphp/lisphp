@@ -293,7 +293,7 @@ The web archive for this mailing list: <http://groups.google.com/group/lisphp>.
 Author and license
 ------------------
 
-Lisphp was written by Hong, MinHee <http://dahlia.kr/>.
+Lisphp was written by Hong Minhee <http://dahlia.kr/>.
 
 Lisphp is distributed under the MIT license.
 
