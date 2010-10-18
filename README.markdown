@@ -7,6 +7,17 @@ it implements sandbox environment for security issues and multiple
 environment instances.
 
 
+Requirements
+------------
+
+It requires PHP 5.2.5 or higher version. When it works on PHP 5.3 or higher,
+it is integrated with lambda functions well. It also requires [SPL][]
+which is available and compiled by default in PHP 5.
+
+
+ [spl]: http://kr.php.net/manual/en/book.spl.php
+
+
 Standalone command line interface
 ---------------------------------
 
