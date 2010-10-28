@@ -11,7 +11,7 @@ abstract class Lisphp_Runtime_ComparingPredicate
         $fst = array_shift($operands);
         $or = $this->logicalOr;
         foreach ($operands as $val) {
-            if ($or xor !$this->compare($val, $fst)) return $or;
+            if ($or xor !$this->compare($fst, $val)) return $or;
             $fst = $val;
         }
         return !$or;
@@ -37,6 +37,34 @@ class Lisphp_Runtime_Predicate_NotEq extends Lisphp_Runtime_ComparingPredicate {
 
     protected function compare($a, $b) {
         return $a !== $b;
+    }
+}
+
+final class Lisphp_Runtime_Predicate_LessThan
+      extends Lisphp_Runtime_ComparingPredicate {
+    protected function compare($a, $b) {
+        return $a < $b;
+    }
+}
+
+final class Lisphp_Runtime_Predicate_GreaterThan
+      extends Lisphp_Runtime_ComparingPredicate {
+    protected function compare($a, $b) {
+        return $a > $b;
+    }
+}
+
+final class Lisphp_Runtime_Predicate_LessEqual
+      extends Lisphp_Runtime_ComparingPredicate {
+    protected function compare($a, $b) {
+        return $a <= $b;
+    }
+}
+
+final class Lisphp_Runtime_Predicate_GreaterEqual
+      extends Lisphp_Runtime_ComparingPredicate {
+    protected function compare($a, $b) {
+        return $a >= $b;
     }
 }
 

@@ -40,6 +40,10 @@ final class Lisphp_Environment {
                       = new Lisphp_Runtime_Predicate_NotEq;
         $scope['!='] = $scope['/='] = $scope['not-equal'] = $scope['not-equal?']
                      = new Lisphp_Runtime_Predicate_NotEqual;
+        $scope['<'] = new Lisphp_Runtime_Predicate_LessThan;
+        $scope['>'] = new Lisphp_Runtime_Predicate_GreaterThan;
+        $scope['<='] = new Lisphp_Runtime_Predicate_LessEqual;
+        $scope['>='] = new Lisphp_Runtime_Predicate_GreaterEqual;
         foreach (Lisphp_Runtime_Predicate_Type::getFunctions() as $n => $f) {
             $scope[$n] = $f;
         }
