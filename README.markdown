@@ -104,7 +104,7 @@ writes some text.
 
     {let [fp (fopen "a.txt" "w")]
          (fwrite fp "some text")
-         (flose fp)}
+         (fclose fp)}
 
 
 Macro `use` and `from`
