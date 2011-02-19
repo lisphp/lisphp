@@ -3,6 +3,7 @@ require_once 'Runtime/Function.php';
 require_once 'Runtime/UserMacro.php';
 require_once 'Runtime/Eval.php';
 require_once 'Runtime/Define.php';
+require_once 'Runtime/Setf.php';
 require_once 'Runtime/Let.php';
 require_once 'Runtime/Quote.php';
 require_once 'Runtime/Macro.php';

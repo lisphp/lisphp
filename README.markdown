@@ -183,6 +183,17 @@ Following code defines the same function.
 Function body can contain one or more forms. All forms are evaluated
 sequentially then the evaluated value of the last form is returned.
 
+Plus, of course, it implements lexical scope (that is also known as closure)
+also.
+
+    (define (adder n)
+            {lambda [x]
+                    (setf! n (+ n x))
+                    n})
+
+Special form `define` defines global variables (and functions),
+but `setf!` modifies local variables. See also `let` form.
+
 
 Define custom macros
 --------------------

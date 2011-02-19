@@ -13,8 +13,13 @@ final class Lisphp_Runtime_Define implements Lisphp_Applicable {
             $body = $arguments->cdr();
             $name = $name->car();
             $retval = new Lisphp_Runtime_Function($scope, $params, $body);
+        } else {
+            throw new InvalidArgumentException(
+                'first operand of define form must be symbol or list'
+            );
         }
-        return $scope[$name] = $retval;
+        $scope->define($name, $retval);
+        return $retval;
     }
 }
 

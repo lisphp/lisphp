@@ -14,6 +14,7 @@ final class Lisphp_Environment {
             array('Lisphp_Symbol', 'get')
         );
         $scope['define'] = new Lisphp_Runtime_Define;
+        $scope['setf!'] = new Lisphp_Runtime_Setf;
         $scope['let'] = new Lisphp_Runtime_Let;
         $scope['macro'] = new Lisphp_Runtime_Macro;
         $scope['lambda'] = new Lisphp_Runtime_Lambda;

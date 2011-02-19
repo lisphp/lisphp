@@ -19,6 +19,11 @@ final class Lisphp_Scope implements ArrayAccess, IteratorAggregate {
         $this->values[self::_symbol($symbol)] = $value;
     }
 
+    function define($symbol, $value) {
+        for ($s = $this; !is_null($s->superscope); $s = $s->superscope);
+        $s->let($symbol, $value);
+    }
+
     function offsetGet($symbol) {
         $sym = self::_symbol($symbol);
         if (array_key_exists($sym, $this->values)) return $this->values[$sym];

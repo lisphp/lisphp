@@ -1,0 +1,28 @@
+"Lexical closure -- define, setf!, let, lambda test."
+
+(define (adder n)
+        {lambda [x]
+                (setf! n (+ n x))
+                n})
+
+(define a (adder 3))
+
+(echo (a 1) "\n")
+(echo (a 2) "\n")
+
+
+(define z 1)
+
+{let [(z 123)]
+     (echo z "\n")
+     (setf! z 1234)
+     (echo z "\n")}
+
+(echo z "\n")
+
+
+{let [(y 12)]
+     (define y 123)
+     (echo y "\n")}
+
+(echo y "\n")
