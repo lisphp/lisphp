@@ -49,4 +49,7 @@ if ($fails) {
         $files = array_map('basename', array_keys($fails));
         echo "Failed tests: ", join(', ', $files), "\n";
     }
+    exit(1);
 }
+
+exit(0);
