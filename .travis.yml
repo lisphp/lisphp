@@ -4,5 +4,5 @@ php:
 - 5.3
 - 5.4
 script:
-- phpunit
+- phpunit Lisphp/Test/
 - php test.php --verbose
