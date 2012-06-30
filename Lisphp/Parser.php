@@ -14,7 +14,7 @@ final class Lisphp_Parser {
               | \d* \. \d+ | \d+ \. \d*)
     }ix';
     const INTEGER_PATTERN = '/^([+-]?)(0x([0-9a-f]+)|0([0-7]+)|[1-9]\d*|0)/i';
-    const STRING_PATTERN = '/^"([^"\\\\]|\\\\.)*"|\'([^\'\\\\]|\\\\.)\'/';
+    const STRING_PATTERN = '/^"([^"\\\\]|\\\\.)*"|\'([^\'\\\\]|\\\\.)*\'/';
     const STRING_ESCAPE_PATTERN = '/\\\\(([0-7]{1,3})|x([0-9A-Fa-f]{1,2})|.)/';
     const SYMBOL_PATTERN = '{^
         [^ \s \d () {} \[\] : +-] [^\s () {} \[\] :]*

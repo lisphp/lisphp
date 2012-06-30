@@ -124,8 +124,11 @@ class Lisphp_Test_ParserTest extends Lisphp_Test_TestCase {
 
     function testParseForm_string() {
         $this->assertForm(new Lisphp_Literal("abcd efg \"q1\"\n\t'q2'"),
-                                27,
-                                '"abcd efg \\"q1\\"\n\\t\\\'q2\\\'"');
+                          27,
+                          '"abcd efg \\"q1\\"\n\\t\\\'q2\\\'"');
+        $this->assertForm(new Lisphp_Literal("abcd efg 'q1'\n\t\"q2\""),
+                          27,
+                          "'abcd efg \\'q1\\'\\n\\t\\\"q2\\\"'");
     }
 
     function testParseForm_symbol() {
