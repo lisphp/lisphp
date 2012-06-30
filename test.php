@@ -40,13 +40,13 @@ echo ")\n";
 
 if ($fails) {
     if (isset($options['verbose']) || isset($options['v'])) {
-      $br = str_repeat('-', 80);
-      foreach ($fails as $file => $actual) {
-        echo "$br\n$file\n$br\n$actual\n";
-      }
-      echo "$br\n";
+        $br = str_repeat('-', 80);
+        foreach ($fails as $file => $actual) {
+            echo "$br\n$file\n$br\n$actual\n";
+        }
+        echo "$br\n";
     } else {
-      $files = array_map('basename', array_keys($fails));
-      echo "Failed tests: ", join(', ', $files), "\n";
+        $files = array_map('basename', array_keys($fails));
+        echo "Failed tests: ", join(', ', $files), "\n";
     }
 }
