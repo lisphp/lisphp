@@ -1,12 +1,12 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'Lisphp/List.php';
 require_once 'Lisphp/Scope.php';
 require_once 'Lisphp/Symbol.php';
 require_once 'Lisphp/Literal.php';
 require_once 'Lisphp/Runtime/Define.php';
+require_once 'Lisphp/Test/TestCase.php';
 
-class Lisphp_Test_ListTest extends PHPUnit_Framework_TestCase {
+class Lisphp_Test_ListTest extends Lisphp_Test_TestCase {
     function setUp() {
         $this->list = new Lisphp_List(array(
             Lisphp_Symbol::get('define'),

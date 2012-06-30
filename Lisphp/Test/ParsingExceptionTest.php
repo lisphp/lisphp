@@ -1,8 +1,8 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'Lisphp/Parser.php';
+require_once 'Lisphp/Test/TestCase.php';
 
-class Lisphp_Test_ParsingExceptionTest extends PHPUnit_Framework_TestCase {
+class Lisphp_Test_ParsingExceptionTest extends Lisphp_Test_TestCase {
     function setUp() {
         $this->exception = new Lisphp_ParsingException('
             (use substr)

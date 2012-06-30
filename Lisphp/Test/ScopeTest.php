@@ -1,9 +1,9 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'Lisphp/Scope.php';
 require_once 'Lisphp/Symbol.php';
+require_once 'Lisphp/Test/TestCase.php';
 
-class Lisphp_Test_ScopeTest extends PHPUnit_Framework_TestCase {
+class Lisphp_Test_ScopeTest extends Lisphp_Test_TestCase {
     function setUp() {
         $this->scope = new Lisphp_Scope;
         $this->scope['abc'] = 1;

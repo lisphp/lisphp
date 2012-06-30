@@ -1,9 +1,9 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'Lisphp/Quote.php';
 require_once 'Lisphp/Scope.php';
+require_once 'Lisphp/Test/TestCase.php';
 
-class Lisphp_Test_QuoteTest extends PHPUnit_Framework_TestCase {
+class Lisphp_Test_QuoteTest extends Lisphp_Test_TestCase {
     function testEvaluate() {
         $quote = new Lisphp_Quote(Lisphp_Symbol::get('abc'));
         $this->assertEquals(Lisphp_Symbol::get('abc'),

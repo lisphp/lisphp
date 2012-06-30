@@ -1,9 +1,9 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'Lisphp/Literal.php';
 require_once 'Lisphp/Scope.php';
+require_once 'Lisphp/Test/TestCase.php';
 
-class Lisphp_Test_LiteralTest extends PHPUnit_Framework_TestCase {
+class Lisphp_Test_LiteralTest extends Lisphp_Test_TestCase {
     static $values = array('integer' => 123, 'real' => 3.14, 'string' => 'abc');
 
     function testUnexpectedValue() {

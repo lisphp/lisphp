@@ -1,9 +1,9 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'Lisphp/Environment.php';
 require_once 'Lisphp/Runtime.php';
+require_once 'Lisphp/Test/TestCase.php';
 
-class Lisphp_Test_EnvironmentTest extends PHPUnit_Framework_TestCase {
+class Lisphp_Test_EnvironmentTest extends Lisphp_Test_TestCase {
     function testSandbox($scope = null) {
         if (is_null($scope)) {
             $scope = Lisphp_Environment::sandbox();

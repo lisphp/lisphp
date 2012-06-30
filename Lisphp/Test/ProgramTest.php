@@ -1,10 +1,10 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'Lisphp/Program.php';
 require_once 'Lisphp/Form.php';
 require_once 'Lisphp/Runtime.php';
+require_once 'Lisphp/Test/TestCase.php';
 
-class Lisphp_Test_ProgramTest extends PHPUnit_Framework_TestCase {
+class Lisphp_Test_ProgramTest extends Lisphp_Test_TestCase {
     public $program;
     public $execResult = null;
 

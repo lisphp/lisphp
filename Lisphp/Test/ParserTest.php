@@ -1,11 +1,11 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'Lisphp/Program.php';
 require_once 'Lisphp/Parser.php';
 require_once 'Lisphp/Symbol.php';
 require_once 'Lisphp/Literal.php';
+require_once 'Lisphp/Test/TestCase.php';
 
-class Lisphp_Test_ParserTest extends PHPUnit_Framework_TestCase {
+class Lisphp_Test_ParserTest extends Lisphp_Test_TestCase {
     function assertForm($value, $offset, $expression) {
         $actual = Lisphp_Parser::parseForm($expression, $pos);
         $this->assertEquals($value, $actual);

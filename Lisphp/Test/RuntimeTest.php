@@ -1,5 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'Lisphp/Runtime.php';
 require_once 'Lisphp/Scope.php';
 require_once 'Lisphp/Environment.php';
@@ -7,6 +6,7 @@ require_once 'Lisphp/List.php';
 require_once 'Lisphp/Symbol.php';
 require_once 'Lisphp/Literal.php';
 require_once 'Lisphp/Parser.php';
+require_once 'Lisphp/Test/TestCase.php';
 
 final class Lisphp_Test_SampleClass {
     const PI = 3.14;
@@ -20,14 +20,15 @@ final class Lisphp_Test_SampleClass {
     }
 }
 
-class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
+class Lisphp_Test_RuntimeTest extends Lisphp_Test_TestCase {
     static function lst($code) {
+        $_ = 0;
         return Lisphp_Parser::parseForm("[$code]", $_);
     }
 
     function testEval() {
         $eval = new Lisphp_Runtime_Eval;
-        $form = Lisphp_Parser::parseForm(':(+ 1 2 [- 4 3])', $_);
+        $form = Lisphp_Parser::parseForm(':(+ 1 2 [- 4 3])');
         $scope = Lisphp_Environment::sandbox();
         $args = new Lisphp_List(array($form));
         $this->assertEquals(4, $eval->apply($scope, $args));
@@ -52,7 +53,7 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
         )));
         $this->assertEquals(pi(), $result);
         $this->assertEquals(pi(), $scope['pi2']);
-        $result = $define->apply($scope, self::lst('[add a b] {+ a b}', $_));
+        $result = $define->apply($scope, self::lst('[add a b] {+ a b}'));
         $this->assertSame($result, $scope['add']);
         $this->assertType('Lisphp_Runtime_Function', $result);
         $this->assertFunction(3, $result, 1, 2);
@@ -88,7 +89,7 @@ class Lisphp_Test_RuntimeTest extends PHPUnit_Framework_TestCase {
     function testUserMacro() {
         $scope = Lisphp_Environment::sandbox();
         $scope['log'] = new Lisphp_Runtime_PHPFunction(array($this, 'logTest'));
-        $body = self::lst('(log "testUserMacro") (list #scope #arguments)', $_);
+        $body = self::lst('(log "testUserMacro") (list #scope #arguments)');
         $macro = new Lisphp_Runtime_UserMacro($scope, $body);
         $this->assertSame($scope, $macro->scope);
         $this->assertEquals($body, $macro->body);
