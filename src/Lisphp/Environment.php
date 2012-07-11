@@ -99,4 +99,3 @@ final class Lisphp_Environment {
         $scope->let('*session*', $_SESSION);
     }
 }
-

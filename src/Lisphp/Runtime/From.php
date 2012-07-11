@@ -16,4 +16,3 @@ final class Lisphp_Runtime_From implements Lisphp_Applicable {
         return $retval;
     }
 }
-

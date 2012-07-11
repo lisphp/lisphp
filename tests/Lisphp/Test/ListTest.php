@@ -10,12 +10,12 @@ class Lisphp_Test_ListTest extends Lisphp_Test_TestCase {
     }
 
     function testInvalidApplication() {
-        $this->setExpectedException('InvalidApplicationException');
+        $this->setExpectedException('Lisphp_InvalidApplicationException');
         $this->list->evaluate(new Lisphp_Scope);
     }
 
     function testInvalidApplication2() {
-        $this->setExpectedException('InvalidApplicationException');
+        $this->setExpectedException('Lisphp_InvalidApplicationException');
         $l = Lisphp_Parser::parseForm('("trim" "  hello  ")', $_);
         $l->evaluate(new Lisphp_Scope);
     }

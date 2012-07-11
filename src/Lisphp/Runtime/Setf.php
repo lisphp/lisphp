@@ -13,4 +13,3 @@ final class Lisphp_Runtime_Setf implements Lisphp_Applicable {
         return $scope[$name] = $retval;
     }
 }
-

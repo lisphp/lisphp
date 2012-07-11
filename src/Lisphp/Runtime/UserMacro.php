@@ -18,4 +18,3 @@ class Lisphp_Runtime_UserMacro implements Lisphp_Applicable {
         if (isset($retval)) return $retval;
     }
 }
-

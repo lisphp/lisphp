@@ -15,4 +15,3 @@ final class Lisphp_Quote implements Lisphp_Form {
         return ':' . $this->form->__toString();
     }
 }
-

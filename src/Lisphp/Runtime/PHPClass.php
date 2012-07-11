@@ -30,4 +30,3 @@ final class Lisphp_Runtime_PHPClass extends Lisphp_Runtime_Function {
         return is_object($instance) && $this->class->isInstance($instance);
     }
 }
-

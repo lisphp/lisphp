@@ -5,4 +5,3 @@ final class Lisphp_Runtime_Quote implements Lisphp_Applicable {
         return $arguments[0];
     }
 }
-

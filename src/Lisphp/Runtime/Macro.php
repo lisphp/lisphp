@@ -5,4 +5,3 @@ final class Lisphp_Runtime_Macro implements Lisphp_Applicable {
         return new Lisphp_Runtime_UserMacro($scope, $arguments);
     }
 }
-

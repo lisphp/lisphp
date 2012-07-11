@@ -11,4 +11,3 @@ final class Lisphp_Runtime_Lambda implements Lisphp_Applicable {
                                            $arguments->cdr());
     }
 }
-

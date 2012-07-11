@@ -7,4 +7,3 @@ final class Lisphp_Runtime_Eval implements Lisphp_Applicable {
                                                : $scope);
     }
 }
-

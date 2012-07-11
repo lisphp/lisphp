@@ -51,4 +51,3 @@ final class Lisphp_Program implements IteratorAggregate, ArrayAccess,
         return count($this->forms);
     }
 }
-

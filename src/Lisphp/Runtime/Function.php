@@ -42,4 +42,3 @@ class Lisphp_Runtime_Function implements Lisphp_Applicable {
         return $retval;
     }
 }
-

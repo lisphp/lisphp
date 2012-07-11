@@ -69,4 +69,3 @@ final class Lisphp_Scope implements ArrayAccess, IteratorAggregate {
         return array_unique($symbols);
     }
 }
-

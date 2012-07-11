@@ -31,4 +31,3 @@ final class Lisphp_Literal implements Lisphp_Form {
         return var_export($this->value, true);
     }
 }
-

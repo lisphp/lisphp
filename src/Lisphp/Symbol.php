@@ -31,4 +31,3 @@ final class Lisphp_Symbol implements Lisphp_Form {
         return $this->symbol;
     }
 }
-

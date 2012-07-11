@@ -8,4 +8,3 @@ final class Lisphp_Runtime_Apply extends Lisphp_Runtime_BuiltinFunction {
         }
     }
 }
-

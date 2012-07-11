@@ -13,7 +13,9 @@
         "php": ">=5.2.5"
     },
     "autoload": {
-        "classmap": ["src"]
+        "psr-0": {
+            "Lisphp": "src/"
+        }
     },
     "bin": ["bin/lisphp"]
 }
