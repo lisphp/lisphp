@@ -13,7 +13,7 @@
         "php": ">=5.2.5"
     },
     "autoload": {
-        "files": ["/Lisphp.php"]
+        "classmap": ["src"]
     },
     "bin": ["bin/lisphp"]
 }

@@ -1,5 +1,5 @@
 <?php
-require dirname(__FILE__) . '/Lisphp.php';
+require 'vendor/autoload.php';
 
 $options = getopt('v', array('verbose'));
 

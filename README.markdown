@@ -3,9 +3,9 @@ Lisphp
 
 [![Build Status](https://secure.travis-ci.org/dahlia/lisphp.png?branch=master)](http://travis-ci.org/dahlia/lisphp)
 
-Lisphp is a Lisp dialect written in PHP. It was created to be embedded in 
+Lisphp is a Lisp dialect written in PHP. It was created to be embedded in
 web services or to be distributed within web applications. For that reason,
-it implements sandbox environment for security issues and multiple 
+it implements sandbox environment for security issues and multiple
 environment instances.
 
 
@@ -66,7 +66,7 @@ Simple tutorial
     >>> (% 30 4)
     ==> 2
     >>> (. "hello" "world")
-    ==> 'helloworld' 
+    ==> 'helloworld'
     >>> (define pi 3.14)
     ==> 3.14
     >>> pi
@@ -88,14 +88,14 @@ symbols, built-in functions and macros. A program to be executed starts from the
 initialized environment. You can initialize the environment with
 `Lisphp_Environment` class.
 
-    require_once 'Lisphp.php';
+    require 'vendor/autoload.php';
     $env = Lisphp_Environment::sandbox();
     $program = new Lisphp_Program($lisphpCode);
     $program->execute($env);
 
 There are two given environment sets in `Lisphp_Environment`. One is the
 sandbox, which is created with the method `Lisphp_Environment::sandbox()`.
-In the sandbox mode, programs cannot access the file system, IO, etc. 
+In the sandbox mode, programs cannot access the file system, IO, etc.
 The other set is the full environment of Lisphp, which is initialized with
 `Lisphp_Environment::full()`. This environment provides `use` macro for
 importing native PHP functions and classes. File system, IO, socket, etc.
@@ -202,7 +202,7 @@ Define custom macros
 
 The built-in macros in Lisphp such as `eval`, `define`, `lambda`, `let`, `if`,
 `and`, `or` do not evaluate the form of their arguments'. For example, `define`
-takes the name to define as its first argument, but it does not evaluate the 
+takes the name to define as its first argument, but it does not evaluate the
 name. In the same way, `if` takes three forms as arguments, but always
 evaluates only two of those arguments and ignores the other. It is impossible
 to implement `if` as a function, because then every argument would have to be
@@ -271,7 +271,7 @@ Lisphp implements lists in primitive, but it has some differences between
 original Lisp. In original Lisp, lists are made from [cons][] pairs. But lists
 in Lisphp is just an instance of `Lisphp_List` class, a subclass of
 [`ArrayObject`][arrayobject]. So it is not exactly a linked list but is similar
-to an array. In the same manner, `nil`is  also not an empty list in Lisphp 
+to an array. In the same manner, `nil`is  also not an empty list in Lisphp
 unlike in the original Lisp. It is a just synonym for PHP [`null`][null] value.
 
 
