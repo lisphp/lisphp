@@ -15,5 +15,5 @@
     "autoload": {
         "files": ["/Lisphp.php"]
     },
-    "bin": ["lis.php"]
+    "bin": ["bin/lisphp"]
 }
