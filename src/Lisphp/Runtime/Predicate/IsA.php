@@ -2,7 +2,8 @@
 
 final class Lisphp_Runtime_Predicate_IsA
       extends Lisphp_Runtime_BuiltinFunction {
-    protected function execute(array $arguments) {
+    protected function execute(array $arguments)
+    {
         $object = array_shift($arguments);
         if (!isset($arguments[0])) {
             throw new InvalidArgumentException('too few arguments');
@@ -13,6 +14,7 @@ final class Lisphp_Runtime_Predicate_IsA
             }
             if ($class->isClassOf($object)) return true;
         }
+
         return false;
     }
 }

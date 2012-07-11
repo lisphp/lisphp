@@ -1,7 +1,9 @@
 <?php
 
-final class Lisphp_Runtime_Use implements Lisphp_Applicable {
-    function apply(Lisphp_Scope $scope, Lisphp_List $arguments) {
+final class Lisphp_Runtime_Use implements Lisphp_Applicable
+{
+    public function apply(Lisphp_Scope $scope, Lisphp_List $arguments)
+    {
         $values = array();
         foreach ($arguments as $name) {
             foreach ($this->dispatch($name) as $name => $value) {
@@ -9,10 +11,12 @@ final class Lisphp_Runtime_Use implements Lisphp_Applicable {
             }
             $values[] = $value;
         }
+
         return new Lisphp_List($values);
     }
 
-    function dispatch(Lisphp_Form $name) {
+    public function dispatch(Lisphp_Form $name)
+    {
         if ($name instanceof Lisphp_Symbol) {
             $phpname = $name = $name->symbol;
         } else {
@@ -28,13 +32,16 @@ final class Lisphp_Runtime_Use implements Lisphp_Applicable {
                     $objs["$name/$methodName"] = $method;
                 }
                 $objs[$name] = $class;
+
                 return $objs;
             }
             if (preg_match('|^(?:([^/]+/)+)?\+(.+?)\+$|', $phpname, $matches)) {
                 $phpname = str_replace('/', '_', $matches[1] . $matches[2]);
                 $objs[$name] = constant($phpname);
+
                 return $objs;
             }
+
             return array($name => new Lisphp_Runtime_PHPFunction($phpname));
         } catch (UnexpectedValueException $e) {
             throw new InvalidArgumentException($e);

@@ -1,7 +1,9 @@
 <?php
 
-final class Lisphp_Runtime_Object_GetAttribute implements Lisphp_Applicable {
-    function apply(Lisphp_Scope $scope, Lisphp_List $arguments) {
+final class Lisphp_Runtime_Object_GetAttribute implements Lisphp_Applicable
+{
+    public function apply(Lisphp_Scope $scope, Lisphp_List $arguments)
+    {
         if (count($arguments) < 2) {
             throw new InvalidArgumentException('expected least two arguments');
         }
@@ -13,7 +15,7 @@ final class Lisphp_Runtime_Object_GetAttribute implements Lisphp_Applicable {
             $chain .= "->$name";
             if (isset($object->$name)) {
                 $object = $object->$name;
-            } else if (method_exists($object, $name)) {
+            } elseif (method_exists($object, $name)) {
                 $object = new Lisphp_Runtime_PHPFunction(array($object, $name));
             } else {
                 $o = (is_object($first) ? get_class($first) : gettype($first))
@@ -21,6 +23,7 @@ final class Lisphp_Runtime_Object_GetAttribute implements Lisphp_Applicable {
                 throw new RuntimeException("there is no name '$name' for $o");
             }
         }
+
         return $object;
     }
 }

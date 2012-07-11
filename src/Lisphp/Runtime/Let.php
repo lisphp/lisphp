@@ -1,7 +1,9 @@
 <?php
 
-final class Lisphp_Runtime_Let implements Lisphp_Applicable {
-    function apply(Lisphp_Scope $scope, Lisphp_List $arguments) {
+final class Lisphp_Runtime_Let implements Lisphp_Applicable
+{
+    public function apply(Lisphp_Scope $scope, Lisphp_List $arguments)
+    {
         $vars = $arguments->car();
         $scope = new Lisphp_Scope($scope);
         foreach ($vars as $var) {
@@ -11,6 +13,7 @@ final class Lisphp_Runtime_Let implements Lisphp_Applicable {
         foreach ($arguments->cdr() as $form) {
             $retval = $form->evaluate($scope);
         }
+
         return $retval;
     }
 }

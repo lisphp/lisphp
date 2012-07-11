@@ -1,6 +1,7 @@
 <?php
 
-final class Lisphp_Symbol implements Lisphp_Form {
+final class Lisphp_Symbol implements Lisphp_Form
+{
     const PATTERN = '{^
         [^ \s \d () {} \[\] : +-] [^\s () {} \[\] :]*
     |   [+-] ([^ \s \d () {} \[\] :] [^ \s () {} \[\]]*)?
@@ -9,25 +10,30 @@ final class Lisphp_Symbol implements Lisphp_Form {
     protected static $map = array();
     public $symbol;
 
-    static function get($symbol) {
+    public static function get($symbol)
+    {
         if (isset(self::$map[$symbol])) return self::$map[$symbol];
+
         return self::$map[$symbol] = new self($symbol);
     }
 
-    protected function __construct($symbol) {
+    protected function __construct($symbol)
+    {
         if (!is_string($symbol)) {
             throw new UnexpectedValueException('expected string');
-        } else if (!preg_match(self::PATTERN, $symbol)) {
+        } elseif (!preg_match(self::PATTERN, $symbol)) {
             throw new UnexpectedValueException('invalid symbol');
         }
         $this->symbol = $symbol;
     }
 
-    function evaluate(Lisphp_Scope $scope) {
+    public function evaluate(Lisphp_Scope $scope)
+    {
         return $scope[$this];
     }
 
-    function __toString() {
+    public function __toString()
+    {
         return $this->symbol;
     }
 }

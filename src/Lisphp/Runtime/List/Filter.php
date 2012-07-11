@@ -1,7 +1,9 @@
 <?php
 
-final class Lisphp_Runtime_List_Filter extends Lisphp_Runtime_BuiltinFunction {
-    protected function execute(array $arguments) {
+final class Lisphp_Runtime_List_Filter extends Lisphp_Runtime_BuiltinFunction
+{
+    protected function execute(array $arguments)
+    {
         list($predicate, $values) = $arguments;
         $list = array();
         foreach ($values as $value) {
@@ -9,6 +11,7 @@ final class Lisphp_Runtime_List_Filter extends Lisphp_Runtime_BuiltinFunction {
                 $list[] = $value;
             }
         }
+
         return new Lisphp_List($list);
     }
 }

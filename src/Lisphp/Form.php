@@ -1,5 +1,6 @@
 <?php
 
-interface Lisphp_Form {
-    function evaluate(Lisphp_Scope $scope);
+interface Lisphp_Form
+{
+    public function evaluate(Lisphp_Scope $scope);
 }

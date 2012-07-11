@@ -1,6 +1,7 @@
 <?php
 
-final class Lisphp_Parser {
+final class Lisphp_Parser
+{
     const PARENTHESES = '(){}[]';
     const QUOTE_PREFIX = ':';
     const WHITESPACES = " \t\n\r\f\v\0";
@@ -16,7 +17,8 @@ final class Lisphp_Parser {
     |   [+-] ([^ \s \d () {} \[\] :] [^ \s () {} \[\]]*)?
     }x';
 
-    static function parse($program, $asArray = false) {
+    public static function parse($program, $asArray = false)
+    {
         if (!$asArray) return new Lisphp_Program($program);
         $i = 0;
         $len = strlen($program);
@@ -34,10 +36,12 @@ final class Lisphp_Parser {
                 ++$i;
             }
         }
+
         return $forms;
     }
 
-    static function parseForm($form, &$offset) {
+    public static function parseForm($form, &$offset)
+    {
         static $parentheses = null;
         if (is_null($parentheses)) {
             $_parentheses = self::PARENTHESES;
@@ -66,39 +70,46 @@ final class Lisphp_Parser {
             }
             if (isset($form[$i]) && $form[$i] == $end) {
                 $offset = $i + 1;
+
                 return new Lisphp_List($values);
             }
             throw new Lisphp_ParsingException($form, $i);
-        } else if (isset($form[0]) && $form[0] == self::QUOTE_PREFIX) {
+        } elseif (isset($form[0]) && $form[0] == self::QUOTE_PREFIX) {
             $parsed = self::parseForm(substr($form, 1), $_offset);
             $offset = $_offset + 1;
+
             return new Lisphp_Quote($parsed);
-        } else if (preg_match(self::REAL_PATTERN, $form, $matches)) {
+        } elseif (preg_match(self::REAL_PATTERN, $form, $matches)) {
             $offset = strlen($matches[0]);
+
             return new Lisphp_Literal((float) $matches[0]);
-        } else if (preg_match(self::INTEGER_PATTERN, $form, $matches)) {
+        } elseif (preg_match(self::INTEGER_PATTERN, $form, $matches)) {
             $offset = strlen($matches[0]);
             $sign = $matches[1] == '-' ? -1 : 1;
             $value = !empty($matches[3]) ? hexdec($matches[3])
                    : (!empty($matches[4]) ? octdec($matches[4]) : $matches[2]);
+
             return new Lisphp_Literal($sign * $value);
-        } else if (preg_match(self::STRING_PATTERN, $form, $matches)) {
+        } elseif (preg_match(self::STRING_PATTERN, $form, $matches)) {
             list($parsed) = $matches;
             $offset = strlen($parsed);
+
             return new Lisphp_Literal(
                 preg_replace_callback(self::STRING_ESCAPE_PATTERN,
                                       array(__CLASS__, '_unescapeString'),
                                       substr($parsed, 1, -1))
             );
-        } else if (preg_match(self::SYMBOL_PATTERN, $form, $matches)) {
+        } elseif (preg_match(self::SYMBOL_PATTERN, $form, $matches)) {
             $offset = strlen($matches[0]);
+
             return Lisphp_Symbol::get($matches[0]);
         } else {
             throw new Lisphp_ParsingException($form, 0);
         }
     }
 
-    protected static function _unescapeString($matches) {
+    protected static function _unescapeString($matches)
+    {
         static $map = array('n' => "\n", 'r' => "\r", 't' => "\t", 'v' => "\v",
                             'f' => "\f");
         if (!empty($matches[2])) return chr(octdec($matches[2]));

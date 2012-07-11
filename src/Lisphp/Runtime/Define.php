@@ -1,11 +1,13 @@
 <?php
 
-final class Lisphp_Runtime_Define implements Lisphp_Applicable {
-    function apply(Lisphp_Scope $scope, Lisphp_List $arguments) {
+final class Lisphp_Runtime_Define implements Lisphp_Applicable
+{
+    public function apply(Lisphp_Scope $scope, Lisphp_List $arguments)
+    {
         $name = $arguments[0];
         if ($name instanceof Lisphp_Symbol) {
             $retval = $arguments[1]->evaluate($scope);
-        } else if ($name instanceof Lisphp_List) {
+        } elseif ($name instanceof Lisphp_List) {
             $params = $name->cdr();
             $body = $arguments->cdr();
             $name = $name->car();
@@ -16,6 +18,7 @@ final class Lisphp_Runtime_Define implements Lisphp_Applicable {
             );
         }
         $scope->define($name, $retval);
+
         return $retval;
     }
 }

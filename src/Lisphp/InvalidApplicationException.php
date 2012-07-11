@@ -1,9 +1,11 @@
 <?php
 
-class Lisphp_InvalidApplicationException extends BadFunctionCallException {
+class Lisphp_InvalidApplicationException extends BadFunctionCallException
+{
     public $valueToApply;
 
-    function __construct($valueToApply, Lisphp_List $list = null) {
+    public function __construct($valueToApply, Lisphp_List $list = null)
+    {
         $this->valueToApply = $valueToApply;
         $this->list = $list;
         $type = is_object($this->valueToApply)

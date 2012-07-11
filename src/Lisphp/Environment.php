@@ -1,7 +1,9 @@
 <?php
 
-final class Lisphp_Environment {
-    static function sandbox() {
+final class Lisphp_Environment
+{
+    public static function sandbox()
+    {
         $scope = new Lisphp_Scope;
         $scope['nil'] = null;
         $scope['true'] = $scope['#t'] = true;
@@ -63,33 +65,40 @@ final class Lisphp_Environment {
         $scope['or'] = new Lisphp_Runtime_Logical_Or;
         $scope['if'] = new Lisphp_Runtime_Logical_If;
         $scope['->'] = new Lisphp_Runtime_Object_GetAttribute;
+
         return $scope;
     }
 
-    static function full() {
+    public static function full()
+    {
         $scope = new Lisphp_Scope(self::sandbox());
         $scope->let('use', new Lisphp_Runtime_Use);
         $scope->let('from', new Lisphp_Runtime_From);
         $scope->let('*env*', $_ENV);
         $scope->let('*server*', $_SERVER);
+
         return $scope;
     }
 
     protected static $antimagicFunction = null;
 
-    protected static function antimagic($vars) {
+    protected static function antimagic($vars)
+    {
         if (!get_magic_quotes_gpc()) return ($vars);
         if (!$f = self::$antimagicFunction) {
             self::$antimagicFunction = create_function('$vars', '
+
                 return is_array($vars)
                      ? array_map(' . __CLASS__ . '::$antimagicFunction, $vars)
                      : stripslashes($vars);
             ');
         }
+
         return $f($vars);
     }
 
-    static function webapp() {
+    public static function webapp()
+    {
         $scope = new Lisphp_Scope(self::sandbox());
         $scope->let('*get*', self::antimagic($_GET));
         $scope->let('*post*', self::antimagic($_POST));

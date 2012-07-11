@@ -1,7 +1,9 @@
 <?php
 
-class Lisphp_List extends ArrayObject implements Lisphp_Form {
-    function evaluate(Lisphp_Scope $scope) {
+class Lisphp_List extends ArrayObject implements Lisphp_Form
+{
+    public function evaluate(Lisphp_Scope $scope)
+    {
         $function = $this->car()->evaluate($scope);
         $applicable = $function instanceof Lisphp_Applicable;
         if (is_callable($function) && is_object($function)) {
@@ -9,22 +11,27 @@ class Lisphp_List extends ArrayObject implements Lisphp_Form {
             foreach ($this->cdr() as $arg) {
                 $parameters[] = $arg->evaluate($scope);
             }
+
             return call_user_func_array($function, $parameters);
         }
         if ($applicable) return $function->apply($scope, $this->cdr());
         throw new Lisphp_InvalidApplicationException($function, $this);
     }
 
-    function car() {
+    public function car()
+    {
         return isset($this[0]) ? $this[0] : null;
     }
 
-    function cdr() {
+    public function cdr()
+    {
         if (!isset($this[0])) return;
+
         return new self(array_slice($this->getArrayCopy(), 1));
     }
 
-    function __toString() {
+    public function __toString()
+    {
         foreach ($this as $form) {
             if ($form instanceof Lisphp_Form) {
                 $strs[] = $form->__toString();
@@ -32,6 +39,7 @@ class Lisphp_List extends ArrayObject implements Lisphp_Form {
                 $strs[] = '...';
             }
         }
+
         return '(' . join(' ', $strs) . ')';
     }
 }

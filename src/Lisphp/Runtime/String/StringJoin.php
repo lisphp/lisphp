@@ -2,7 +2,8 @@
 
 final class Lisphp_Runtime_String_StringJoin
       extends Lisphp_Runtime_BuiltinFunction {
-    protected function execute(array $arguments) {
+    protected function execute(array $arguments)
+    {
         list($strs, $sep) = $arguments;
         if (is_array($strs)) return join($sep, $strs);
         foreach ($strs as $s) {
@@ -12,6 +13,7 @@ final class Lisphp_Runtime_String_StringJoin
                 $result = $s;
             }
         }
+
         return $result;
     }
 }

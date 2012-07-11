@@ -1,7 +1,9 @@
 <?php
 
-final class Lisphp_Runtime_List_Fold extends Lisphp_Runtime_BuiltinFunction {
-    protected function execute(array $arguments) {
+final class Lisphp_Runtime_List_Fold extends Lisphp_Runtime_BuiltinFunction
+{
+    protected function execute(array $arguments)
+    {
         list($aggregate, $values) = $arguments;
         if ($hasResult = isset($arguments[2])) {
             $result = $arguments[2];

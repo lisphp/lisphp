@@ -1,17 +1,21 @@
 <?php
 
-final class Lisphp_Quote implements Lisphp_Form {
+final class Lisphp_Quote implements Lisphp_Form
+{
     public $form;
 
-    function __construct(Lisphp_Form $form) {
+    public function __construct(Lisphp_Form $form)
+    {
         $this->form = $form;
     }
 
-    function evaluate(Lisphp_Scope $scope) {
+    public function evaluate(Lisphp_Scope $scope)
+    {
         return $this->form;
     }
 
-    function __toString() {
+    public function __toString()
+    {
         return ':' . $this->form->__toString();
     }
 }

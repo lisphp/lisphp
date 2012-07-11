@@ -1,19 +1,21 @@
 <?php
 
-final class Lisphp_Runtime_List_Map extends Lisphp_Runtime_BuiltinFunction {
-    protected function execute(array $arguments) {
+final class Lisphp_Runtime_List_Map extends Lisphp_Runtime_BuiltinFunction
+{
+    protected function execute(array $arguments)
+    {
         if (!$function = array_shift($arguments)) {
             throw new InvalidArgumentException('missing function');
-        } else if (!isset($arguments[0])) {
+        } elseif (!isset($arguments[0])) {
             throw new InvalidArgumentException('least one list is required');
         }
         $map = array();
         foreach ($arguments as &$list) {
             if ($list instanceof IteratorAggregate) {
                 $list = $list->getIterator();
-            } else if (is_array($list)) {
+            } elseif (is_array($list)) {
                 $list = new ArrayIterator($list);
-            } else if (!($list instanceof Iterator)) {
+            } elseif (!($list instanceof Iterator)) {
                 throw new InvalidArgumentException('expected list');
             }
         }
@@ -27,6 +29,7 @@ final class Lisphp_Runtime_List_Map extends Lisphp_Runtime_BuiltinFunction {
             }
             $map[] = Lisphp_Runtime_Function::call($function, $values);
         }
+
         return new Lisphp_List($map);
     }
 }

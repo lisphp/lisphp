@@ -1,7 +1,9 @@
 <?php
 
-final class Lisphp_Runtime_Dict implements Lisphp_Applicable {
-    function apply(Lisphp_Scope $scope, Lisphp_List $arguments) {
+final class Lisphp_Runtime_Dict implements Lisphp_Applicable
+{
+    public function apply(Lisphp_Scope $scope, Lisphp_List $arguments)
+    {
         $dict = array();
         foreach ($arguments as $pair) {
             if ($pair instanceof Lisphp_List) {
@@ -15,6 +17,7 @@ final class Lisphp_Runtime_Dict implements Lisphp_Applicable {
                 $dict[] = $pair->evaluate($scope);
             }
         }
+
         return $dict;
     }
 }
