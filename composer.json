@@ -1,0 +1,19 @@
+{
+    "name": "lisphp/lisphp",
+    "description": "Lisphp is a Lisp dialect written in PHP.",
+    "keywords": ["lisp"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hong Minhee",
+            "email": "minhee@dahlia.kr"
+        }
+    ],
+    "require": {
+        "php": ">=5.2.5"
+    },
+    "autoload": {
+        "files": ["/Lisphp.php"]
+    },
+    "bin": ["lis.php"]
+}
