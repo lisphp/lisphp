@@ -31,6 +31,13 @@ class Lisphp_Runtime_Function implements Lisphp_Applicable
         return $this->execute($args);
     }
 
+    public function __invoke()
+    {
+        $args = func_get_args();
+
+        return $this->execute($args);
+    }
+
     protected function execute(array $arguments)
     {
         $local = new Lisphp_Scope($this->scope);
