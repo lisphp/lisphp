@@ -26,5 +26,42 @@ shouldn't be executed (evaluated) before ``(times ...)`` is called.
 
 So :class:`Lisphp_List` passed into :meth:`Lisphp_Applicable::apply` method
 doesn't contain arguments that are evaluated into objects, but *not evaluated*
-forms.
+forms.  That means, you can ignore some of them, or evaluated some of them
+multiple times as well:
+
+.. sourcecode:: php
+
+   <?php
+
+   class Times implements Lisphp_Applicable
+   {
+       public function apply(Lisphp_Scope $scope, Lisphp_List $args)
+       {
+           if (count($args) != 2) {
+               throw new InvalidArgumentException('times takes two arguments');
+           }
+           $times = $args[1]->evaluate($scope);
+           for ($i = 0; $i < $times; ++$i) {
+               $result = $args[0]->evaluate($scope);
+           }
+           return $result;
+       }
+   }
+
+
+Interfaces
+----------
+
+.. interface:: Lisphp_Applicable
+
+   Lisphp's fexpr interface.
+
+   .. method:: apply($scope, $args)
+
+      :param $scope: the scope which called this
+      :type $scope: :class:`Lisphp_Scope`
+      :param $args: the list of arguments *not evaluated yet*.  these are
+                    forms
+      :type $args: :class:`Lisphp_List`
+      :returns: the return value
 
