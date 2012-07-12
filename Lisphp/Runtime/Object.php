@@ -15,7 +15,7 @@ final class Lisphp_Runtime_Object_GetAttribute implements Lisphp_Applicable {
             $chain .= "->$name";
             if (isset($object->$name)) {
                 $object = $object->$name;
-            } else if (method_exists($object, $name)) {
+            } else if (method_exists($object, $name) || method_exists($object, '__call')) {
                 $object = new Lisphp_Runtime_PHPFunction(array($object, $name));
             } else {
                 $o = (is_object($first) ? get_class($first) : gettype($first))
