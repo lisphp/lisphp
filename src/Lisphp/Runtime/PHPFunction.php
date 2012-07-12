@@ -6,8 +6,7 @@ final class Lisphp_Runtime_PHPFunction extends Lisphp_Runtime_Function
 
     public function __construct($callback)
     {
-        if (is_array($callback) ? !method_exists($callback[0], $callback[1])
-                                : !function_exists($callback)) {
+        if (!is_callable($callback)) {
             throw new UnexpectedValueException('undefined function or method');
         }
         $this->callback = $callback;
