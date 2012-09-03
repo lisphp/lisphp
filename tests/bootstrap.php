@@ -1,4 +1,4 @@
 <?php
 
-$loader = require __DIR__.'/../vendor/autoload.php';
-$loader->add('Lisphp_Test', __DIR__);
+$loader = require dirname(__FILE__) . '/../vendor/autoload.php';
+$loader->add('Lisphp_Test', dirname(__FILE__));
