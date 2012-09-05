@@ -226,10 +226,7 @@ class Lisphp_Test_RuntimeTest extends Lisphp_Test_TestCase {
     }
 
     function testGenericCall530() {
-        if (version_compare(phpversion(), '5.3.0', '<')) {
-            $this->markTestSkipped('PHP version is less than 5.3.0.');
-        }
-        eval('$f = function($a, $b) { return $a + $b; };');
+        $f = function($a, $b) { return $a + $b; };;
         $val = Lisphp_Runtime_Function::call($f, array(1, 2));
         $this->assertEquals(3, $val);
     }

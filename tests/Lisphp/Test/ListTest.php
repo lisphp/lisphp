@@ -28,11 +28,8 @@ class Lisphp_Test_ListTest extends Lisphp_Test_TestCase {
     }
 
     function testEvaluate530() {
-        if (version_compare(phpversion(), '5.3.0', '<')) {
-            $this->markTestSkipped('PHP version is less than 5.3.0.');
-        }
         $scope = new Lisphp_Scope;
-        eval('$scope["f"] = function($a, $b) { return $a + $b; };');
+        $scope['f'] = function($a, $b) { return $a + $b; };
         $list = new Lisphp_List(array(
             Lisphp_Symbol::get('f'),
             new Lisphp_Literal(123),
