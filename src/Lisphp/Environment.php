@@ -86,12 +86,11 @@ final class Lisphp_Environment
     {
         if (!get_magic_quotes_gpc()) return ($vars);
         if (!$f = self::$antimagicFunction) {
-            self::$antimagicFunction = create_function('$vars', '
-
+            self::$antimagicFunction = function ($vars) {
                 return is_array($vars)
-                     ? array_map(' . __CLASS__ . '::$antimagicFunction, $vars)
+                     ? array_map(self::$antimagicFunction, $vars)
                      : stripslashes($vars);
-            ');
+            };
         }
 
         return $f($vars);
