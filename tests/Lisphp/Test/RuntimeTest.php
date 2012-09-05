@@ -19,8 +19,9 @@ class Lisphp_Test_RuntimeTest extends Lisphp_Test_TestCase {
     }
 
     function testEval() {
+        $_ = 0;
         $eval = new Lisphp_Runtime_Eval;
-        $form = Lisphp_Parser::parseForm(':(+ 1 2 [- 4 3])');
+        $form = Lisphp_Parser::parseForm(':(+ 1 2 [- 4 3])', $_);
         $scope = Lisphp_Environment::sandbox();
         $args = new Lisphp_List(array($form));
         $this->assertEquals(4, $eval->apply($scope, $args));
