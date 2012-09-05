@@ -27,8 +27,10 @@ final class Lisphp_Program implements IteratorAggregate, ArrayAccess,
     public function execute(Lisphp_Scope $scope)
     {
         foreach ($this->forms as $form) {
-            $form->evaluate($scope);
+            $value = $form->evaluate($scope);
         }
+
+        return $value;
     }
 
     public function offsetGet($offset)
