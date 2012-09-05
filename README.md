@@ -104,7 +104,7 @@ writes some text.
 
     (use fopen fwrite fclose)
 
-    {let [fp (fopen "a.txt" "w")]
+    {let ([fp (fopen "a.txt" "w")])
          (fwrite fp "some text")
          (fclose fp)}
 
