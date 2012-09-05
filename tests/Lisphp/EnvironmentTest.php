@@ -1,6 +1,6 @@
 <?php
 
-class Lisphp_Test_EnvironmentTest extends Lisphp_Test_TestCase {
+class Lisphp_EnvironmentTest extends Lisphp_TestCase {
     function testSandbox($scope = null) {
         if (is_null($scope)) {
             $scope = Lisphp_Environment::sandbox();

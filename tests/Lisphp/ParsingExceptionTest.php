@@ -1,6 +1,6 @@
 <?php
 
-class Lisphp_Test_ParsingExceptionTest extends Lisphp_Test_TestCase {
+class Lisphp_ParsingExceptionTest extends Lisphp_TestCase {
     function setUp() {
         $this->exception = new Lisphp_ParsingException('
             (use substr)

@@ -1,6 +1,6 @@
 <?php
 
-class Lisphp_Test_LiteralTest extends Lisphp_Test_TestCase {
+class Lisphp_LiteralTest extends Lisphp_TestCase {
     static $values = array('integer' => 123, 'real' => 3.14, 'string' => 'abc');
 
     function testUnexpectedValue() {

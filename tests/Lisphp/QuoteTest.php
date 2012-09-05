@@ -1,6 +1,6 @@
 <?php
 
-class Lisphp_Test_QuoteTest extends Lisphp_Test_TestCase {
+class Lisphp_QuoteTest extends Lisphp_TestCase {
     function testEvaluate() {
         $quote = new Lisphp_Quote(Lisphp_Symbol::get('abc'));
         $this->assertEquals(Lisphp_Symbol::get('abc'),

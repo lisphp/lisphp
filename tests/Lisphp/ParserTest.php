@@ -1,6 +1,6 @@
 <?php
 
-class Lisphp_Test_ParserTest extends Lisphp_Test_TestCase {
+class Lisphp_ParserTest extends Lisphp_TestCase {
     function assertForm($value, $offset, $expression) {
         $actual = Lisphp_Parser::parseForm($expression, $pos);
         $this->assertEquals($value, $actual);

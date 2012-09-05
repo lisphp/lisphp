@@ -1,6 +1,6 @@
 <?php
 
-final class Lisphp_Test_SampleClass {
+final class Lisphp_SampleClass {
     const PI = 3.14;
 
     static function a() {
@@ -12,7 +12,7 @@ final class Lisphp_Test_SampleClass {
     }
 }
 
-class Lisphp_Test_RuntimeTest extends Lisphp_Test_TestCase {
+class Lisphp_RuntimeTest extends Lisphp_TestCase {
     static function lst($code) {
         $_ = 0;
         return Lisphp_Parser::parseForm("[$code]", $_);
@@ -706,16 +706,16 @@ class Lisphp_Test_RuntimeTest extends Lisphp_Test_TestCase {
         } catch (UnexpectedValueException $e) {
             # pass
         }
-        $class = new Lisphp_Runtime_PHPClass('Lisphp_Test_SampleClass');
+        $class = new Lisphp_Runtime_PHPClass('Lisphp_SampleClass');
         $methods = $class->getStaticMethods();
         $this->assertEquals(2, count($methods));
         $this->assertType('Lisphp_Runtime_PHPFunction', $methods['a']);
-        $this->assertEquals(array('Lisphp_Test_SampleClass', 'a'),
+        $this->assertEquals(array('Lisphp_SampleClass', 'a'),
                             $methods['a']->callback);
         $this->assertType('Lisphp_Runtime_PHPFunction', $methods['b']);
-        $this->assertEquals(array('Lisphp_Test_SampleClass', 'b'),
+        $this->assertEquals(array('Lisphp_SampleClass', 'b'),
                             $methods['b']->callback);
-        $this->assertTrue($class->isClassOf(new Lisphp_Test_SampleClass));
+        $this->assertTrue($class->isClassOf(new Lisphp_SampleClass));
         $this->assertFalse($class->isClassOf(new stdClass));
         $this->assertFalse($class->isClassOf(213));
     }

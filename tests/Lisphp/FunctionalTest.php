@@ -1,6 +1,6 @@
 <?php
 
-class Lisphp_Test_FunctionalTest extends Lisphp_Test_TestCase {
+class Lisphp_FunctionalTest extends Lisphp_TestCase {
     private $result;
 
     function testFromFile() {

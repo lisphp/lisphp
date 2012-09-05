@@ -1,6 +1,6 @@
 <?php
 
-class Lisphp_Test_ListTest extends Lisphp_Test_TestCase {
+class Lisphp_ListTest extends Lisphp_TestCase {
     function setUp() {
         $this->list = new Lisphp_List(array(
             Lisphp_Symbol::get('define'),
