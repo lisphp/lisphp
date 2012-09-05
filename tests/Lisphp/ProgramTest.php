@@ -13,10 +13,10 @@ class Lisphp_ProgramTest extends Lisphp_TestCase {
     }
 
     function testFromFile() {
-        $program = Lisphp_Program::load(dirname(__FILE__) . '/sample.lisphp');
+        $program = Lisphp_Program::load(__DIR__ . '/sample.lisphp');
         $this->assertEquals(3, count($program));
         try {
-            Lisphp_Program::load($f = dirname(__FILE__) . '/sample2.lisphp');
+            Lisphp_Program::load($f = __DIR__ . '/sample2.lisphp');
             $this->fail();
         } catch (Lisphp_ParsingException $e) {
             $this->assertEquals(file_get_contents($f), $e->code);
