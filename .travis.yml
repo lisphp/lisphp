@@ -1,8 +1,8 @@
 language: php
 php:
-- 5.2
-- 5.3
-- 5.4
+    - 5.2
+    - 5.3
+    - 5.4
 script:
-- phpunit Lisphp/Test/
-- php test.php --verbose
+    - composer install --dev
+    - phpunit Lisphp/Test/
