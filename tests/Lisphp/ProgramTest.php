@@ -1,6 +1,6 @@
 <?php
 
-class Lisphp_Test_ProgramTest extends Lisphp_Test_TestCase {
+class Lisphp_ProgramTest extends Lisphp_TestCase {
     public $program;
     public $execResult = null;
 
@@ -13,10 +13,10 @@ class Lisphp_Test_ProgramTest extends Lisphp_Test_TestCase {
     }
 
     function testFromFile() {
-        $program = Lisphp_Program::load(dirname(__FILE__) . '/sample.lisphp');
+        $program = Lisphp_Program::load(__DIR__ . '/sample.lisphp');
         $this->assertEquals(3, count($program));
         try {
-            Lisphp_Program::load($f = dirname(__FILE__) . '/sample2.lisphp');
+            Lisphp_Program::load($f = __DIR__ . '/sample2.lisphp');
             $this->fail();
         } catch (Lisphp_ParsingException $e) {
             $this->assertEquals(file_get_contents($f), $e->code);
@@ -32,7 +32,7 @@ class Lisphp_Test_ProgramTest extends Lisphp_Test_TestCase {
         $scope['+'] = new Lisphp_Runtime_Arithmetic_Addition;
         $scope['-'] = new Lisphp_Runtime_Arithmetic_Subtraction;
         $scope['lambda'] = new Lisphp_Runtime_Lambda;
-        $scope['echo'] = new Lisphp_Test_ProgramTest_Echo($this);
+        $scope['echo'] = new Lisphp_ProgramTest_Echo($this);
         $this->program->execute($scope);
         $this->assertSame($scope['+'], $scope['add']);
         $this->assertEquals(array(9), $this->execResult);
@@ -86,10 +86,10 @@ class Lisphp_Test_ProgramTest extends Lisphp_Test_TestCase {
     }
 }
 
-final class Lisphp_Test_ProgramTest_Echo extends Lisphp_Runtime_Function {
+final class Lisphp_ProgramTest_Echo extends Lisphp_Runtime_Function {
     public $test;
 
-    function __construct(Lisphp_Test_ProgramTest $test) {
+    function __construct(Lisphp_ProgramTest $test) {
         $this->test = $test;
     }
 

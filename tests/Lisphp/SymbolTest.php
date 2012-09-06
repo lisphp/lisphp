@@ -1,6 +1,6 @@
 <?php
 
-class Lisphp_Test_SymbolTest extends Lisphp_Test_TestCase {
+class Lisphp_SymbolTest extends Lisphp_TestCase {
     function testIdentityMap() {
         $this->assertSame(Lisphp_Symbol::get('abc'), Lisphp_Symbol::get('abc'));
     }

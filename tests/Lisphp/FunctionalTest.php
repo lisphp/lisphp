@@ -1,10 +1,10 @@
 <?php
 
-class Lisphp_Test_FunctionalTest extends Lisphp_Test_TestCase {
+class Lisphp_FunctionalTest extends Lisphp_TestCase {
     private $result;
 
     function testFromFile() {
-        $testFiles = glob(dirname(__FILE__) . '/Functional/*.lisphp');
+        $testFiles = glob(__DIR__ . '/Functional/*.lisphp');
 
         foreach ($testFiles as $file) {
             $this->result = '';

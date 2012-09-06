@@ -1,6 +1,6 @@
 <?php
 
-class Lisphp_Test_EnvironmentTest extends Lisphp_Test_TestCase {
+class Lisphp_EnvironmentTest extends Lisphp_TestCase {
     function testSandbox($scope = null) {
         if (is_null($scope)) {
             $scope = Lisphp_Environment::sandbox();
@@ -103,7 +103,7 @@ class Lisphp_Test_EnvironmentTest extends Lisphp_Test_TestCase {
                 'Lisphp_Environment::webapp() is unavailable on CLI'
             );
         }
-        # TODO: *get*, *post*, *request*, antimagic.
+        # TODO: *get*, *post*, *request*.
         $this->assertEquals($_SESSION, $scope['*session*']);
         $this->assertEquals($_FILES, $scope['*files*']);
     }

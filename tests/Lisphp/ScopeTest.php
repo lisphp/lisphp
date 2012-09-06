@@ -1,6 +1,6 @@
 <?php
 
-class Lisphp_Test_ScopeTest extends Lisphp_Test_TestCase {
+class Lisphp_ScopeTest extends Lisphp_TestCase {
     function setUp() {
         $this->scope = new Lisphp_Scope;
         $this->scope['abc'] = 1;

@@ -55,10 +55,10 @@ $environment = isset($options['s'])
              : Lisphp_Environment::full();
 
 $scope = new Lisphp_Scope($environment);
-$scope['echo'] = new Lisphp_Runtime_PHPFunction(create_function('', '
+$scope['echo'] = new Lisphp_Runtime_PHPFunction(function () {
     $args = func_get_args();
     foreach ($args as $arg) echo $arg;
-'));
+});
 
 class Lisphp_EnterREPL extends Exception {}
 
@@ -76,14 +76,13 @@ try {
     Lisphp_printParsingError($e);
 } catch (Lisphp_EnterREPL $e) {
     $scope['exit'] = new Lisphp_Runtime_PHPFunction(
-        create_function('$status = null', '
+        function ($status = null) {
             if (is_null($status)) die;
             else die($status);
-        ')
+        }
     );
     if (extension_loaded('readline')) {
-        readline_completion_function(create_function('$line', '
-            global $scope;
+        readline_completion_function(function ($line) use ($scope) {
             $symbols = array();
             foreach ($scope->listSymbols() as $symbol) {
                 if ($line != "" && strpos($symbol, $line) !== 0) continue;
@@ -93,16 +92,16 @@ try {
                 $symbols[] = $line;
             }
             return $symbols;
-        '));
+        });
         $readline = 'readline';
         $add_history = 'readline_add_history';
         $exit = false;
     } else {
-        $readline = create_function('$prompt', '
+        $readline = function ($prompt) {
             echo $prompt;
             return fread(STDIN, 8192);
-        ');
-        $add_history = create_function('', '');
+        };
+        $add_history = function () {};
         $exit = '';
     }
     while (true) {

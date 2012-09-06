@@ -80,31 +80,14 @@ final class Lisphp_Environment
         return $scope;
     }
 
-    protected static $antimagicFunction = null;
-
-    protected static function antimagic($vars)
-    {
-        if (!get_magic_quotes_gpc()) return ($vars);
-        if (!$f = self::$antimagicFunction) {
-            self::$antimagicFunction = create_function('$vars', '
-
-                return is_array($vars)
-                     ? array_map(' . __CLASS__ . '::$antimagicFunction, $vars)
-                     : stripslashes($vars);
-            ');
-        }
-
-        return $f($vars);
-    }
-
     public static function webapp()
     {
         $scope = new Lisphp_Scope(self::sandbox());
-        $scope->let('*get*', self::antimagic($_GET));
-        $scope->let('*post*', self::antimagic($_POST));
-        $scope->let('*request*', self::antimagic($_REQUEST));
+        $scope->let('*get*', $_GET);
+        $scope->let('*post*', $_POST);
+        $scope->let('*request*', $_REQUEST);
         $scope->let('*files*', $_FILES);
-        $scope->let('*cookie*', self::antimagic($_COOKIE));
+        $scope->let('*cookie*', $_COOKIE);
         $scope->let('*session*', $_SESSION);
     }
 }
