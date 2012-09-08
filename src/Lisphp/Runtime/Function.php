@@ -42,7 +42,7 @@ class Lisphp_Runtime_Function implements Lisphp_Applicable
     {
         $local = new Lisphp_Scope($this->scope);
         foreach ($this->parameters as $i => $name) {
-            if (!isset($arguments[$i])) {
+            if (!array_key_exists($i, $arguments)) {
                 throw new InvalidArgumentException('too few arguments');
             }
             $local->let($name, $arguments[$i]);
