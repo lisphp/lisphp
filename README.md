@@ -12,9 +12,8 @@ environment instances.
 Requirements
 ------------
 
-It requires PHP 5.2.5 or higher version. When it works on PHP 5.3 or higher,
-it is integrated with lambda functions well. It also requires [SPL][]
-which is available and compiled by default in PHP 5.
+It requires PHP 5.3.0 or higher version. It also requires [SPL][] which is
+available and compiled by default.
 
 
  [spl]: http://kr.php.net/manual/en/book.spl.php
