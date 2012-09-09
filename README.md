@@ -1,7 +1,7 @@
 Lisphp
 ======
 
-[![Build Status](https://secure.travis-ci.org/dahlia/lisphp.png?branch=master)](http://travis-ci.org/dahlia/lisphp)
+[![Build Status](https://secure.travis-ci.org/lisphp/lisphp.png?branch=master)](http://travis-ci.org/lisphp/lisphp)
 
 Lisphp is a Lisp dialect written in PHP. It was created to be embedded in
 web services or to be distributed within web applications. For that reason,
