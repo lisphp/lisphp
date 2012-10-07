@@ -38,7 +38,7 @@ REPL
 If there is no filename in arguments to `lis.php`, it enters REPL mode.
 
     $ php lis.php
-    >>> (form to evaulate)
+    >>> (form to evaluate)
 
 Similarly you can specify `-s` to enter REPL mode in sandbox.
 
@@ -270,7 +270,7 @@ Lisphp implements lists in primitive, but it has some differences between
 original Lisp. In original Lisp, lists are made from [cons][] pairs. But lists
 in Lisphp is just an instance of `Lisphp_List` class, a subclass of
 [`ArrayObject`][arrayobject]. So it is not exactly a linked list but is similar
-to an array. In the same manner, `nil`is  also not an empty list in Lisphp
+to an array. In the same manner, `nil` is  also not an empty list in Lisphp
 unlike in the original Lisp. It is a just synonym for PHP [`null`][null] value.
 
 
