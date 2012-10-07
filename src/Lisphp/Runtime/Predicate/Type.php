@@ -3,7 +3,7 @@
 final class Lisphp_Runtime_Predicate_Type
       extends Lisphp_Runtime_BuiltinFunction {
     public static $types = array('array', 'binary', 'bool', 'buffer', 'double',
-                          'float', 'int', 'integer', 'long', 'null', 'numberic',
+                          'float', 'int', 'integer', 'long', 'null', 'numeric',
                           'object', 'real', 'resource', 'scalar', 'string');
     public $type;
 

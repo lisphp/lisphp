@@ -1,0 +1,2 @@
+(and (numeric? 5) (echo "5 is numeric\n"))
+(or (numeric? #t) (echo "#t is not numeric\n"))
