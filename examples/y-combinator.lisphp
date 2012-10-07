@@ -1,0 +1,18 @@
+; thanks to the little schemer
+
+(define Y
+    (lambda (le)
+        ((lambda (f) (f f))
+            (lambda (f)
+                (le (lambda (x) ((f f) x)))))))
+
+(define length
+    (Y
+        (lambda (length)
+            (lambda (l)
+                (if (= l :())
+                    0
+                    (+ 1 (length (cdr l))))))))
+
+(echo (length :(a b c)))
+(echo "\n")
