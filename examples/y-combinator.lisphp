@@ -10,9 +10,9 @@
     (Y
         (lambda (length)
             (lambda (l)
-                (if (= l :())
-                    0
-                    (+ 1 (length (cdr l))))))))
+                (cond
+                    ((= l :()) 0)
+                    (else (+ 1 (length (cdr l)))))))))
 
 (echo (length :(a b c)))
 (echo "\n")
