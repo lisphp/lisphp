@@ -8,6 +8,7 @@ class Lisphp_EnvironmentTest extends Lisphp_TestCase {
         $this->assertType('Lisphp_Scope', $scope);
         $this->assertNull($scope['nil']);
         $this->assertTrue($scope['true']);
+        $this->assertTrue($scope['else']);
         $this->assertFalse($scope['false']);
         $this->assertTrue($scope['#t']);
         $this->assertFalse($scope['#f']);
@@ -35,6 +36,7 @@ class Lisphp_EnvironmentTest extends Lisphp_TestCase {
         $this->assertType('Lisphp_Runtime_List_Map', $scope['map']);
         $this->assertType('Lisphp_Runtime_List_Filter', $scope['filter']);
         $this->assertType('Lisphp_Runtime_List_Fold', $scope['fold']);
+        $this->assertType('Lisphp_Runtime_List_Cond', $scope['cond']);
         $this->assertType('Lisphp_Runtime_Predicate_Eq', $scope['==']);
         $this->assertType('Lisphp_Runtime_Predicate_Eq', $scope['eq']);
         $this->assertType('Lisphp_Runtime_Predicate_Eq', $scope['eq?']);

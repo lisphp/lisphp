@@ -6,7 +6,7 @@ final class Lisphp_Environment
     {
         $scope = new Lisphp_Scope;
         $scope['nil'] = null;
-        $scope['true'] = $scope['#t'] = true;
+        $scope['true'] = $scope['#t'] = $scope['else'] = true;
         $scope['false'] = $scope['#f'] = false;
         $scope['eval'] = new Lisphp_Runtime_Eval;
         $scope['quote'] = new Lisphp_Runtime_Quote;
@@ -33,6 +33,7 @@ final class Lisphp_Environment
         $scope['map'] = new Lisphp_Runtime_List_Map;
         $scope['filter'] = new Lisphp_Runtime_List_Filter;
         $scope['fold'] = new Lisphp_Runtime_List_Fold;
+        $scope['cond'] = new Lisphp_Runtime_List_Cond;
         $scope['=='] = $scope['eq'] = $scope['eq?']
                      = new Lisphp_Runtime_Predicate_Eq;
         $scope['='] = $scope['equal'] = $scope['equal?']

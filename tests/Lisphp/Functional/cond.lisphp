@@ -1,0 +1,17 @@
+(define length
+    (lambda (l)
+        (cond
+            ((= l :()) 0)
+            (else (+ 1 (length (cdr l)))))))
+
+(define echo-length
+    (lambda (l)
+        (echo (length l))
+        (echo "\n")))
+
+(echo-length :())
+(echo-length :(a))
+(echo-length :(a b))
+(echo-length :(a b c))
+(echo-length :(a b c d))
+(echo-length :(a b c d e))
