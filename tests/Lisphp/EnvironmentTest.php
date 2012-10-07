@@ -98,16 +98,5 @@ class Lisphp_EnvironmentTest extends Lisphp_TestCase {
         $this->assertEquals($_ENV, $scope['*env*']);
         $this->assertEquals($_SERVER, $scope['*server*']);
     }
-
-    function testWebapp() {
-        if (!isset($_GET, $_POST, $_REQUEST, $_FILES, $_COOKIE, $_SESSION)) {
-            $this->markTestSkipped(
-                'Lisphp_Environment::webapp() is unavailable on CLI'
-            );
-        }
-        # TODO: *get*, *post*, *request*.
-        $this->assertEquals($_SESSION, $scope['*session*']);
-        $this->assertEquals($_FILES, $scope['*files*']);
-    }
 }
 
