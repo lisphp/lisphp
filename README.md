@@ -22,27 +22,27 @@ available and compiled by default.
 Standalone command line interface
 ---------------------------------
 
-There is `lis.php`, a standalone command line interface. It can take one
+There is `bin/lisphp`, a standalone command line interface. It can take one
 parameter, the filename of the Lisphp program to be executed.
 
-    $ php lis.php program.lisphp
+    $ bin/lisphp program.lisphp
 
 You can run the program in sandbox with the option `-s`.
 
-    $ php lis.php -s program.lisphp
+    $ bin/lisphp -s program.lisphp
 
 
 REPL
 ----
 
-If there is no filename in arguments to `lis.php`, it enters REPL mode.
+If there is no filename in arguments to `bin/lisphp`, it enters REPL mode.
 
-    $ php lis.php
+    $ bin/lisphp
     >>> (form to evaluate)
 
 Similarly you can specify `-s` to enter REPL mode in sandbox.
 
-    $ php lis.php -s
+    $ bin/lisphp -s
 
  - `>>>` is a prompt.
  - `==>` is a returned value of evaluation.
