@@ -1,9 +1,11 @@
 <?php
 
-class Lisphp_FunctionalTest extends Lisphp_TestCase {
+class Lisphp_FunctionalTest extends Lisphp_TestCase
+{
     private $result;
 
-    function testFromFile() {
+    public function testFromFile()
+    {
         $testFiles = glob(__DIR__ . '/Functional/*.lisphp');
 
         foreach ($testFiles as $file) {
@@ -19,7 +21,8 @@ class Lisphp_FunctionalTest extends Lisphp_TestCase {
         }
     }
 
-    function displayStrings() {
+    public function displayStrings()
+    {
         $args = func_get_args();
         $this->result .= join('', array_map('strval', $args));
     }

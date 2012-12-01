@@ -1,13 +1,16 @@
 <?php
 
-class Lisphp_QuoteTest extends Lisphp_TestCase {
-    function testEvaluate() {
+class Lisphp_QuoteTest extends Lisphp_TestCase
+{
+    public function testEvaluate()
+    {
         $quote = new Lisphp_Quote(Lisphp_Symbol::get('abc'));
         $this->assertEquals(Lisphp_Symbol::get('abc'),
                             $quote->evaluate(new Lisphp_Scope));
     }
 
-    function testToString() {
+    public function testToString()
+    {
         $quote = new Lisphp_Quote(Lisphp_Symbol::get('abc'));
         $this->assertEquals(':abc', $quote->__toString());
         $quote = new Lisphp_Quote(new Lisphp_List(array(
@@ -18,4 +21,3 @@ class Lisphp_QuoteTest extends Lisphp_TestCase {
         $this->assertEquals(':(define pi 3.14)', $quote->__toString());
     }
 }
-

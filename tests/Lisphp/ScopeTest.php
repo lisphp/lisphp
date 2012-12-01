@@ -1,31 +1,37 @@
 <?php
 
-class Lisphp_ScopeTest extends Lisphp_TestCase {
-    function setUp() {
+class Lisphp_ScopeTest extends Lisphp_TestCase
+{
+    public function setUp()
+    {
         $this->scope = new Lisphp_Scope;
         $this->scope['abc'] = 1;
         $this->scope['def'] = true;
         $this->scope[Lisphp_Symbol::get('ghi')] = null;
     }
 
-    function testGet() {
+    public function testGet()
+    {
         $this->assertEquals(1, $this->scope['abc']);
         $this->assertEquals(true, $this->scope[Lisphp_Symbol::get('def')]);
         $this->assertNull($this->scope['ghi']);
         $this->assertNull($this->scope['x']);
     }
 
-    function testExists() {
+    public function testExists()
+    {
         $this->assertTrue(isset($this->scope['abc']));
         $this->assertTrue(isset($this->scope['x']));
     }
 
-    function testUnset() {
+    public function testUnset()
+    {
         unset($this->scope['abc']);
         $this->assertNull($this->scope['abc']);
     }
 
-    function testSuperscope() {
+    public function testSuperscope()
+    {
         $scope = new Lisphp_Scope($this->scope);
         $this->assertSame($this->scope, $scope->superscope);
         $this->assertEquals(1, $scope['abc']);
@@ -45,13 +51,15 @@ class Lisphp_ScopeTest extends Lisphp_TestCase {
         $this->assertNull($this->scope['def']);
     }
 
-    function testLet() {
+    public function testLet()
+    {
         $scope = new Lisphp_Scope($this->scope);
         $scope->let('abc', 'overridden');
         $this->assertEquals('overridden', $scope['abc']);
     }
 
-    function testListSymbols() {
+    public function testListSymbols()
+    {
         $this->assertEquals(
             array(),
             array_diff(array('abc', 'def', 'ghi'), $this->scope->listSymbols())
@@ -65,4 +73,3 @@ class Lisphp_ScopeTest extends Lisphp_TestCase {
         );
     }
 }
-

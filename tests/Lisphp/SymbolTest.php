@@ -1,21 +1,26 @@
 <?php
 
-class Lisphp_SymbolTest extends Lisphp_TestCase {
-    function testIdentityMap() {
+class Lisphp_SymbolTest extends Lisphp_TestCase
+{
+    public function testIdentityMap()
+    {
         $this->assertSame(Lisphp_Symbol::get('abc'), Lisphp_Symbol::get('abc'));
     }
 
-    function testNonString() {
+    public function testNonString()
+    {
         $this->setExpectedException('UnexpectedValueException');
         Lisphp_Symbol::get(123);
     }
 
-    function testInvalidSymbol() {
+    public function testInvalidSymbol()
+    {
         $this->setExpectedException('UnexpectedValueException');
         Lisphp_Symbol::get('(abc)');
     }
 
-    function testEvaluate() {
+    public function testEvaluate()
+    {
         $scope = new Lisphp_Scope;
         $scope['abc'] = 123;
         $symbol = Lisphp_Symbol::get('abc');
@@ -24,9 +29,9 @@ class Lisphp_SymbolTest extends Lisphp_TestCase {
         $this->assertNull($symbol->evaluate($scope));
     }
 
-    function testToString() {
+    public function testToString()
+    {
         $symbol = Lisphp_Symbol::get('abc');
         $this->assertEquals('abc', $symbol->__toString());
     }
 }
-

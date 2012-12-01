@@ -1,7 +1,9 @@
 <?php
 
-class Lisphp_EnvironmentTest extends Lisphp_TestCase {
-    function testSandbox($scope = null) {
+class Lisphp_EnvironmentTest extends Lisphp_TestCase
+{
+    public function testSandbox($scope = null)
+    {
         if (is_null($scope)) {
             $scope = Lisphp_Environment::sandbox();
         }
@@ -90,7 +92,8 @@ class Lisphp_EnvironmentTest extends Lisphp_TestCase {
         $this->assertType('Lisphp_Runtime_Object_GetAttribute', $scope['->']);
     }
 
-    function testFull() {
+    public function testFull()
+    {
         $scope = Lisphp_Environment::full();
         $this->testSandbox($scope);
         $this->assertType('Lisphp_Runtime_Use', $scope['use']);
@@ -99,4 +102,3 @@ class Lisphp_EnvironmentTest extends Lisphp_TestCase {
         $this->assertEquals($_SERVER, $scope['*server*']);
     }
 }
-

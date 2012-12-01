@@ -1,13 +1,16 @@
 <?php
 
-class Lisphp_ParserTest extends Lisphp_TestCase {
-    function assertForm($value, $offset, $expression) {
+class Lisphp_ParserTest extends Lisphp_TestCase
+{
+    public function assertForm($value, $offset, $expression)
+    {
         $actual = Lisphp_Parser::parseForm($expression, $pos);
         $this->assertEquals($value, $actual);
         $this->assertEquals($offset, $pos);
     }
 
-    function testParse() {
+    public function testParse()
+    {
         $expected = array(
             new Lisphp_Literal('this is a docstring'),
             new Lisphp_List(array(Lisphp_Symbol::get('define'),
@@ -53,7 +56,8 @@ class Lisphp_ParserTest extends Lisphp_TestCase {
         }
     }
 
-    function testParseForm_list() {
+    public function testParseForm_list()
+    {
         $expected = new Lisphp_List(array(
             Lisphp_Symbol::get('define'),
             Lisphp_Symbol::get('add'),
@@ -75,13 +79,14 @@ class Lisphp_ParserTest extends Lisphp_TestCase {
         try {
             Lisphp_Parser::parseForm('(abc d ])', $offset);
             $this->fails();
-        } catch(Lisphp_ParsingException $e) {
+        } catch (Lisphp_ParsingException $e) {
             $this->assertEquals('(abc d ])', $e->code);
             $this->assertEquals(7, $e->offset);
         }
     }
 
-    function testParseForm_quote() {
+    public function testParseForm_quote()
+    {
         $this->assertForm(new Lisphp_Quote(Lisphp_Symbol::get('abc')), 4,
                           ':abc');
         $this->assertForm(new Lisphp_Quote(new Lisphp_List(array(
@@ -93,7 +98,8 @@ class Lisphp_ParserTest extends Lisphp_TestCase {
                           ':(add 2 3)');
     }
 
-    function testParseForm_integer() {
+    public function testParseForm_integer()
+    {
         $this->assertForm(new Lisphp_Literal(123), 3, '123');
         $this->assertForm(new Lisphp_Literal(123), 4, '+123 ');
         $this->assertForm(new Lisphp_Literal(-123), 4, '-123');
@@ -105,7 +111,8 @@ class Lisphp_ParserTest extends Lisphp_TestCase {
         $this->assertForm(new Lisphp_Literal(-0765), 5, '-0765');
     }
 
-    function testParseForm_real() {
+    public function testParseForm_real()
+    {
         $this->assertForm(new Lisphp_Literal(1.234), 5, '1.234');
         $this->assertForm(new Lisphp_Literal(1.23), 5, '+1.23');
         $this->assertForm(new Lisphp_Literal(-1.23), 5, '-1.23');
@@ -117,7 +124,8 @@ class Lisphp_ParserTest extends Lisphp_TestCase {
         $this->assertForm(new Lisphp_Literal(-1.2e3), 6, '-1.2e3');
     }
 
-    function testParseForm_string() {
+    public function testParseForm_string()
+    {
         $this->assertForm(new Lisphp_Literal("abcd efg \"q1\"\n\t'q2'"),
                           27,
                           '"abcd efg \\"q1\\"\n\\t\\\'q2\\\'"');
@@ -126,11 +134,11 @@ class Lisphp_ParserTest extends Lisphp_TestCase {
                           "'abcd efg \\'q1\\'\\n\\t\\\"q2\\\"'");
     }
 
-    function testParseForm_symbol() {
+    public function testParseForm_symbol()
+    {
         $this->assertForm(Lisphp_Symbol::get('abc'), 3, 'abc');
         $this->assertForm(Lisphp_Symbol::get('-abcd'), 5, '-abcd ');
         $this->assertForm(Lisphp_Symbol::get('-'), 1, '-');
         $this->assertForm(Lisphp_Symbol::get('+'), 1, '+');
     }
 }
-

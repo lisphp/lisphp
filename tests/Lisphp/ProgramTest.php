@@ -1,10 +1,12 @@
 <?php
 
-class Lisphp_ProgramTest extends Lisphp_TestCase {
+class Lisphp_ProgramTest extends Lisphp_TestCase
+{
     public $program;
     public $execResult = null;
 
-    function setUp() {
+    public function setUp()
+    {
         $this->program = new Lisphp_Program('
             (define add +)
             (define sub (lambda [a b] {- a b}))
@@ -12,13 +14,15 @@ class Lisphp_ProgramTest extends Lisphp_TestCase {
         ');
     }
 
-    function testEmptyCode() {
+    public function testEmptyCode()
+    {
         $scope = new Lisphp_Scope;
         $this->program = new Lisphp_Program('');
         $this->program->execute($scope);
     }
 
-    function testFromFile() {
+    public function testFromFile()
+    {
         $program = Lisphp_Program::load(__DIR__ . '/sample.lisphp');
         $this->assertEquals(3, count($program));
         try {
@@ -32,7 +36,8 @@ class Lisphp_ProgramTest extends Lisphp_TestCase {
         }
     }
 
-    function testExecute() {
+    public function testExecute()
+    {
         $scope = new Lisphp_Scope;
         $scope['define'] = new Lisphp_Runtime_Define;
         $scope['+'] = new Lisphp_Runtime_Arithmetic_Addition;
@@ -44,13 +49,15 @@ class Lisphp_ProgramTest extends Lisphp_TestCase {
         $this->assertEquals(array(9), $this->execResult);
     }
 
-    function testParse() {
+    public function testParse()
+    {
         $this->assertEquals("define", $this->program[0][0]->symbol);
         $this->assertEquals("define", $this->program[1][0]->symbol);
         $this->assertEquals("echo", $this->program[2][0]->symbol);
     }
 
-    function testArrayAccess() {
+    public function testArrayAccess()
+    {
         $this->assertFalse(isset($this->program[-1]));
         $this->assertTrue(isset($this->program[0]));
         $this->assertTrue(isset($this->program[1]));
@@ -77,7 +84,8 @@ class Lisphp_ProgramTest extends Lisphp_TestCase {
         }
     }
 
-    function testIterator() {
+    public function testIterator()
+    {
         $i = 0;
         foreach ($this->program as $j => $form) {
             $this->assertType('Lisphp_List', $form);
@@ -87,20 +95,23 @@ class Lisphp_ProgramTest extends Lisphp_TestCase {
         $this->assertEquals(3, count($forms));
     }
 
-    function testCount() {
+    public function testCount()
+    {
         $this->assertEquals(3, count($this->program));
     }
 }
 
-final class Lisphp_ProgramTest_Echo extends Lisphp_Runtime_Function {
+final class Lisphp_ProgramTest_Echo extends Lisphp_Runtime_Function
+{
     public $test;
 
-    function __construct(Lisphp_ProgramTest $test) {
+    public function __construct(Lisphp_ProgramTest $test)
+    {
         $this->test = $test;
     }
 
-    function execute(array $arguments) {
+    public function execute(array $arguments)
+    {
         $this->test->execResult = $arguments;
     }
 }
-

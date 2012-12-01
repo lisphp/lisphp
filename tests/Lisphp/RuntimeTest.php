@@ -1,24 +1,31 @@
 <?php
 
-final class Lisphp_SampleClass {
+final class Lisphp_SampleClass
+{
     const PI = 3.14;
 
-    static function a() {
+    public static function a()
+    {
         return 'a';
     }
 
-    static function b() {
+    public static function b()
+    {
         return 'b';
     }
 }
 
-class Lisphp_RuntimeTest extends Lisphp_TestCase {
-    static function lst($code) {
+class Lisphp_RuntimeTest extends Lisphp_TestCase
+{
+    public static function lst($code)
+    {
         $_ = 0;
+
         return Lisphp_Parser::parseForm("[$code]", $_);
     }
 
-    function testEval() {
+    public function testEval()
+    {
         $_ = 0;
         $eval = new Lisphp_Runtime_Eval;
         $form = Lisphp_Parser::parseForm(':(+ 1 2 [- 4 3])', $_);
@@ -31,7 +38,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertEquals(4, $eval->apply($names, $args));
     }
 
-    function testDefine() {
+    public function testDefine()
+    {
         $define = new Lisphp_Runtime_Define;
         $scope = new Lisphp_Scope(Lisphp_Environment::sandbox());
         $result = $define->apply($scope, new Lisphp_List(array(
@@ -52,7 +60,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertFunction(3, $result, 1, 2);
     }
 
-    function testLet() {
+    public function testLet()
+    {
         $let = new Lisphp_Runtime_Let;
         $scope = Lisphp_Environment::sandbox();
         $scope['a'] = 1;
@@ -67,7 +76,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertNull($scope['b']);
     }
 
-    function testQuote() {
+    public function testQuote()
+    {
         $quote = new Lisphp_Runtime_Quote;
         $this->assertEquals(Lisphp_Symbol::get('abc'),
                             $quote->apply(new Lisphp_Scope, new Lisphp_List(
@@ -75,11 +85,13 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
                             )));
     }
 
-    function logTest($log) {
+    public function logTest($log)
+    {
         $this->logged = $log;
     }
 
-    function testUserMacro() {
+    public function testUserMacro()
+    {
         $scope = Lisphp_Environment::sandbox();
         $scope['log'] = new Lisphp_Runtime_PHPFunction(array($this, 'logTest'));
         $body = self::lst('(log "testUserMacro") (list #scope #arguments)');
@@ -94,7 +106,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertEquals($args, $retval[1]);
     }
 
-    function testMacro() {
+    public function testMacro()
+    {
         $macro = new Lisphp_Runtime_Macro;
         $args = self::lst('(+ 1 2)');
         $scope = new Lisphp_Scope;
@@ -104,7 +117,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertEquals($args, $retval->body);
     }
 
-    function testLambda() {
+    public function testLambda()
+    {
         $lambda = new Lisphp_Runtime_Lambda;
         $scope = new Lisphp_Scope;
         $args = self::lst('[a b] (define x 2) (+ a b)');
@@ -115,7 +129,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertEquals($args->cdr(), $func->body);
     }
 
-    function testDo() {
+    public function testDo()
+    {
         $do = new Lisphp_Runtime_Do;
         $scope = new Lisphp_Scope(Lisphp_Environment::sandbox());
         $scope['a'] = new Lisphp_List;
@@ -128,7 +143,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
                             $scope['a']);
     }
 
-    function testIf() {
+    public function testIf()
+    {
         $if = new Lisphp_Runtime_Logical_If;
         $scope = new Lisphp_Scope;
         $scope['define'] = new Lisphp_Runtime_Define;
@@ -155,7 +171,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertEquals(2, $scope['b']);
     }
 
-    function applyFunction(Lisphp_Applicable $function) {
+    public function applyFunction(Lisphp_Applicable $function)
+    {
         $args = func_get_args();
         array_shift($args);
         $scope = new Lisphp_Scope;
@@ -163,17 +180,19 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         foreach ($args as &$value) {
             if ($value instanceof ArrayObject || is_array($value)) {
                 $value = new Lisphp_Quote(new Lisphp_List($value));
-            } else if (is_object($value) || is_bool($value) || is_null($value)){
+            } elseif (is_object($value) || is_bool($value) || is_null($value)) {
                 $scope["tmp-$symbol"] = $value;
                 $value = Lisphp_Symbol::get('tmp-' . $symbol++);
             } else {
                 $value = new Lisphp_Literal($value);
             }
         }
+
         return $function->apply($scope, new Lisphp_List($args));
     }
 
-    function assertFunction($expected, Lisphp_Applicable $function) {
+    public function assertFunction($expected, Lisphp_Applicable $function)
+    {
         $args = func_get_args();
         array_shift($args);
         $this->assertEquals(
@@ -182,7 +201,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         );
     }
 
-    function testFunction() {
+    public function testFunction()
+    {
         $this->markTestIncomplete('Somebody please debug this, I have no clue what is going on.');
 
         $global = new Lisphp_Scope(Lisphp_Environment::sandbox());
@@ -207,7 +227,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertFunction(new Lisphp_List(range(1, 3)), $func, 1, 2, 3);
     }
 
-    function testGenericCall() {
+    public function testGenericCall()
+    {
         $val = Lisphp_Runtime_Function::call(
             new Lisphp_Runtime_Arithmetic_Addition,
             array(1, 2)
@@ -227,33 +248,38 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         }
     }
 
-    function testGenericCall530() {
+    public function testGenericCall530()
+    {
         $f = function($a, $b) { return $a + $b; };;
         $val = Lisphp_Runtime_Function::call($f, array(1, 2));
         $this->assertEquals(3, $val);
     }
 
-    function testApply() {
+    public function testApply()
+    {
         $apply = new Lisphp_Runtime_Apply;
         $add = new Lisphp_Runtime_Arithmetic_Addition;
         $this->assertFunction(9, $apply, $add, new Lisphp_List(array(2, 3, 4)));
     }
 
-    function testAdd() {
+    public function testAdd()
+    {
         $add = new Lisphp_Runtime_Arithmetic_Addition;
         $this->assertFunction(5, $add, 5);
         $this->assertFunction(10, $add, 5, 5);
         $this->assertFunction(6, $add, 1, 2, 3);
     }
 
-    function testSubtract() {
+    public function testSubtract()
+    {
         $sub = new Lisphp_Runtime_Arithmetic_Subtraction;
         $this->assertFunction(-5, $sub, 5);
         $this->assertFunction(2, $sub, 5, 3);
         $this->assertFunction(1, $sub, 5, 3, 1);
     }
 
-    function testMultiply() {
+    public function testMultiply()
+    {
         $mul = new Lisphp_Runtime_Arithmetic_Multiplication;
         $this->assertFunction(1, $mul);
         $this->assertFunction(5, $mul, 5);
@@ -261,19 +287,22 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertFunction(50, $mul, 5, 5, 2);
     }
 
-    function testDivide() {
+    public function testDivide()
+    {
         $div = new Lisphp_Runtime_Arithmetic_Division;
         $this->assertFunction(5, $div, 25, 5);
         $this->assertFunction(5, $div, 50, 2, 5);
     }
 
-    function testMod() {
+    public function testMod()
+    {
         $mod = new Lisphp_Runtime_Arithmetic_Modulus;
         $this->assertFunction(0, $mod, 25, 5);
         $this->assertFunction(1, $mod, 25, 4);
     }
 
-    function testNot() {
+    public function testNot()
+    {
         $not = new Lisphp_Runtime_Logical_Not;
         $this->assertFunction(false, $not, true);
         $this->assertFunction(true, $not, false);
@@ -284,7 +313,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertFunction(true, $not, '');
     }
 
-    function testAnd() {
+    public function testAnd()
+    {
         $this->markTestIncomplete('Somebody please debug this, I have no clue what is going on.');
 
         $and = new Lisphp_Runtime_Logical_And;
@@ -315,7 +345,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertEquals(2, $scope['a']);
     }
 
-    function testOr() {
+    public function testOr()
+    {
         $this->markTestIncomplete('Somebody please debug this, I have no clue what is going on.');
 
         $or = new Lisphp_Runtime_Logical_Or;
@@ -349,7 +380,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertEquals(0, $scope['b']);
     }
 
-    function testEq() {
+    public function testEq()
+    {
         $eq = new Lisphp_Runtime_Predicate_Eq;
         $this->assertFunction(false, $eq, new stdClass, new stdClass);
         $o = new stdClass;
@@ -377,7 +409,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         }
     }
 
-    function testEqual() {
+    public function testEqual()
+    {
         $eq = new Lisphp_Runtime_Predicate_Equal;
         $this->assertFunction(true, $eq, new stdClass, new stdClass);
         $this->assertFunction(true, $eq, 3, 3);
@@ -403,7 +436,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         }
     }
 
-    function testNotEq() {
+    public function testNotEq()
+    {
         $ne = new Lisphp_Runtime_Predicate_NotEq;
         $this->assertFunction(true, $ne, new stdClass, new stdClass);
         $o = new stdClass;
@@ -431,7 +465,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         }
     }
 
-    function testNotEqual() {
+    public function testNotEqual()
+    {
         $ne = new Lisphp_Runtime_Predicate_NotEqual;
         $this->assertFunction(false, $ne, new stdClass, new stdClass);
         $o = new stdClass;
@@ -459,7 +494,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         }
     }
 
-    function testTypePredicate() {
+    public function testTypePredicate()
+    {
         $int = new Lisphp_Runtime_Predicate_Type('int');
         $this->assertEquals('int', $int->type);
         $this->assertFunction(true, $int, 123);
@@ -478,7 +514,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertFunction(false, $env['nil?'], 123);
     }
 
-    function testIsA() {
+    public function testIsA()
+    {
         $isa = new Lisphp_Runtime_Predicate_IsA;
         $this->assertFunction(true, $isa,
                               new stdClass,
@@ -510,14 +547,16 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         }
     }
 
-    function testList() {
+    public function testList()
+    {
         $list = new Lisphp_Runtime_List;
         $this->assertFunction(new Lisphp_List, $list);
         $this->assertFunction(new Lisphp_List(array(1, 2, 3, 4)),
                               $list, 1, 2, 3, 4);
     }
 
-    function testCar() {
+    public function testCar()
+    {
         $car = new Lisphp_Runtime_List_Car;
         $this->assertFunction(1, $car, array(1, 2, 3));
         try {
@@ -528,7 +567,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         }
     }
 
-    function testCdr() {
+    public function testCdr()
+    {
         $cdr = new Lisphp_Runtime_List_Cdr;
         $this->assertFunction(new Lisphp_List(array(2, 3)),
                               $cdr, array(1, 2, 3));
@@ -536,7 +576,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertFunction(new Lisphp_List, $cdr, array(1));
     }
 
-    function testAt() {
+    public function testAt()
+    {
         $at = new Lisphp_Runtime_List_At;
         $this->assertFunction(1, $at, new Lisphp_List(array(1, 2, 3)), 0);
         $this->assertFunction(3, $at, new Lisphp_List(array(1, 2, 3)), 2);
@@ -548,7 +589,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         }
     }
 
-    function testSetAt() {
+    public function testSetAt()
+    {
         $setAt = new Lisphp_Runtime_List_SetAt;
         $array = new ArrayObject(array('a', 'b'));
         $this->assertFunction('c', $setAt, $array, 'c');
@@ -559,7 +601,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertEquals(new ArrayObject(array('a', 'b', 'C', 'd')), $array);
     }
 
-    function testUnsetAt() {
+    public function testUnsetAt()
+    {
         $unsetAt = new Lisphp_Runtime_List_UnsetAt;
         $array = new ArrayObject(array('a', 'b'));
         $this->assertFunction('b', $unsetAt, $array, 1);
@@ -575,13 +618,15 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         }
     }
 
-    function testExistsAt() {
+    public function testExistsAt()
+    {
         $existsAt = new Lisphp_Runtime_List_ExistsAt;
         $this->assertFunction(true, $existsAt, array(1, 2, 3), 0);
         $this->assertFunction(false, $existsAt, array(1, 2, 3), 5);
     }
 
-    function testCount() {
+    public function testCount()
+    {
         $count = new Lisphp_Runtime_List_Count;
         $this->assertFunction(0, $count, array());
         $this->assertFunction(3, $count, array(1, 2, 3));
@@ -591,13 +636,15 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertFunction(3, $count, 'abc');
     }
 
-    function testArray() {
+    public function testArray()
+    {
         $array = new Lisphp_Runtime_Array;
         $this->assertFunction(array(), $array);
         $this->assertFunction(array(1, 2, 3), $array, 1, 2, 3);
     }
 
-    function testDict() {
+    public function testDict()
+    {
         $dict = new Lisphp_Runtime_Dict;
         $scope = new Lisphp_Scope;
         $scope['a'] = 'key';
@@ -605,7 +652,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertEquals(array('key' => 1, 'key2' => 2, 3, 4), $retval);
     }
 
-    function testMap() {
+    public function testMap()
+    {
         $map = new Lisphp_Runtime_List_Map;
         $func = new Lisphp_Runtime_Function(
             Lisphp_Environment::sandbox(),
@@ -644,7 +692,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         }
     }
 
-    function testFilter() {
+    public function testFilter()
+    {
         $filter = new Lisphp_Runtime_List_Filter;
         $this->assertFunction(new Lisphp_List(array(1, 3, 5)),
                               $filter,
@@ -652,7 +701,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
                               array(1, '2', 3, array(4), 5));
     }
 
-    function testFoldl() {
+    public function testFoldl()
+    {
         $fold = new Lisphp_Runtime_List_Fold;
         $agg = new Lisphp_Runtime_Arithmetic_Subtraction;
         $this->assertFunction(3, $fold, $agg, array(25, 9, 5, 7, 1));
@@ -666,7 +716,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         }
     }
 
-    function testConcat() {
+    public function testConcat()
+    {
         $concat = new Lisphp_Runtime_String_Concat;
         $this->assertFunction('ab', $concat, 'a', 'b');
         $this->assertFunction('hello world!', $concat, 'hello', ' world', '!');
@@ -678,17 +729,20 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         }
     }
 
-    function testStringJoin() {
+    public function testStringJoin()
+    {
         $join = new Lisphp_Runtime_String_StringJoin;
         $this->assertFunction('one two three', $join,
                               array('one', 'two', 'three'), ' ');
     }
 
-    function methodTest($a) {
+    public function methodTest($a)
+    {
         return array($this, $a);
     }
 
-    function testPHPFunction() {
+    public function testPHPFunction()
+    {
         $substr = new Lisphp_Runtime_PHPFunction('substr');
         $this->assertFunction('world', $substr, 'hello world', 6);
         $method = new Lisphp_Runtime_PHPFunction(array($this, 'methodTest'));
@@ -701,7 +755,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         }
     }
 
-    function testPHPClass() {
+    public function testPHPClass()
+    {
         $class = new Lisphp_Runtime_PHPClass('ArrayObject');
         $obj = $this->applyFunction($class, array(1, 2, 3));
         $this->assertType('ArrayObject', $obj);
@@ -726,7 +781,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         $this->assertFalse($class->isClassOf(213));
     }
 
-    function testGetAttribute() {
+    public function testGetAttribute()
+    {
         $attr = new Lisphp_Runtime_Object_GetAttribute;
         $object = (object) array('abc' => 'value');
         $object->ptr = $object;
@@ -750,7 +806,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         }
     }
 
-    function testUse() {
+    public function testUse()
+    {
         $use = new Lisphp_Runtime_Use;
         $env = Lisphp_Environment::sandbox();
         $scope = new Lisphp_Scope($env);
@@ -815,7 +872,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
         }
     }
 
-    function testFrom() {
+    public function testFrom()
+    {
         $from = new Lisphp_Runtime_From;
         $env = Lisphp_Environment::sandbox();
         $scope = new Lisphp_Scope($env);
@@ -829,4 +887,3 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase {
                             $scope['<Program>']->class->getName());
     }
 }
-
