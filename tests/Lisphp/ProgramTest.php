@@ -12,6 +12,12 @@ class Lisphp_ProgramTest extends Lisphp_TestCase {
         ');
     }
 
+    function testEmptyCode() {
+        $scope = new Lisphp_Scope;
+        $this->program = new Lisphp_Program('');
+        $this->program->execute($scope);
+    }
+
     function testFromFile() {
         $program = Lisphp_Program::load(__DIR__ . '/sample.lisphp');
         $this->assertEquals(3, count($program));
