@@ -25,8 +25,8 @@ final class Lisphp_Runtime_Use implements Lisphp_Applicable
         }
         $phpname = str_replace('-', '_', $phpname);
         try {
-            if (preg_match('|^(?:([^/]+/)+)?<(.+?)>$|', $phpname, $matches)) {
-                $phpname = str_replace('/', '_', $matches[1] . $matches[2]);
+            if (preg_match('|^<(.+?)>$|', $phpname, $matches)) {
+                $phpname = substr($phpname, 1, -1);
                 $class = new Lisphp_Runtime_PHPClass($phpname);
                 foreach ($class->getStaticMethods() as $methodName => $method) {
                     $objs["$name/$methodName"] = $method;
@@ -35,8 +35,8 @@ final class Lisphp_Runtime_Use implements Lisphp_Applicable
 
                 return $objs;
             }
-            if (preg_match('|^(?:([^/]+/)+)?\+(.+?)\+$|', $phpname, $matches)) {
-                $phpname = str_replace('/', '_', $matches[1] . $matches[2]);
+            if (preg_match('|^\+(.+?)\+$|', $phpname, $matches)) {
+                $phpname = substr($phpname, 1, -1);
                 $objs[$name] = constant($phpname);
 
                 return $objs;

@@ -816,10 +816,10 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase
                                                  [implode array->string]
                                                  <ArrayObject>
                                                  <Lisphp_Symbol>
-                                                 Lisphp/<Program>
+                                                 <Foo\\Bar>
                                                  [<Lisphp-Scope> scope]
                                                  +PHP_VERSION+
-                                                 PHP/+OS+'));
+                                                 +PHP_OS+'));
         $this->assertType('Lisphp_Runtime_PHPFunction', $values[0]);
         $this->assertEquals('array_merge', $values[0]->callback);
         $this->assertSame($values[0], $scope['array_merge']);
@@ -841,13 +841,13 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase
         $this->assertSame($values[4], $scope['<Lisphp_Symbol>']);
         $this->assertNull($env['<Lisphp_Symbol>']);
         $this->assertType('Lisphp_Runtime_PHPClass', $values[5]);
-        $this->assertEquals('Lisphp_Program', $values[5]->class->getName());
-        $this->assertSame($values[5], $scope['Lisphp/<Program>']);
+        $this->assertEquals('Foo\\Bar', $values[5]->class->getName());
+        $this->assertSame($values[5], $scope['<Foo\\Bar>']);
         $this->assertType('Lisphp_Runtime_PHPFunction',
-                          $scope['Lisphp/<Program>/load']);
-        $this->assertEquals(array('Lisphp_Program', 'load'),
-                            $scope['Lisphp/<Program>/load']->callback);
-        $this->assertNull($env['Lisphp/<Program>']);
+                          $scope['<Foo\\Bar>/doSomething']);
+        $this->assertEquals(array('Foo\\Bar', 'doSomething'),
+                            $scope['<Foo\\Bar>/doSomething']->callback);
+        $this->assertNull($env['<Foo\\Bar>']);
         $this->assertType('Lisphp_Runtime_PHPClass', $values[6]);
         $this->assertEquals('Lisphp_Scope', $values[6]->class->getName());
         $this->assertSame($values[6], $scope['scope']);
@@ -856,8 +856,8 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase
         $this->assertEquals(PHP_VERSION, $scope['+PHP_VERSION+']);
         $this->assertNull($env['+PHP_VERSION+']);
         $this->assertEquals(PHP_OS, $values[8]);
-        $this->assertEquals(PHP_OS, $scope['PHP/+OS+']);
-        $this->assertNull($env['PHP/+OS+']);
+        $this->assertEquals(PHP_OS, $scope['+PHP_OS+']);
+        $this->assertNull($env['+PHP_OS+']);
         try {
             $use->apply($scope, self::lst('undefined-function-name'));
             $this->fail();
@@ -877,13 +877,10 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase
         $from = new Lisphp_Runtime_From;
         $env = Lisphp_Environment::sandbox();
         $scope = new Lisphp_Scope($env);
-        $values = $from->apply($scope,
-                               self::lst('Lisphp (<Symbol> <Program>)'));
-        $this->assertEquals('Lisphp_Symbol', $values[0]->class->getName());
-        $this->assertEquals('Lisphp_Symbol',
-                            $scope['<Symbol>']->class->getName());
-        $this->assertEquals('Lisphp_Program', $values[1]->class->getName());
-        $this->assertEquals('Lisphp_Program',
-                            $scope['<Program>']->class->getName());
+        $values = $from->apply($scope, self::lst('Foo (<Bar> <Baz>)'));
+        $this->assertEquals('Foo\\Bar', $values[0]->class->getName());
+        $this->assertEquals('Foo\\Bar', $scope['<Bar>']->class->getName());
+        $this->assertEquals('Foo\\Baz', $values[1]->class->getName());
+        $this->assertEquals('Foo\\Baz', $scope['<Baz>']->class->getName());
     }
 }

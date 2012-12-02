@@ -9,7 +9,8 @@ final class Lisphp_Runtime_From implements Lisphp_Applicable
         $ns = (string) $arguments->car();
         $simpleNames = iterator_to_array($arguments[1]);
         foreach ($simpleNames as $name) {
-            $names[] = Lisphp_Symbol::get("$ns/$name");
+            $name = substr($name, 1, -1);
+            $names[] = Lisphp_Symbol::get("<$ns\\$name>");
         }
         $retval = $use->apply($tmp, new Lisphp_List($names));
         foreach ($simpleNames as $i => $name) {
