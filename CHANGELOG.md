@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-* 1.0.1 (2012-xx-xx)
+* 1.1.0 (2012-xx-xx)
 
   * Make `use` and `from` more PHP 5.3 friendly.
 
