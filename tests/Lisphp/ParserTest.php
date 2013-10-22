@@ -134,6 +134,29 @@ class Lisphp_ParserTest extends Lisphp_TestCase
                           "'abcd efg \\'q1\\'\\n\\t\\\"q2\\\"'");
     }
 
+    public function testParseForm_singlequotestring()
+    {
+        $this->assertForm(new Lisphp_Literal('foo bar'),
+                          9,
+                          "'foo bar'");
+
+        $this->assertForm(new Lisphp_List(array(
+                              Lisphp_Symbol::get('if'),
+                              Lisphp_Symbol::get('true'),
+                              new Lisphp_Literal('Yep'),
+                          )),
+                          15,
+                          '(if true "Yep")');
+
+        $this->assertForm(new Lisphp_List(array(
+                              Lisphp_Symbol::get('if'),
+                              Lisphp_Symbol::get('true'),
+                              new Lisphp_Literal('Yep'),
+                          )),
+                          15,
+                          "(if true 'Yep')");
+    }
+
     public function testParseForm_symbol()
     {
         $this->assertForm(Lisphp_Symbol::get('abc'), 3, 'abc');

@@ -12,6 +12,7 @@ CHANGELOG
     `Foo_Bar` and `Foo_Baz`.
 
   * Bugfix: Allow omitting else clause of an if form.
+  * Bugfix: Allow single-quoted strings anywhere in a form.
 
 * 1.0.0 (2012-12-01)
 
