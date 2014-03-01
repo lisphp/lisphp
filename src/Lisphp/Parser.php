@@ -12,6 +12,7 @@ final class Lisphp_Parser
     const INTEGER_PATTERN = '/^([+-]?)(0x([0-9a-f]+)|0([0-7]+)|[1-9]\d*|0)/i';
     const STRING_PATTERN = '/^("([^"\\\\]|\\\\.)*"|\'([^\'\\\\]|\\\\.)*\')/';
     const STRING_ESCAPE_PATTERN = '/\\\\(([0-7]{1,3})|x([0-9A-Fa-f]{1,2})|.)/';
+    const COMMENT_PATTERN = '/^;.*/';
     const SYMBOL_PATTERN = '{^
         [^ \s \d () {} \[\] : +-] [^\s () {} \[\] :]*
     |   [+-] ([^ \s \d () {} \[\] :] [^ \s () {} \[\]]*)?
@@ -26,7 +27,10 @@ final class Lisphp_Parser
         while ($i < $len) {
             if (strpos(self::WHITESPACES, $program[$i]) === false) {
                 try {
-                    $forms[] = self::parseForm(substr($program, $i), $offset);
+                    $form = self::parseForm(substr($program, $i), $offset);
+                    if ($form) {
+                        $forms[] = $form;
+                    }
                 } catch (Lisphp_ParsingException $e) {
                     throw new Lisphp_ParsingException($program,
                                                       $e->offset + $i);
@@ -62,7 +66,10 @@ final class Lisphp_Parser
                     continue;
                 }
                 try {
-                    $values[] = self::parseForm(substr($form, $i), $_offset);
+                    $value = self::parseForm(substr($form, $i), $_offset);
+                    if ($value) {
+                        $values[] = $value;
+                    }
                     $i += $_offset;
                 } catch (Lisphp_ParsingException $e) {
                     throw new Lisphp_ParsingException($form, $i + $e->offset);
@@ -76,6 +83,9 @@ final class Lisphp_Parser
             throw new Lisphp_ParsingException($form, $i);
         } elseif (isset($form[0]) && $form[0] == self::QUOTE_PREFIX) {
             $parsed = self::parseForm(substr($form, 1), $_offset);
+            if (!$parsed) {
+                throw new Lisphp_ParsingException($form, 0);
+            }
             $offset = $_offset + 1;
 
             return new Lisphp_Quote($parsed);
@@ -99,6 +109,10 @@ final class Lisphp_Parser
                                       array(__CLASS__, '_unescapeString'),
                                       substr($parsed, 1, -1))
             );
+        } elseif (preg_match(self::COMMENT_PATTERN, $form, $matches)) {
+            $offset = strlen($matches[0]);
+
+            return null;
         } elseif (preg_match(self::SYMBOL_PATTERN, $form, $matches)) {
             $offset = strlen($matches[0]);
 
