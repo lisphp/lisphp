@@ -12,7 +12,11 @@ class Lisphp_List extends ArrayObject implements Lisphp_Form
                 $parameters[] = $arg->evaluate($scope);
             }
 
-            return call_user_func_array($function, $parameters);
+            try {
+                return call_user_func_array($function, $parameters);
+            } catch (Exception $e) {
+                throw new Exception('Exception evaluating ' . $this->__toString(), 0, $e);
+            }
         }
         if ($applicable) return $function->apply($scope, $this->cdr());
         throw new Lisphp_InvalidApplicationException($function, $this);
