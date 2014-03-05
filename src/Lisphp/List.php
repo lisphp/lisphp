@@ -11,11 +11,15 @@ class Lisphp_List extends ArrayObject implements Lisphp_Form
             foreach ($this->cdr() as $arg) {
                 $parameters[] = $arg->evaluate($scope);
             }
-
             try {
                 return call_user_func_array($function, $parameters);
             } catch (Exception $e) {
-                throw new Exception('Exception evaluating ' . $this->__toString(), 0, $e);
+                // $message will end up being a "stack trace" of Lisp forms.
+                $message = $e->getMessage() . "\n# " . substr($this->__toString(), 0, 100);
+                // Set the previous exception to the original (innermost) exception.
+                // This will cause two stack traces to be logged: the original
+                // exception and the "Lisp stack trace".
+                throw new Exception($message, 0, $e->getPrevious() ? $e->getPrevious() : $e);
             }
         }
         if ($applicable) return $function->apply($scope, $this->cdr());
