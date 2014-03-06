@@ -16,6 +16,7 @@ final class Lisphp_Environment
         $scope['define'] = new Lisphp_Runtime_Define;
         $scope['setf!'] = new Lisphp_Runtime_Setf;
         $scope['let'] = new Lisphp_Runtime_Let;
+        $scope['let*'] = new Lisphp_Runtime_LetStar;
         $scope['macro'] = new Lisphp_Runtime_Macro;
         $scope['lambda'] = new Lisphp_Runtime_Lambda;
         $scope['apply'] = new Lisphp_Runtime_Apply;
