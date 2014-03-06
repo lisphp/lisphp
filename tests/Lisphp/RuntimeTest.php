@@ -76,6 +76,19 @@ class Lisphp_RuntimeTest extends Lisphp_TestCase
         $this->assertNull($scope['b']);
     }
 
+    public function testLetStar()
+    {
+        $letStar = new Lisphp_Runtime_LetStar;
+        $scope = Lisphp_Environment::sandbox();
+        $scope['a'] = 1;
+        $scope['c'] = 1;
+        $retval = $letStar->apply(
+            $scope,
+            self::lst('[(x 5) (y (+ x 1))] y')
+        );
+        $this->assertEquals(6, $retval);
+    }
+
     public function testQuote()
     {
         $quote = new Lisphp_Runtime_Quote;
