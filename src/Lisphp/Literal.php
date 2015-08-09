@@ -35,6 +35,7 @@ final class Lisphp_Literal implements Lisphp_Form
 
     public function __toString()
     {
-        return var_export($this->value, true);
+        if ($this->isString()) return var_export($this->value, true);
+        else return (string) $this->value;
     }
 }
